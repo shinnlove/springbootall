@@ -1,0 +1,4 @@
+# 自定义某些配置属性(如RPC服务或netty绑定端口，给`@ConfigurationProperties`用)
+diy:
+  ip: 192.168.0.106
+  port: 10520

@@ -1,0 +1,60 @@
+# springboot公共配置
+#服务端口与超时
+server:
+  port: 8080
+  session-timeout: 1200
+  tomcat:
+    accesslog:
+      # 打开Tomcat访问日志
+      enabled: true
+      # 访问日志所在目录
+      directory: logs
+    uri-encoding: utf-8
+    compression: off
+    # 允许HTTP请求缓存到请求队列的最大个数，默认不限制
+    #accept-count:
+    # 最大连接数，默认不限制，如果一旦连接数到达，剩下的连接将会保存到请求缓存队列李，也就是accept-count指定队列
+    #max-connections:
+    # 最大工作线程数
+    #max-threads:
+    # HTTP POST最大长度，默认不限制
+    #max-http-post-size:
+
+#logback日志(默认情况下，INFO级别以上的信息才会打印到控制台，可以自己设定日志输出级别)
+logging:
+  config: classpath:logback.xml
+
+#actuator端口
+management:
+  server:
+    port: 9001
+  security:
+    enabled: false
+  endpoints:
+    web:
+      #修改访问路径  2.0之前默认是/   2.0默认是 /actuator  可以通过这个属性值修改
+      base-path: /monitor
+      exposure:
+        #开放所有页面节点  默认只开启了health、info两个节点(yml中*是特殊字符，需要引号)
+        include: "*"
+    health:
+      #显示健康具体信息  默认不会显示详细信息
+      show-details: always
+
+# 设置banner信息(现在字符集默认UTF-8不需要设置、location、image现在都是deprecated)
+
+# spring servlet信息、数据源配置
+spring:
+  profiles:
+    # 读取默认激活的配置
+    active: @spring.profiles.active@
+  servlet:
+    # 配置servlet上传文件
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      location:
+      max-file-size: 25MB
+      max-request-size: 20MB
+      resolve-lazily: false
+

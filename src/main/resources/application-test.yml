@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    username: root
+    password:
+    url: jdbc:mysql://127.0.0.1:3306
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      pool-name: MyHikariCP-test
+      maximum-pool-size: 10
+      minimum-idle: 3
+      auto-commit: true
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 100000
+      connection-test-query: SELECT 1
+      login-timeout: 500
+      validation-timeout: 1000
+
+memo:
+  info: test-env
