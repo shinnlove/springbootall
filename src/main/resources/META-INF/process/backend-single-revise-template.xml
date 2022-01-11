@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template id="40002" name="backend_single_revise_process" desc="后台改价单改价项子流程" parent="backend_parent_revise_process">
+
+    <metadata>
+        <status no="-1" name="init" desc="流程初始化"/>
+        <status no="1" name="risk_audit" desc="待风控审核"/>
+        <status no="2" name="customer_confirm" desc="待客户确认"/>
+        <status no="3" name="upper_confirm" desc="待UP主确认"/>
+        <status no="4" name="accepted" desc="改价项已完成"/>
+        <status no="5" name="rejected" desc="改价项已拒绝"/>
+        <status no="6" name="canceled" desc="改价项已取消"/>
+    </metadata>
+
+    <init>
+        <handler seq="1" ref="processCreateReviseHandler" desc="创建单个改价项流程"/>
+    </init>
+
+    <accepted>
+        <handler seq="1" ref="processAcceptedTrigger" desc="单个改价项完成后trigger"/>
+    </accepted>
+
+    <rejected>
+        <handler seq="1" ref="processRejectedTrigger" desc="单个改价项拒绝后trigger"/>
+    </rejected>
+
+    <canceled>
+        <handler seq="1" ref="processCanceledTrigger" desc="单个改价项流程关闭后的trigger"/>
+    </canceled>
+
+    <action id="40201" name="upper_enroll" desc="UP主报名D活动" destination="1" entrance="true">
+        <handler seq="1" ref="validateUpperEnrollDHandler" desc="检验UP主重复报名D类任务处理器"/>
+        <handler seq="2" ref="delegateRegisterUpperHandler" desc="委托注册UP主处理器"/>
+        <handler seq="3" ref="upperEnrollDHandler" desc="UP主报名D类任务处理器"/>
+    </action>
+
+    <action id="40202" name="enroll_attach_tag" desc="稿件绑定标签" destination="2">
+        <handler seq="1" ref="upperDPromoteToIngHandler" desc="UP主推进D类任务到进行中处理器"/>
+        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系处理器"/>
+    </action>
+
+    <action id="40203" name="detach_all_tag" desc="取消绑定标签" destination="1">
+        <handler seq="1" ref="upperDRevokeToSignUpHandler" desc="UP的D类任务状态回退到已报名"/>
+        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系处理器"/>
+    </action>
+
+    <action id="40204" name="attach_tag_enroll" desc="标签报名" destination="2" entrance="true">
+        <handler seq="1" ref="delegateRegisterUpperHandler" desc="委托注册UP主处理器"/>
+        <handler seq="2" ref="validateTagEnrollDHandler" desc="检验UP主重复报名D类任务处理器"/>
+        <handler seq="3" ref="tagEnrollDHandler" desc="UP主报名D类任务处理器"/>
+        <handler seq="4" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系处理器"/>
+    </action>
+
+    <action id="40205" name="finish_no_rewards" desc="完成活动" destination="4">
+        <handler seq="1" ref="commonValidationHandler" desc="通用验证handler demo"/>
+        <handler seq="2" ref="commonProcessHandler" desc="通用流程控制器demo"/>
+    </action>
+
+    <action id="40206" name="finish_with_rewards" desc="导入中奖名单" destination="3">
+        <handler seq="1" ref="commonValidationHandler" desc="通用验证handler demo"/>
+        <handler seq="2" ref="commonProcessHandler" desc="通用流程控制器demo"/>
+    </action>
+
+    <action id="40207" name="financial_paid" desc="财务已打款" destination="4">
+        <handler seq="1" ref="commonValidationHandler" desc="通用验证handler demo"/>
+        <handler seq="2" ref="commonProcessHandler" desc="通用流程控制器demo"/>
+    </action>
+
+    <action id="40208" name="d_upper_cancel" desc="终止任务" destination="5">
+        <handler seq="1" ref="commonValidationHandler" desc="通用验证handler demo"/>
+        <handler seq="2" ref="commonProcessHandler" desc="通用流程控制器demo"/>
+    </action>
+
+</template>

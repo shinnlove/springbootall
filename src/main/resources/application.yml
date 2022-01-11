@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.221.47.78:3306/bilibili_business_mission?useUnicode=true&characterEncoding=UTF-8&tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+    username: rd
+    password: rd66!!
+    hikari:
+      pool-name: MyHikariCP
+      maximum-pool-size: 10
+      minimum-idle: 3
+      auto-commit: true
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 100000
+      connection-test-query: SELECT 1
+      login-timeout: 500
+      validation-timeout: 1000
