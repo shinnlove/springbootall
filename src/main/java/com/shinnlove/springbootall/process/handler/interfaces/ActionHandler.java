@@ -72,6 +72,12 @@ public interface ActionHandler<T, R> {
      */
     R process(ActionChain chain, ProcessContext<T> context);
 
+    /**
+     * New feature: add handlers executed as pipeline.
+     *
+     * @param context
+     * @return
+     */
     default R pipeline(ProcessContext<T> context) {
         return process(null, context);
     }
