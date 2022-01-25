@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.221.47.78:3306/bilibili_business_mission?useUnicode=true&characterEncoding=UTF-8&tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
-    username: rd
-    password: rd66!!
+    url: jdbc:mysql://127.0.0.1:3306/miffy?useUnicode=true&characterEncoding=UTF-8&tinyInt1isBit=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+    username: root
+    password:
     hikari:
       pool-name: MyHikariCP
       maximum-pool-size: 10

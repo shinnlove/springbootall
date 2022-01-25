@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template id="30003" name="revise_item_order_expense_template" desc="单个改价项订单支出子流程" parent="revise_parent_template">
+
+    <metadata>
+        <status no="-1" name="init" desc="流程初始化"/>
+        <status no="1" name="risk_audit" desc="待风控审核"/>
+        <status no="4" name="accepted" desc="改价项已完成"/>
+        <status no="5" name="rejected" desc="改价项已拒绝"/>
+        <status no="6" name="canceled" desc="改价项已取消"/>
+    </metadata>
+
+    <init>
+        <handler seq="1" ref="createReviseProcessHandler" desc="创建单个改价项流程"/>
+    </init>
+
+    <accepted>
+        <handler seq="1" ref="acceptProcessHandler" desc="单个改价项完成后trigger"/>
+    </accepted>
+
+    <rejected>
+        <handler seq="1" ref="rejectProcessHandler" desc="单个改价项拒绝后trigger"/>
+    </rejected>
+
+    <canceled>
+        <handler seq="1" ref="cancelProcessHandler" desc="单个改价项流程关闭后的trigger"/>
+    </canceled>
+
+    <action id="30301" name="upper_enroll" desc="触发阈值待风控审核" destination="1" entrance="true">
+        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+        <handler seq="2" ref="notifyRiskAuditHandler" desc="通知风控审核处理器"/>
+    </action>
+
+    <action id="30302" name="accomplish_revise" desc="改价项完成" destination="4">
+        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系处理器"/>
+    </action>
+
+</template>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template id="30000" name="revise_parent_template" desc="改价父流程" parent="">
+
+    <metadata>
+        <status no="-1" name="init" desc="流程初始化"/>
+        <status no="1" name="revising" desc="改价中"/>
+        <status no="4" name="accepted" desc="改价项已完成"/>
+        <status no="5" name="rejected" desc="改价项已拒绝"/>
+        <status no="6" name="canceled" desc="改价项已取消"/>
+    </metadata>
+
+    <init>
+        <handler seq="1" ref="processCreateReviseHandler" desc="创建后台改价父流程"/>
+    </init>
+
+    <accepted>
+        <handler seq="1" ref="processAcceptedTrigger" desc="后台改价父流程完成后trigger"/>
+    </accepted>
+
+    <rejected>
+        <handler seq="1" ref="processRejectedTrigger" desc="后台改价父流程拒绝后trigger"/>
+    </rejected>
+
+    <canceled>
+        <handler seq="1" ref="processCanceledTrigger" desc="后台改价父流程关闭后trigger"/>
+    </canceled>
+
+    <action id="30001" name="revising" desc="改价中" destination="1" entrance="true">
+        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+        <handler seq="2" ref="notifyRiskAuditHandler" desc="通知风控审核处理器"/>
+    </action>
+
+    <action id="30002" name="accomplished" desc="改价完成" destination="4">
+        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+        <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+    </action>
+
+    <action id="30003" name="accomplish_revise" desc="改价已拒绝" destination="5">
+        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系处理器"/>
+    </action>
+
+    <action id="30004" name="accomplish_revise" desc="改价已关闭" destination="6">
+        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系处理器"/>
+    </action>
+
+</template>
