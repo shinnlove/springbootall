@@ -40,11 +40,6 @@ public class ProcessActionMetadataPo implements Serializable {
     private Integer processEntrance;
 
     /**
-     * 备注
-     */
-    private String remark;
-
-    /**
      * 创建时间
      */
     private Timestamp ctime;
@@ -53,6 +48,11 @@ public class ProcessActionMetadataPo implements Serializable {
      * 更新时间
      */
     private Timestamp mtime;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     private static final long serialVersionUID = 1L;
 
@@ -112,14 +112,6 @@ public class ProcessActionMetadataPo implements Serializable {
         this.processEntrance = processEntrance;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
     public Timestamp getCtime() {
         return ctime;
     }
@@ -134,6 +126,14 @@ public class ProcessActionMetadataPo implements Serializable {
 
     public void setMtime(Timestamp mtime) {
         this.mtime = mtime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     @Override
@@ -155,9 +155,9 @@ public class ProcessActionMetadataPo implements Serializable {
             && (this.getSourceStatus() == null ? other.getSourceStatus() == null : this.getSourceStatus().equals(other.getSourceStatus()))
             && (this.getDestinationStatus() == null ? other.getDestinationStatus() == null : this.getDestinationStatus().equals(other.getDestinationStatus()))
             && (this.getProcessEntrance() == null ? other.getProcessEntrance() == null : this.getProcessEntrance().equals(other.getProcessEntrance()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getCtime() == null ? other.getCtime() == null : this.getCtime().equals(other.getCtime()))
-            && (this.getMtime() == null ? other.getMtime() == null : this.getMtime().equals(other.getMtime()));
+            && (this.getMtime() == null ? other.getMtime() == null : this.getMtime().equals(other.getMtime()))
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()));
     }
 
     @Override
@@ -171,9 +171,9 @@ public class ProcessActionMetadataPo implements Serializable {
         result = prime * result + ((getSourceStatus() == null) ? 0 : getSourceStatus().hashCode());
         result = prime * result + ((getDestinationStatus() == null) ? 0 : getDestinationStatus().hashCode());
         result = prime * result + ((getProcessEntrance() == null) ? 0 : getProcessEntrance().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getCtime() == null) ? 0 : getCtime().hashCode());
         result = prime * result + ((getMtime() == null) ? 0 : getMtime().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         return result;
     }
 
@@ -190,9 +190,9 @@ public class ProcessActionMetadataPo implements Serializable {
         sb.append(", sourceStatus=").append(sourceStatus);
         sb.append(", destinationStatus=").append(destinationStatus);
         sb.append(", processEntrance=").append(processEntrance);
-        sb.append(", remark=").append(remark);
         sb.append(", ctime=").append(ctime);
         sb.append(", mtime=").append(mtime);
+        sb.append(", remark=").append(remark);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -45,7 +45,7 @@ public class ProcessStatusLogCoreServiceImpl implements ProcessStatusLogCoreServ
     public List<ProcessStatusLog> getLogsByProcessNo(long processNo) {
 
         ProcessStatusLogPoExample example = new ProcessStatusLogPoExample();
-        ProcessStatusLogPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+        ProcessStatusLogPoExample.Criteria criteria = example.or();
         criteria.andProcessNoEqualTo(processNo);
 
         example.setOrderByClause("ctime desc");

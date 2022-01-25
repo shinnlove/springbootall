@@ -18,8 +18,8 @@
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://10.221.47.78:3306/bilibili_business_mission?useUnicode=true&amp;characterEncoding=UTF-8&amp;tinyInt1isBit=false&amp;allowMultiQueries=true&amp;zeroDateTimeBehavior=convertToNull"
-                        userId="rd" password="rd66!!">
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/miffy?useUnicode=true&amp;characterEncoding=UTF-8&amp;tinyInt1isBit=false&amp;allowMultiQueries=true&amp;zeroDateTimeBehavior=convertToNull"
+                        userId="root" password="">
         </jdbcConnection>
         <javaTypeResolver type="com.shinnlove.springbootall.util.plugin.JavaTypeResolver">
             <!-- This property is used to specify whether MyBatis Generator should
@@ -43,7 +43,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!--                  修改完直接在  com.bilibili.ad.missiondao.Generator 里执行main方法                 -->
+        <!--                  修改完直接在  com.bilibili.ad.commercialorder.Generator 里执行main方法                 -->
         <!-- 要生成哪些表 -->
 
         <table tableName="universal_process" domainObjectName="UniversalProcessPo" mapperName="UniversalProcessDao">

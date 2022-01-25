@@ -38,17 +38,17 @@
 
     <action id="30403" name="upper_revise_accomplish" desc="UP主收益项改价项完成" destination="4">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系"/>
+        <handler seq="2" ref="notifyUpperHandler" desc="通知UP主"/>
     </action>
 
     <action id="30404" name="upper_revise_reject" desc="UP主收益项改价项拒绝" destination="5">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系"/>
+        <handler seq="2" ref="notifyUpperHandler" desc="通知UP主"/>
     </action>
 
     <action id="30405" name="upper_revise_cancel" desc="UP主收益项改价项取消" destination="6">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系"/>
+        <handler seq="2" ref="notifyUpperHandler" desc="通知UP主"/>
     </action>
 
 </template>

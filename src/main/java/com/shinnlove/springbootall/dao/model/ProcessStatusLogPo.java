@@ -35,14 +35,19 @@ public class ProcessStatusLogPo implements Serializable {
     private Integer destinationStatus;
 
     /**
-     * 操作人
+     * 流程操作人类型
      */
-    private String operator;
+    private Integer operatorType;
 
     /**
-     * 备注
+     * 流程操作人id
      */
-    private String remark;
+    private Long operatorId;
+
+    /**
+     * 流程操作人名称
+     */
+    private String operator;
 
     /**
      * 创建时间
@@ -55,9 +60,9 @@ public class ProcessStatusLogPo implements Serializable {
     private Timestamp mtime;
 
     /**
-     * 软删除: 0 否 1是
+     * 流程操作备注
      */
-    private Integer isDeleted;
+    private String remark;
 
     private static final long serialVersionUID = 1L;
 
@@ -109,20 +114,28 @@ public class ProcessStatusLogPo implements Serializable {
         this.destinationStatus = destinationStatus;
     }
 
+    public Integer getOperatorType() {
+        return operatorType;
+    }
+
+    public void setOperatorType(Integer operatorType) {
+        this.operatorType = operatorType;
+    }
+
+    public Long getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(Long operatorId) {
+        this.operatorId = operatorId;
+    }
+
     public String getOperator() {
         return operator;
     }
 
     public void setOperator(String operator) {
         this.operator = operator == null ? null : operator.trim();
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
     }
 
     public Timestamp getCtime() {
@@ -141,12 +154,12 @@ public class ProcessStatusLogPo implements Serializable {
         this.mtime = mtime;
     }
 
-    public Integer getIsDeleted() {
-        return isDeleted;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     @Override
@@ -167,11 +180,12 @@ public class ProcessStatusLogPo implements Serializable {
             && (this.getActionId() == null ? other.getActionId() == null : this.getActionId().equals(other.getActionId()))
             && (this.getSourceStatus() == null ? other.getSourceStatus() == null : this.getSourceStatus().equals(other.getSourceStatus()))
             && (this.getDestinationStatus() == null ? other.getDestinationStatus() == null : this.getDestinationStatus().equals(other.getDestinationStatus()))
+            && (this.getOperatorType() == null ? other.getOperatorType() == null : this.getOperatorType().equals(other.getOperatorType()))
+            && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperator() == null ? other.getOperator() == null : this.getOperator().equals(other.getOperator()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getCtime() == null ? other.getCtime() == null : this.getCtime().equals(other.getCtime()))
             && (this.getMtime() == null ? other.getMtime() == null : this.getMtime().equals(other.getMtime()))
-            && (this.getIsDeleted() == null ? other.getIsDeleted() == null : this.getIsDeleted().equals(other.getIsDeleted()));
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()));
     }
 
     @Override
@@ -184,11 +198,12 @@ public class ProcessStatusLogPo implements Serializable {
         result = prime * result + ((getActionId() == null) ? 0 : getActionId().hashCode());
         result = prime * result + ((getSourceStatus() == null) ? 0 : getSourceStatus().hashCode());
         result = prime * result + ((getDestinationStatus() == null) ? 0 : getDestinationStatus().hashCode());
+        result = prime * result + ((getOperatorType() == null) ? 0 : getOperatorType().hashCode());
+        result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperator() == null) ? 0 : getOperator().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getCtime() == null) ? 0 : getCtime().hashCode());
         result = prime * result + ((getMtime() == null) ? 0 : getMtime().hashCode());
-        result = prime * result + ((getIsDeleted() == null) ? 0 : getIsDeleted().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         return result;
     }
 
@@ -204,11 +219,12 @@ public class ProcessStatusLogPo implements Serializable {
         sb.append(", actionId=").append(actionId);
         sb.append(", sourceStatus=").append(sourceStatus);
         sb.append(", destinationStatus=").append(destinationStatus);
+        sb.append(", operatorType=").append(operatorType);
+        sb.append(", operatorId=").append(operatorId);
         sb.append(", operator=").append(operator);
-        sb.append(", remark=").append(remark);
         sb.append(", ctime=").append(ctime);
         sb.append(", mtime=").append(mtime);
-        sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", remark=").append(remark);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

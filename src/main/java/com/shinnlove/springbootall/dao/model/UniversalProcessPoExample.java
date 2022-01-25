@@ -245,63 +245,63 @@ public class UniversalProcessPoExample {
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdIsNull() {
-            addCriterion("template_id is null");
+        public Criteria andParentProcessNoIsNull() {
+            addCriterion("parent_process_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdIsNotNull() {
-            addCriterion("template_id is not null");
+        public Criteria andParentProcessNoIsNotNull() {
+            addCriterion("parent_process_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdEqualTo(Integer value) {
-            addCriterion("template_id =", value, "templateId");
+        public Criteria andParentProcessNoEqualTo(Long value) {
+            addCriterion("parent_process_no =", value, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdNotEqualTo(Integer value) {
-            addCriterion("template_id <>", value, "templateId");
+        public Criteria andParentProcessNoNotEqualTo(Long value) {
+            addCriterion("parent_process_no <>", value, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdGreaterThan(Integer value) {
-            addCriterion("template_id >", value, "templateId");
+        public Criteria andParentProcessNoGreaterThan(Long value) {
+            addCriterion("parent_process_no >", value, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("template_id >=", value, "templateId");
+        public Criteria andParentProcessNoGreaterThanOrEqualTo(Long value) {
+            addCriterion("parent_process_no >=", value, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdLessThan(Integer value) {
-            addCriterion("template_id <", value, "templateId");
+        public Criteria andParentProcessNoLessThan(Long value) {
+            addCriterion("parent_process_no <", value, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdLessThanOrEqualTo(Integer value) {
-            addCriterion("template_id <=", value, "templateId");
+        public Criteria andParentProcessNoLessThanOrEqualTo(Long value) {
+            addCriterion("parent_process_no <=", value, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdIn(List<Integer> values) {
-            addCriterion("template_id in", values, "templateId");
+        public Criteria andParentProcessNoIn(List<Long> values) {
+            addCriterion("parent_process_no in", values, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdNotIn(List<Integer> values) {
-            addCriterion("template_id not in", values, "templateId");
+        public Criteria andParentProcessNoNotIn(List<Long> values) {
+            addCriterion("parent_process_no not in", values, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdBetween(Integer value1, Integer value2) {
-            addCriterion("template_id between", value1, value2, "templateId");
+        public Criteria andParentProcessNoBetween(Long value1, Long value2) {
+            addCriterion("parent_process_no between", value1, value2, "parentProcessNo");
             return (Criteria) this;
         }
 
-        public Criteria andTemplateIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("template_id not between", value1, value2, "templateId");
+        public Criteria andParentProcessNoNotBetween(Long value1, Long value2) {
+            addCriterion("parent_process_no not between", value1, value2, "parentProcessNo");
             return (Criteria) this;
         }
 
@@ -365,6 +365,66 @@ public class UniversalProcessPoExample {
             return (Criteria) this;
         }
 
+        public Criteria andTemplateIdIsNull() {
+            addCriterion("template_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdIsNotNull() {
+            addCriterion("template_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdEqualTo(Integer value) {
+            addCriterion("template_id =", value, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdNotEqualTo(Integer value) {
+            addCriterion("template_id <>", value, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdGreaterThan(Integer value) {
+            addCriterion("template_id >", value, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("template_id >=", value, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdLessThan(Integer value) {
+            addCriterion("template_id <", value, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdLessThanOrEqualTo(Integer value) {
+            addCriterion("template_id <=", value, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdIn(List<Integer> values) {
+            addCriterion("template_id in", values, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdNotIn(List<Integer> values) {
+            addCriterion("template_id not in", values, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdBetween(Integer value1, Integer value2) {
+            addCriterion("template_id between", value1, value2, "templateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTemplateIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("template_id not between", value1, value2, "templateId");
+            return (Criteria) this;
+        }
+
         public Criteria andRefUniqueNoIsNull() {
             addCriterion("ref_unique_no is null");
             return (Criteria) this;
@@ -425,66 +485,6 @@ public class UniversalProcessPoExample {
             return (Criteria) this;
         }
 
-        public Criteria andParentProcessNoIsNull() {
-            addCriterion("parent_process_no is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoIsNotNull() {
-            addCriterion("parent_process_no is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoEqualTo(Long value) {
-            addCriterion("parent_process_no =", value, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoNotEqualTo(Long value) {
-            addCriterion("parent_process_no <>", value, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoGreaterThan(Long value) {
-            addCriterion("parent_process_no >", value, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoGreaterThanOrEqualTo(Long value) {
-            addCriterion("parent_process_no >=", value, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoLessThan(Long value) {
-            addCriterion("parent_process_no <", value, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoLessThanOrEqualTo(Long value) {
-            addCriterion("parent_process_no <=", value, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoIn(List<Long> values) {
-            addCriterion("parent_process_no in", values, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoNotIn(List<Long> values) {
-            addCriterion("parent_process_no not in", values, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoBetween(Long value1, Long value2) {
-            addCriterion("parent_process_no between", value1, value2, "parentProcessNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andParentProcessNoNotBetween(Long value1, Long value2) {
-            addCriterion("parent_process_no not between", value1, value2, "parentProcessNo");
-            return (Criteria) this;
-        }
-
         public Criteria andCurrentStatusIsNull() {
             addCriterion("current_status is null");
             return (Criteria) this;
@@ -542,6 +542,66 @@ public class UniversalProcessPoExample {
 
         public Criteria andCurrentStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("current_status not between", value1, value2, "currentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdIsNull() {
+            addCriterion("latest_operator_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdIsNotNull() {
+            addCriterion("latest_operator_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdEqualTo(Long value) {
+            addCriterion("latest_operator_id =", value, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdNotEqualTo(Long value) {
+            addCriterion("latest_operator_id <>", value, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdGreaterThan(Long value) {
+            addCriterion("latest_operator_id >", value, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("latest_operator_id >=", value, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdLessThan(Long value) {
+            addCriterion("latest_operator_id <", value, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdLessThanOrEqualTo(Long value) {
+            addCriterion("latest_operator_id <=", value, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdIn(List<Long> values) {
+            addCriterion("latest_operator_id in", values, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdNotIn(List<Long> values) {
+            addCriterion("latest_operator_id not in", values, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdBetween(Long value1, Long value2) {
+            addCriterion("latest_operator_id between", value1, value2, "latestOperatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatestOperatorIdNotBetween(Long value1, Long value2) {
+            addCriterion("latest_operator_id not between", value1, value2, "latestOperatorId");
             return (Criteria) this;
         }
 
@@ -612,76 +672,6 @@ public class UniversalProcessPoExample {
 
         public Criteria andLatestOperatorNotBetween(String value1, String value2) {
             addCriterion("latest_operator not between", value1, value2, "latestOperator");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkIsNull() {
-            addCriterion("remark is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkIsNotNull() {
-            addCriterion("remark is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkEqualTo(String value) {
-            addCriterion("remark =", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotEqualTo(String value) {
-            addCriterion("remark <>", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkGreaterThan(String value) {
-            addCriterion("remark >", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
-            addCriterion("remark >=", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLessThan(String value) {
-            addCriterion("remark <", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLessThanOrEqualTo(String value) {
-            addCriterion("remark <=", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLike(String value) {
-            addCriterion("remark like", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotLike(String value) {
-            addCriterion("remark not like", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkIn(List<String> values) {
-            addCriterion("remark in", values, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotIn(List<String> values) {
-            addCriterion("remark not in", values, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkBetween(String value1, String value2) {
-            addCriterion("remark between", value1, value2, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotBetween(String value1, String value2) {
-            addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
 
@@ -805,63 +795,73 @@ public class UniversalProcessPoExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedIsNull() {
-            addCriterion("is_deleted is null");
+        public Criteria andRemarkIsNull() {
+            addCriterion("remark is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedIsNotNull() {
-            addCriterion("is_deleted is not null");
+        public Criteria andRemarkIsNotNull() {
+            addCriterion("remark is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedEqualTo(Integer value) {
-            addCriterion("is_deleted =", value, "isDeleted");
+        public Criteria andRemarkEqualTo(String value) {
+            addCriterion("remark =", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotEqualTo(Integer value) {
-            addCriterion("is_deleted <>", value, "isDeleted");
+        public Criteria andRemarkNotEqualTo(String value) {
+            addCriterion("remark <>", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedGreaterThan(Integer value) {
-            addCriterion("is_deleted >", value, "isDeleted");
+        public Criteria andRemarkGreaterThan(String value) {
+            addCriterion("remark >", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedGreaterThanOrEqualTo(Integer value) {
-            addCriterion("is_deleted >=", value, "isDeleted");
+        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("remark >=", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedLessThan(Integer value) {
-            addCriterion("is_deleted <", value, "isDeleted");
+        public Criteria andRemarkLessThan(String value) {
+            addCriterion("remark <", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedLessThanOrEqualTo(Integer value) {
-            addCriterion("is_deleted <=", value, "isDeleted");
+        public Criteria andRemarkLessThanOrEqualTo(String value) {
+            addCriterion("remark <=", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedIn(List<Integer> values) {
-            addCriterion("is_deleted in", values, "isDeleted");
+        public Criteria andRemarkLike(String value) {
+            addCriterion("remark like", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotIn(List<Integer> values) {
-            addCriterion("is_deleted not in", values, "isDeleted");
+        public Criteria andRemarkNotLike(String value) {
+            addCriterion("remark not like", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedBetween(Integer value1, Integer value2) {
-            addCriterion("is_deleted between", value1, value2, "isDeleted");
+        public Criteria andRemarkIn(List<String> values) {
+            addCriterion("remark in", values, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotBetween(Integer value1, Integer value2) {
-            addCriterion("is_deleted not between", value1, value2, "isDeleted");
+        public Criteria andRemarkNotIn(List<String> values) {
+            addCriterion("remark not in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkBetween(String value1, String value2) {
+            addCriterion("remark between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotBetween(String value1, String value2) {
+            addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
     }

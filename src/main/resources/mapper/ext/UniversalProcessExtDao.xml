@@ -17,7 +17,6 @@
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="ctime" jdbcType="TIMESTAMP" property="ctime"/>
         <result column="mtime" jdbcType="TIMESTAMP" property="mtime"/>
-        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
     </resultMap>
 
     <select id="selectByProcessNoForUpdate" resultMap="BaseResultMap">

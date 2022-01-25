@@ -43,7 +43,7 @@ public class ProcessBlockingCoreServiceImpl implements ProcessBlockingCoreServic
     public int removeBlockingByMainAndObstacleNo(long mainProcessNo, long obstacleByProcessNo) {
         // build condition
         ProcessBlockingPoExample example = new ProcessBlockingPoExample();
-        ProcessBlockingPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+        ProcessBlockingPoExample.Criteria criteria = example.or();
 
         criteria.andMainProcessNoEqualTo(mainProcessNo)
             .andObstacleByProcessNoEqualTo(obstacleByProcessNo);
@@ -55,7 +55,7 @@ public class ProcessBlockingCoreServiceImpl implements ProcessBlockingCoreServic
     public int removeAllBlockingByMainNo(long mainProcessNo) {
         // build condition
         ProcessBlockingPoExample example = new ProcessBlockingPoExample();
-        ProcessBlockingPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+        ProcessBlockingPoExample.Criteria criteria = example.or();
 
         criteria.andMainProcessNoEqualTo(mainProcessNo);
 
@@ -66,7 +66,7 @@ public class ProcessBlockingCoreServiceImpl implements ProcessBlockingCoreServic
     public List<ProcessBlocking> getBlockingByProcessNo(long processNo) {
         // build condition
         ProcessBlockingPoExample example = new ProcessBlockingPoExample();
-        ProcessBlockingPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+        ProcessBlockingPoExample.Criteria criteria = example.or();
         criteria.andMainProcessNoEqualTo(processNo);
 
         List<ProcessBlockingPo> pos = processBlockingDao.selectByExample(example);

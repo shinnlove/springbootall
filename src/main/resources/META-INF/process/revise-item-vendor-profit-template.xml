@@ -32,7 +32,6 @@
 
     <action id="30502" name="vendor_revise_accomplish" desc="服务商改价项已完成" destination="4">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系"/>
     </action>
 
     <action id="30503" name="vendor_revise_reject" desc="服务商改价项已拒绝" destination="5">

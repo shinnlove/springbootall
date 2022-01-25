@@ -30,11 +30,6 @@ public class ProcessTemplateMetadataPo implements Serializable {
     private Integer coordinateMode;
 
     /**
-     * 备注
-     */
-    private String remark;
-
-    /**
      * 创建时间
      */
     private Timestamp ctime;
@@ -45,9 +40,9 @@ public class ProcessTemplateMetadataPo implements Serializable {
     private Timestamp mtime;
 
     /**
-     * 软删除: 0 否 1是
+     * 备注
      */
-    private Integer isDeleted;
+    private String remark;
 
     private static final long serialVersionUID = 1L;
 
@@ -91,14 +86,6 @@ public class ProcessTemplateMetadataPo implements Serializable {
         this.coordinateMode = coordinateMode;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
     public Timestamp getCtime() {
         return ctime;
     }
@@ -115,12 +102,12 @@ public class ProcessTemplateMetadataPo implements Serializable {
         this.mtime = mtime;
     }
 
-    public Integer getIsDeleted() {
-        return isDeleted;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     @Override
@@ -140,10 +127,9 @@ public class ProcessTemplateMetadataPo implements Serializable {
             && (this.getTemplateName() == null ? other.getTemplateName() == null : this.getTemplateName().equals(other.getTemplateName()))
             && (this.getCompleteReconcileParent() == null ? other.getCompleteReconcileParent() == null : this.getCompleteReconcileParent().equals(other.getCompleteReconcileParent()))
             && (this.getCoordinateMode() == null ? other.getCoordinateMode() == null : this.getCoordinateMode().equals(other.getCoordinateMode()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getCtime() == null ? other.getCtime() == null : this.getCtime().equals(other.getCtime()))
             && (this.getMtime() == null ? other.getMtime() == null : this.getMtime().equals(other.getMtime()))
-            && (this.getIsDeleted() == null ? other.getIsDeleted() == null : this.getIsDeleted().equals(other.getIsDeleted()));
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()));
     }
 
     @Override
@@ -155,10 +141,9 @@ public class ProcessTemplateMetadataPo implements Serializable {
         result = prime * result + ((getTemplateName() == null) ? 0 : getTemplateName().hashCode());
         result = prime * result + ((getCompleteReconcileParent() == null) ? 0 : getCompleteReconcileParent().hashCode());
         result = prime * result + ((getCoordinateMode() == null) ? 0 : getCoordinateMode().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getCtime() == null) ? 0 : getCtime().hashCode());
         result = prime * result + ((getMtime() == null) ? 0 : getMtime().hashCode());
-        result = prime * result + ((getIsDeleted() == null) ? 0 : getIsDeleted().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         return result;
     }
 
@@ -173,10 +158,9 @@ public class ProcessTemplateMetadataPo implements Serializable {
         sb.append(", templateName=").append(templateName);
         sb.append(", completeReconcileParent=").append(completeReconcileParent);
         sb.append(", coordinateMode=").append(coordinateMode);
-        sb.append(", remark=").append(remark);
         sb.append(", ctime=").append(ctime);
         sb.append(", mtime=").append(mtime);
-        sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", remark=").append(remark);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

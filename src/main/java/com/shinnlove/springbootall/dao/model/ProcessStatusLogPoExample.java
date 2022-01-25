@@ -485,6 +485,126 @@ public class ProcessStatusLogPoExample {
             return (Criteria) this;
         }
 
+        public Criteria andOperatorTypeIsNull() {
+            addCriterion("operator_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeIsNotNull() {
+            addCriterion("operator_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeEqualTo(Integer value) {
+            addCriterion("operator_type =", value, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeNotEqualTo(Integer value) {
+            addCriterion("operator_type <>", value, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeGreaterThan(Integer value) {
+            addCriterion("operator_type >", value, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("operator_type >=", value, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeLessThan(Integer value) {
+            addCriterion("operator_type <", value, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("operator_type <=", value, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeIn(List<Integer> values) {
+            addCriterion("operator_type in", values, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeNotIn(List<Integer> values) {
+            addCriterion("operator_type not in", values, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeBetween(Integer value1, Integer value2) {
+            addCriterion("operator_type between", value1, value2, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("operator_type not between", value1, value2, "operatorType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdIsNull() {
+            addCriterion("operator_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdIsNotNull() {
+            addCriterion("operator_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdEqualTo(Long value) {
+            addCriterion("operator_id =", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdNotEqualTo(Long value) {
+            addCriterion("operator_id <>", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdGreaterThan(Long value) {
+            addCriterion("operator_id >", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("operator_id >=", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdLessThan(Long value) {
+            addCriterion("operator_id <", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdLessThanOrEqualTo(Long value) {
+            addCriterion("operator_id <=", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdIn(List<Long> values) {
+            addCriterion("operator_id in", values, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdNotIn(List<Long> values) {
+            addCriterion("operator_id not in", values, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdBetween(Long value1, Long value2) {
+            addCriterion("operator_id between", value1, value2, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdNotBetween(Long value1, Long value2) {
+            addCriterion("operator_id not between", value1, value2, "operatorId");
+            return (Criteria) this;
+        }
+
         public Criteria andOperatorIsNull() {
             addCriterion("operator is null");
             return (Criteria) this;
@@ -552,76 +672,6 @@ public class ProcessStatusLogPoExample {
 
         public Criteria andOperatorNotBetween(String value1, String value2) {
             addCriterion("operator not between", value1, value2, "operator");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkIsNull() {
-            addCriterion("remark is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkIsNotNull() {
-            addCriterion("remark is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkEqualTo(String value) {
-            addCriterion("remark =", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotEqualTo(String value) {
-            addCriterion("remark <>", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkGreaterThan(String value) {
-            addCriterion("remark >", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
-            addCriterion("remark >=", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLessThan(String value) {
-            addCriterion("remark <", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLessThanOrEqualTo(String value) {
-            addCriterion("remark <=", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLike(String value) {
-            addCriterion("remark like", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotLike(String value) {
-            addCriterion("remark not like", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkIn(List<String> values) {
-            addCriterion("remark in", values, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotIn(List<String> values) {
-            addCriterion("remark not in", values, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkBetween(String value1, String value2) {
-            addCriterion("remark between", value1, value2, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotBetween(String value1, String value2) {
-            addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
 
@@ -745,63 +795,73 @@ public class ProcessStatusLogPoExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedIsNull() {
-            addCriterion("is_deleted is null");
+        public Criteria andRemarkIsNull() {
+            addCriterion("remark is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedIsNotNull() {
-            addCriterion("is_deleted is not null");
+        public Criteria andRemarkIsNotNull() {
+            addCriterion("remark is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedEqualTo(Integer value) {
-            addCriterion("is_deleted =", value, "isDeleted");
+        public Criteria andRemarkEqualTo(String value) {
+            addCriterion("remark =", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotEqualTo(Integer value) {
-            addCriterion("is_deleted <>", value, "isDeleted");
+        public Criteria andRemarkNotEqualTo(String value) {
+            addCriterion("remark <>", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedGreaterThan(Integer value) {
-            addCriterion("is_deleted >", value, "isDeleted");
+        public Criteria andRemarkGreaterThan(String value) {
+            addCriterion("remark >", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedGreaterThanOrEqualTo(Integer value) {
-            addCriterion("is_deleted >=", value, "isDeleted");
+        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("remark >=", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedLessThan(Integer value) {
-            addCriterion("is_deleted <", value, "isDeleted");
+        public Criteria andRemarkLessThan(String value) {
+            addCriterion("remark <", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedLessThanOrEqualTo(Integer value) {
-            addCriterion("is_deleted <=", value, "isDeleted");
+        public Criteria andRemarkLessThanOrEqualTo(String value) {
+            addCriterion("remark <=", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedIn(List<Integer> values) {
-            addCriterion("is_deleted in", values, "isDeleted");
+        public Criteria andRemarkLike(String value) {
+            addCriterion("remark like", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotIn(List<Integer> values) {
-            addCriterion("is_deleted not in", values, "isDeleted");
+        public Criteria andRemarkNotLike(String value) {
+            addCriterion("remark not like", value, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedBetween(Integer value1, Integer value2) {
-            addCriterion("is_deleted between", value1, value2, "isDeleted");
+        public Criteria andRemarkIn(List<String> values) {
+            addCriterion("remark in", values, "remark");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotBetween(Integer value1, Integer value2) {
-            addCriterion("is_deleted not between", value1, value2, "isDeleted");
+        public Criteria andRemarkNotIn(List<String> values) {
+            addCriterion("remark not in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkBetween(String value1, String value2) {
+            addCriterion("remark between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotBetween(String value1, String value2) {
+            addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
     }

@@ -50,7 +50,7 @@ public class UniversalProcessCoreServiceImpl implements UniversalProcessCoreServ
     public UniversalProcess getProcessByNo(long processNo) {
         // build query example
         UniversalProcessPoExample example = new UniversalProcessPoExample();
-        UniversalProcessPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+        UniversalProcessPoExample.Criteria criteria = example.or();
         // query by unique process no
         criteria.andProcessNoEqualTo(processNo);
 
@@ -67,7 +67,7 @@ public class UniversalProcessCoreServiceImpl implements UniversalProcessCoreServ
     public List<UniversalProcess> getProcessListByRefUniqueNos(List<Long> refUniqueNos) {
         // build query conditions
         UniversalProcessPoExample example = new UniversalProcessPoExample();
-        UniversalProcessPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+        UniversalProcessPoExample.Criteria criteria = example.or();
         criteria.andRefUniqueNoIn(refUniqueNos);
 
         List<UniversalProcessPo> pos = universalProcessDao.selectByExample(example);
@@ -78,7 +78,7 @@ public class UniversalProcessCoreServiceImpl implements UniversalProcessCoreServ
     public List<UniversalProcess> getProcessListByParentProcessNo(long parentProcessNo) {
         // build query condition
         UniversalProcessPoExample example = new UniversalProcessPoExample();
-        UniversalProcessPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+        UniversalProcessPoExample.Criteria criteria = example.or();
         criteria.andParentProcessNoEqualTo(parentProcessNo);
 
         List<UniversalProcessPo> pos = universalProcessDao.selectByExample(example);
@@ -93,7 +93,7 @@ public class UniversalProcessCoreServiceImpl implements UniversalProcessCoreServ
         } else {
             // common query
             UniversalProcessPoExample example = new UniversalProcessPoExample();
-            UniversalProcessPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+            UniversalProcessPoExample.Criteria criteria = example.or();
             criteria.andRefUniqueNoEqualTo(refUniqueNo);
 
             List<UniversalProcessPo> pos = universalProcessDao.selectByExample(example);
@@ -120,7 +120,7 @@ public class UniversalProcessCoreServiceImpl implements UniversalProcessCoreServ
 
         // where condition
         UniversalProcessPoExample example = new UniversalProcessPoExample();
-        UniversalProcessPoExample.Criteria criteria = example.or().andIsDeletedEqualTo(0);
+        UniversalProcessPoExample.Criteria criteria = example.or();
         criteria.andProcessNoEqualTo(processNo);
 
         return universalProcessDao.updateByExampleSelective(po, example);

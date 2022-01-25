@@ -25,9 +25,9 @@ public class ProcessBlockingPo implements Serializable {
     private Integer refStatus;
 
     /**
-     * 备注
+     * 流程在某状态被其他流程阻塞时提示语
      */
-    private String remark;
+    private String blockingMessage;
 
     /**
      * 创建时间
@@ -40,9 +40,9 @@ public class ProcessBlockingPo implements Serializable {
     private Timestamp mtime;
 
     /**
-     * 软删除: 0 否 1是
+     * 备注
      */
-    private Integer isDeleted;
+    private String remark;
 
     private static final long serialVersionUID = 1L;
 
@@ -78,12 +78,12 @@ public class ProcessBlockingPo implements Serializable {
         this.refStatus = refStatus;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getBlockingMessage() {
+        return blockingMessage;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+    public void setBlockingMessage(String blockingMessage) {
+        this.blockingMessage = blockingMessage == null ? null : blockingMessage.trim();
     }
 
     public Timestamp getCtime() {
@@ -102,12 +102,12 @@ public class ProcessBlockingPo implements Serializable {
         this.mtime = mtime;
     }
 
-    public Integer getIsDeleted() {
-        return isDeleted;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     @Override
@@ -126,10 +126,10 @@ public class ProcessBlockingPo implements Serializable {
             && (this.getMainProcessNo() == null ? other.getMainProcessNo() == null : this.getMainProcessNo().equals(other.getMainProcessNo()))
             && (this.getObstacleByProcessNo() == null ? other.getObstacleByProcessNo() == null : this.getObstacleByProcessNo().equals(other.getObstacleByProcessNo()))
             && (this.getRefStatus() == null ? other.getRefStatus() == null : this.getRefStatus().equals(other.getRefStatus()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+            && (this.getBlockingMessage() == null ? other.getBlockingMessage() == null : this.getBlockingMessage().equals(other.getBlockingMessage()))
             && (this.getCtime() == null ? other.getCtime() == null : this.getCtime().equals(other.getCtime()))
             && (this.getMtime() == null ? other.getMtime() == null : this.getMtime().equals(other.getMtime()))
-            && (this.getIsDeleted() == null ? other.getIsDeleted() == null : this.getIsDeleted().equals(other.getIsDeleted()));
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()));
     }
 
     @Override
@@ -140,10 +140,10 @@ public class ProcessBlockingPo implements Serializable {
         result = prime * result + ((getMainProcessNo() == null) ? 0 : getMainProcessNo().hashCode());
         result = prime * result + ((getObstacleByProcessNo() == null) ? 0 : getObstacleByProcessNo().hashCode());
         result = prime * result + ((getRefStatus() == null) ? 0 : getRefStatus().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getBlockingMessage() == null) ? 0 : getBlockingMessage().hashCode());
         result = prime * result + ((getCtime() == null) ? 0 : getCtime().hashCode());
         result = prime * result + ((getMtime() == null) ? 0 : getMtime().hashCode());
-        result = prime * result + ((getIsDeleted() == null) ? 0 : getIsDeleted().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         return result;
     }
 
@@ -157,10 +157,10 @@ public class ProcessBlockingPo implements Serializable {
         sb.append(", mainProcessNo=").append(mainProcessNo);
         sb.append(", obstacleByProcessNo=").append(obstacleByProcessNo);
         sb.append(", refStatus=").append(refStatus);
-        sb.append(", remark=").append(remark);
+        sb.append(", blockingMessage=").append(blockingMessage);
         sb.append(", ctime=").append(ctime);
         sb.append(", mtime=").append(mtime);
-        sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", remark=").append(remark);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
