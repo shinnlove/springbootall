@@ -26,19 +26,29 @@
         <handler seq="1" ref="cancelProcessHandler" desc="单个改价项流程关闭后的trigger"/>
     </canceled>
 
-    <action id="30201" name="upper_enroll" desc="触发阈值待风控审核" destination="1" entrance="true">
+    <action id="30201" name="fee_revise_audit" desc="触发阈值待风控审核" destination="1" entrance="true">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
         <handler seq="2" ref="notifyRiskAuditHandler" desc="通知风控审核处理器"/>
     </action>
 
-    <action id="30202" name="pending_advertiser_confirm" desc="待客户确认" destination="2">
+    <action id="30202" name="fee_pending_advertiser_confirm" desc="待客户确认" destination="2">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+        <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户"/>
     </action>
 
-    <action id="30203" name="accomplish_revise" desc="改价项完成" destination="4">
+    <action id="30203" name="fee_revise_accomplish" desc="改价项完成" destination="4">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="buildDraftTagRelationHandler" desc="构建稿件标签映射关系处理器"/>
+        <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户"/>
+    </action>
+
+    <action id="30204" name="fee_revise_reject" desc="改价项完成" destination="5">
+        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+        <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户"/>
+    </action>
+
+    <action id="30205" name="fee_revise_cancel" desc="改价项取消" destination="6">
+        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+        <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户"/>
     </action>
 
 </template>
