@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<template id="30005" name="revise_item_vendor_profit_template" desc="单个改价项服务商收益子流程" parent="revise_parent_template">
+<template id="30005" name="revise_item_vendor_profit_template" desc="单个改价项服务商收益子流程" parent="30000">
 
     <metadata>
         <status no="-1" name="init" desc="流程初始化"/>
