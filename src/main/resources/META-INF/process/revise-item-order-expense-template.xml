@@ -2,28 +2,41 @@
 <template id="30003" name="revise_item_order_expense_template" desc="单个改价项订单支出子流程" parent="30000">
 
     <metadata>
-        <status no="-1" name="init" desc="流程初始化"/>
-        <status no="1" name="risk_audit" desc="待风控审核"/>
-        <status no="4" name="accepted" desc="改价项已完成"/>
-        <status no="5" name="rejected" desc="改价项已拒绝"/>
-        <status no="6" name="canceled" desc="改价项已取消"/>
+        <status no="-1" name="init" desc="流程初始化" ps="-1"/>
+        <status no="1" name="risk_audit" desc="待风控审核" ps="1"/>
+        <status no="4" name="accepted" desc="改价项已完成" ps="4"/>
+        <status no="5" name="rejected" desc="改价项已拒绝" ps="5"/>
+        <status no="6" name="canceled" desc="改价项已取消" ps="6"/>
     </metadata>
 
     <init>
-        <handler seq="1" ref="createReviseProcessHandler" desc="创建单个改价项流程"/>
+        <pre>
+            <handler seq="1" ref="createReviseProcessHandler" desc="创建单个改价项流程"/>
+        </pre>
+        <dispatch>
+            <destination no="1">
+                <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
+            </destination>
+            <destination no="2">
+                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+            </destination>
+        </dispatch>
+        <post>
+            <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+        </post>
     </init>
 
-    <accepted>
+    <accept>
         <handler seq="1" ref="acceptProcessHandler" desc="单个改价项完成后trigger"/>
-    </accepted>
+    </accept>
 
-    <rejected>
+    <reject>
         <handler seq="1" ref="rejectProcessHandler" desc="单个改价项拒绝后trigger"/>
-    </rejected>
+    </reject>
 
-    <canceled>
+    <cancel>
         <handler seq="1" ref="cancelProcessHandler" desc="单个改价项流程关闭后的trigger"/>
-    </canceled>
+    </cancel>
 
     <action id="30301" name="expense_revise_audit" desc="订单支出项触发阈值待风控审核" destination="1" entrance="true">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>

@@ -20,26 +20,57 @@ public class XmlProcessTemplate implements Serializable {
 
     private static final long      serialVersionUID = 2554229365631674354L;
 
+    /** template id */
     private int                    id;
+
+    /** template name */
     private String                 name;
+
+    /** template description */
     private String                 desc;
+
+    /** parent template id, default -1 represents no parent */
+    private int                    parent           = -1;
 
     /** a couple of actions hold by the template */
     private List<XmlProcessAction> actions;
 
+    /**
+     * Constructor for reflect.
+     */
     public XmlProcessTemplate() {
     }
 
-    public XmlProcessTemplate(int id, String name, String desc) {
+    /**
+     * Constructor with basic arguments. 
+     * 
+     * @param id 
+     * @param name
+     * @param desc
+     * @param parent
+     */
+    public XmlProcessTemplate(int id, String name, String desc, int parent) {
         this.id = id;
         this.name = name;
         this.desc = desc;
+        this.parent = parent;
     }
 
-    public XmlProcessTemplate(int id, String name, String desc, List<XmlProcessAction> actions) {
+    /**
+     * Constructor with all arguments.
+     * 
+     * @param id 
+     * @param name
+     * @param desc
+     * @param parent
+     * @param actions
+     */
+    public XmlProcessTemplate(int id, String name, String desc, int parent,
+                              List<XmlProcessAction> actions) {
         this.id = id;
         this.name = name;
         this.desc = desc;
+        this.parent = parent;
         this.actions = actions;
     }
 
@@ -65,6 +96,14 @@ public class XmlProcessTemplate implements Serializable {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public int getParent() {
+        return parent;
+    }
+
+    public void setParent(int parent) {
+        this.parent = parent;
     }
 
     public List<XmlProcessAction> getActions() {

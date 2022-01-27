@@ -11,14 +11,21 @@
         <status no="6" name="canceled" desc="改价项已取消"/>
     </metadata>
 
-    <child>
-        <status larger="1" target="2"/>
-        <status larger="2" target="3"/>
-        <status larger="3" target="4"/>
-    </child>
-
     <init>
-        <handler seq="1" ref="processCreateReviseHandler" desc="创建改价父流程"/>
+        <pre>
+            <handler seq="1" ref="processCreateReviseHandler" desc="创建改价父流程"/>
+        </pre>
+        <dispatch>
+            <destination no="1">
+                <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
+            </destination>
+            <destination no="2">
+                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+            </destination>
+        </dispatch>
+        <post>
+            <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+        </post>
     </init>
 
     <accepted>
