@@ -18,11 +18,11 @@
                 <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
             </destination>
             <destination no="2">
-                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户确认"/>
             </destination>
         </dispatch>
         <post>
-            <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+            <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="改价流程初始化完成"/>
         </post>
     </init>
 

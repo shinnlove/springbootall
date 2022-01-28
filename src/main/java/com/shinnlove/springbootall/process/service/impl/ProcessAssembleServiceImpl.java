@@ -147,8 +147,8 @@ public class ProcessAssembleServiceImpl implements ProcessAssembleService, Appli
 
         } // for template's status
 
-        LoggerUtil.info(logger, "Template and status's metadata has been successfully loaded.");
-        LoggerUtil.info(logger, "Springboot context handler has been successfully reflected.");
+        LoggerUtil.debug(logger, "Template and status's metadata has been successfully loaded.");
+        LoggerUtil.debug(logger, "Springboot context handler has been successfully reflected.");
     }
 
     @Override
