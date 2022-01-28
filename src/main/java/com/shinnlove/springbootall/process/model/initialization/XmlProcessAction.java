@@ -5,11 +5,11 @@
 package com.shinnlove.springbootall.process.model.initialization;
 
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.io.Serializable;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Xml file process action attributes domain model.
@@ -32,6 +32,9 @@ public class XmlProcessAction implements Serializable {
     /** whether this action is an entrance, reject proceed if no process and not an entrance */
     private boolean                 entrance;
 
+    /** action from status */
+    private int                     source;
+
     /** action targeting destination status */
     private int                     destination;
 
@@ -52,19 +55,22 @@ public class XmlProcessAction implements Serializable {
 
     /**
      * Constructor with all arguments.
-     *
-     * @param id
+     * 
+     * @param id 
      * @param name
      * @param desc
      * @param entrance
+     * @param source
      * @param destination
      * @param handlers
      */
-    public XmlProcessAction(int id, String name, String desc, boolean entrance, int destination, List<XmlProcessHandler> handlers) {
+    public XmlProcessAction(int id, String name, String desc, boolean entrance, int source,
+                            int destination, List<XmlProcessHandler> handlers) {
         this.id = id;
         this.name = name;
         this.desc = desc;
         this.entrance = entrance;
+        this.source = source;
         this.destination = destination;
         this.handlers = handlers;
     }
@@ -99,6 +105,14 @@ public class XmlProcessAction implements Serializable {
 
     public void setEntrance(boolean entrance) {
         this.entrance = entrance;
+    }
+
+    public int getSource() {
+        return source;
+    }
+
+    public void setSource(int source) {
+        this.source = source;
     }
 
     public int getDestination() {

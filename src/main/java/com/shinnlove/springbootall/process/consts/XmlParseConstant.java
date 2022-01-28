@@ -5,12 +5,16 @@
 package com.shinnlove.springbootall.process.consts;
 
 /**
+ * Xml template file parse constants.
+ * 
  * @author Tony Zhao
  * @version $Id: XmlParseConstant.java, v 0.1 2022-01-27 5:13 PM Tony Zhao Exp $$
  */
 public class XmlParseConstant {
 
     public static final String SECTION_ROOT_METADATA     = "metadata";
+
+    public static final String SECTION_INNER_STATUS      = "status";
 
     public static final String SECTION_ROOT_INIT         = "init";
 
@@ -34,13 +38,19 @@ public class XmlParseConstant {
 
     public static final String ATTR_ID                   = "id";
 
+    public static final String ATTR_NO                   = "no";
+
     public static final String ATTR_NAME                 = "name";
 
     public static final String ATTR_DESC                 = "desc";
 
     public static final String ATTR_PARENT               = "parent";
 
+    public static final String ATTR_PARENT_STATUS        = "ps";
+
     public static final String ATTR_ENTRANCE             = "entrance";
+
+    public static final String ATTR_SOURCE               = "source";
 
     public static final String ATTR_DESTINATION          = "destination";
 

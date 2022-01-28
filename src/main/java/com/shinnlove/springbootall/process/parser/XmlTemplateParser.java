@@ -11,6 +11,7 @@ import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -32,7 +33,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 public class XmlTemplateParser {
 
-    private static final Logger logger           = LoggerFactory.getLogger(XmlTemplateParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(XmlTemplateParser.class);
 
     public static XmlProcessTemplate parse(InputStream stream) {
         XmlProcessTemplate xp = new XmlProcessTemplate();
@@ -48,48 +49,36 @@ public class XmlTemplateParser {
             // pay attention: root node has no text, elements starts from index 0!
             Node template = root.item(0);
 
-            // handler template attributes
-            NamedNodeMap templateNodeAttributes = template.getAttributes();
-            for (int h = 0; h < templateNodeAttributes.getLength(); h++) {
-                String templateAttrName = templateNodeAttributes.item(h).getNodeName();
-                String templateAttrValue = templateNodeAttributes.item(h).getNodeValue();
+            wrapTemplateAttr(xp, parseNodeAttrs(template));
 
-                if (ATTR_ID.equals(templateAttrName)) {
-                    // handle template id
-                    xp.setId(Integer.parseInt(templateAttrValue));
-                    continue;
-                }
-                if (ATTR_NAME.equals(templateAttrName)) {
-                    // use template name to reflect key
-                    xp.setName(templateAttrValue);
-                    continue;
-                }
-                if (ATTR_DESC.equals(templateAttrName)) {
-                    // initialized template's desc into bean definition for logging
-                    xp.setName(templateAttrValue);
-                    continue;
-                }
-                if (ATTR_PARENT.equals(templateAttrName)) {
-                    // initialize parent
-                    xp.setParent(Integer.parseInt(templateAttrValue));
-                    continue;
-                }
+            List<Node> metadata = getChildNodesByName(template, SECTION_ROOT_METADATA);
 
-            } // for template's attributes
+            List<Node> initSection = getChildNodesByName(template, SECTION_ROOT_INIT);
+            if (!CollectionUtils.isEmpty(initSection)) {
+                Map<Integer, List<XmlProcessHandler>> inits = scanInit(initSection.get(0));
+            }
 
-            // for each template's actions
-            NodeList actionList = template.getChildNodes();
+            List<Node> accepts = getChildNodesByName(template, SECTION_ROOT_ACCEPT);
+            List<Node> rejects = getChildNodesByName(template, SECTION_ROOT_REJECT);
+            List<Node> cancels = getChildNodesByName(template, SECTION_ROOT_CANCEL);
 
             // a collection to collect all actions that has been successfully parsed
             List<XmlProcessAction> parseActions = new ArrayList<>();
+            List<Node> actionSection = getChildNodesByName(template, SECTION_ROOT_ACTION);
+            if (!CollectionUtils.isEmpty(actionSection)) {
+                for (Node ac : actionSection) {
+                    List<XmlProcessHandler> handlers = new ArrayList<>();
 
-            for (int i = 0; i < actionList.getLength(); i++) {
-                Node actionNode = actionList.item(i);
+                    parseActions.add(parseAction(parseNodeAttrs(ac), handlers));
 
-                dispatchSectionNode(actionNode);
+                    for (Node ha : getChildNodesByName(ac, SECTION_INNER_HANDLER)) {
+                        handlers.add(parseHandler(parseNodeAttrs(ha)));
+                    }
 
-            } // for actions
-
+                    // don't forget to sort handlers after read from xml file
+                    Collections.sort(handlers);
+                }
+            }
             // special warning: don't forget to put action list back to template
             xp.setActions(parseActions);
 
@@ -99,94 +88,6 @@ public class XmlTemplateParser {
         }
 
         return xp;
-    }
-
-    private static void dispatchSectionNode(Node sectionNode) {
-        switch (sectionNode.getNodeName()) {
-            case SECTION_ROOT_METADATA:
-                List<XmlProcessAction> metadata = scanMetadata(sectionNode);
-                System.out.println(metadata);
-                break;
-            case SECTION_ROOT_INIT:
-                Map<Integer, List<XmlProcessHandler>> inits = scanInit(sectionNode);
-                System.out.println(inits);
-                break;
-            case SECTION_ROOT_ACCEPT:
-                List<XmlProcessAction> accepts = scanAccept(sectionNode);
-                System.out.println(accepts);
-                break;
-            case SECTION_ROOT_REJECT:
-                List<XmlProcessAction> rejects = scanReject(sectionNode);
-                System.out.println(rejects);
-                break;
-            case SECTION_ROOT_CANCEL:
-                List<XmlProcessAction> cancels = scanCancel(sectionNode);
-                System.out.println(cancels);
-            case SECTION_ROOT_ACTION:
-                List<XmlProcessAction> actions = scanActions(sectionNode);
-                System.out.println(actions);
-                break;
-            default:
-                // skip..
-                break;
-        }
-    }
-
-    private static List<XmlProcessAction> scanMetadata(Node actionNode) {
-
-        NamedNodeMap actionNodeAttributes = actionNode.getAttributes();
-        for (int j = 0; j < actionNodeAttributes.getLength(); j++) {
-            String actionAttrName = actionNodeAttributes.item(j).getNodeName();
-            String actionAttrValue = actionNodeAttributes.item(j).getNodeValue();
-            System.out.println("action: " + actionAttrName + "=" + actionAttrValue + ",");
-
-        } // for actions' attributes
-
-        // for each action's child node
-        NodeList action = actionNode.getChildNodes();
-
-        // a collection to collect all handlers that are parsed successfully..
-
-        return null;
-    }
-
-    private static Node getChildNodeByName(Node root, String childNodeName) {
-        return getChildNodeByName(root, childNodeName, 0);
-    }
-
-    @Deprecated
-    private static Node getChildNodeByName(Node root, String childNodeName, int depth) {
-
-        if (childNodeName.equals(root.getNodeName())) {
-            return root;
-        }
-
-        NodeList children = root.getChildNodes();
-        int len = children.getLength();
-        if (len == 0 || depth > 5) {
-            // skip recursive exceed five cascades
-            return null;
-        }
-
-        for (int i = 0; i < len; i++) {
-            Node node = children.item(i);
-            if (matchNode(node, childNodeName)) {
-                return node;
-            }
-        }
-
-        for (int j = 0; j < len; j++) {
-            Node node = children.item(j);
-            if (matchNode(node, childNodeName)) {
-                return getChildNodeByName(node, childNodeName, depth + 1);
-            }
-        }
-
-        return null;
-    }
-
-    private static boolean matchNode(Node node, String search) {
-        return node != null && search.equals(node.getNodeName());
     }
 
     private static Map<Integer, List<XmlProcessHandler>> scanInit(Node sectionNode) {
@@ -220,25 +121,22 @@ public class XmlTemplateParser {
 
             } else if (SECTION_INNER_DISPATCH.equals(stepName)) {
 
-                Node destinationNode = getChildNodeByName(initStepNode, SECTION_THIRD_DESTINATION);
+                for (Node des : getChildNodesByName(initStepNode, SECTION_THIRD_DESTINATION)) {
+                    Map<String, String> desAttrs = parseNodeAttrs(des);
+                    System.out.println(desAttrs);
 
-                List<XmlProcessHandler> dispatchHandlers = new ArrayList<>();
-                parseHandler(destinationNode, dispatchHandlers);
+                    Integer destination = Integer.parseInt(desAttrs.get(ATTR_NO));
 
-                Integer destination = -1;
+                    List<XmlProcessHandler> dispatchHandlers = new ArrayList<>();
+                    for (Node ha : getChildNodesByName(des, SECTION_INNER_HANDLER)) {
+                        Map<String, String> haAttrs = parseNodeAttrs(ha);
+                        XmlProcessHandler h = parseHandler(haAttrs);
+                        dispatchHandlers.add(h);
+                    }
 
-                NamedNodeMap handlerAttrs = initStepNode.getAttributes();
-                for (int j = 0; j < handlerAttrs.getLength(); j++) {
-                    String handlerAttrName = handlerAttrs.item(j).getNodeName();
-                    String handlerAttrValue = handlerAttrs.item(j).getNodeValue();
-                    System.out
-                        .println("handlers: " + handlerAttrName + "=" + handlerAttrValue + ",");
+                    destinationMap.put(destination, dispatchHandlers);
 
-                    // destination = Integer.parseInt(handlerAttrValue);
-
-                } // for actions' attributes
-
-                destinationMap.put(destination, dispatchHandlers);
+                }
 
             } else if (SECTION_INNER_POST.equals(stepName)) {
 
@@ -259,116 +157,107 @@ public class XmlTemplateParser {
         return finalDispatch;
     }
 
-    private static List<XmlProcessAction> scanAccept(Node actionNode) {
-        return null;
+    private static void wrapTemplateAttr(XmlProcessTemplate xp, Map<String, String> attr) {
+        xp.setId(Integer.parseInt(attr.get(ATTR_ID)));
+        xp.setName(attr.get(ATTR_NAME));
+        xp.setDesc(attr.get(ATTR_DESC));
+        xp.setParent(Integer.parseInt(attr.get(ATTR_PARENT)));
     }
 
-    private static List<XmlProcessAction> scanReject(Node actionNode) {
-        return null;
+    private static XmlProcessAction parseAction(Map<String, String> attr,
+                                                List<XmlProcessHandler> handlers) {
+        XmlProcessAction xa = new XmlProcessAction();
+
+        xa.setId(Integer.parseInt(attr.get(ATTR_ID)));
+        xa.setName(attr.get(ATTR_NAME));
+        xa.setDesc(attr.get(ATTR_DESC));
+        xa.setEntrance(Boolean.parseBoolean(attr.get(ATTR_ENTRANCE)));
+        xa.setSource(Integer.parseInt(attr.get(ATTR_SOURCE)));
+        xa.setDestination(Integer.parseInt(attr.get(ATTR_DESTINATION)));
+        xa.setHandlers(handlers);
+
+        return xa;
     }
 
-    private static List<XmlProcessAction> scanCancel(Node actionNode) {
-        return null;
-    }
-
-    private static List<XmlProcessAction> scanActions(Node actionNode) {
-
-        List<XmlProcessAction> parseActions = new ArrayList<>();
-
-        if (SECTION_ROOT_ACTION.equals(actionNode.getNodeName())) {
-
-            // a new action node created...
-            XmlProcessAction xa = new XmlProcessAction();
-
-            // extract action's attributes
-            NamedNodeMap actionNodeAttributes = actionNode.getAttributes();
-            for (int j = 0; j < actionNodeAttributes.getLength(); j++) {
-                String actionAttrName = actionNodeAttributes.item(j).getNodeName();
-                String actionAttrValue = actionNodeAttributes.item(j).getNodeValue();
-                //                        System.out.println("action: " + actionAttrName + "=" + actionAttrValue + ",");
-
-                if (ATTR_ID.equals(actionAttrName)) {
-                    // handle action id
-                    xa.setId(Integer.parseInt(actionAttrValue));
-                }
-                if (ATTR_NAME.equals(actionAttrName)) {
-                    // use action name to reflect key
-                    xa.setName(actionAttrValue);
-                }
-                if (ATTR_DESC.equals(actionAttrName)) {
-                    // initialized action's desc into bean definition for logging
-                    xa.setDesc(actionAttrValue);
-                }
-                if (ATTR_ENTRANCE.equals(actionAttrName)) {
-                    // initialize actions's entrance for process init
-                    xa.setEntrance(Boolean.parseBoolean(actionAttrValue));
-                }
-                if (ATTR_DESTINATION.equals(actionAttrName)) {
-                    // initialize action's target status for check destination
-                    xa.setDestination(Integer.parseInt(actionAttrValue));
-                }
-            } // for actions' attributes
-
-            // for each action's child node
-            NodeList action = actionNode.getChildNodes();
-
-            // a collection to collect all handlers that are parsed successfully..
-            List<XmlProcessHandler> parseHandlers = new ArrayList<>();
-
-            for (int k = 0; k < action.getLength(); k++) {
-                Node handlerNode = action.item(k);
-
-                if (SECTION_INNER_HANDLER.equals(handlerNode.getNodeName())) {
-                    parseHandler(handlerNode, parseHandlers);
-                } // if handler
-
-            } // for handlers
-
-            // don't forget to sort handlers after read from xml file
-            Collections.sort(parseHandlers);
-            // put handlers back to an action
-            xa.setHandlers(parseHandlers);
-            // special warning: don't forget to put action back to action list
-            parseActions.add(xa);
-
-        } // if action
-
-        return parseActions;
-    }
-
-    private static void parseHandler(Node handlerNode, List<XmlProcessHandler> parseHandlers) {
+    private static XmlProcessHandler parseHandler(Map<String, String> attr) {
         // a new handler created...
         XmlProcessHandler xh = new XmlProcessHandler();
 
-        // extract handler's attributes
-        NamedNodeMap handlerNodeAttributes = handlerNode.getAttributes();
-        for (int l = 0; l < handlerNodeAttributes.getLength(); l++) {
-            String handlerAttrName = handlerNodeAttributes.item(l).getNodeName();
-            String handlerAttrValue = handlerNodeAttributes.item(l).getNodeValue();
+        xh.setSequence(Integer.parseInt(attr.get(ATTR_SEQUENCE)));
+        xh.setRefBeanId(attr.get(ATTR_REFERENCE));
+        xh.setDesc(attr.get(ATTR_DESC));
+        xh.setTrans(Boolean.parseBoolean(attr.get(ATTR_TRANS)));
 
-            LoggerUtil.info(logger, "handler: ", handlerAttrName, "=", handlerAttrValue, ",");
+        return xh;
+    }
 
-            if (ATTR_SEQUENCE.equals(handlerAttrName)) {
-                // handle sequence
-                xh.setSequence(Integer.parseInt(handlerAttrValue));
-            }
-            if (ATTR_REFERENCE.equals(handlerAttrName)) {
-                // get bean reference from spring context
-                xh.setRefBeanId(handlerAttrValue);
-            }
-            if (ATTR_DESC.equals(handlerAttrName)) {
-                // initialized to bean definition for logging
-                xh.setDesc(handlerAttrValue);
-            }
-            if (ATTR_TRANS.equals(handlerAttrName)) {
-                // trans sync execute
-                xh.setTrans(Boolean.parseBoolean(handlerAttrValue));
-            }
+    private static boolean matchNode(Node node, String search) {
+        return node != null && search.equals(node.getNodeName());
+    }
 
-        } // for handler's attributes
+    private static List<Node> getChildNodesByName(Node root, String childName) {
+        return getChildNodesByName(root, childName, 0);
+    }
 
-        // special waring: don't forget to put handler back to handler list
-        parseHandlers.add(xh);
+    @Deprecated
+    private static List<Node> getChildNodesByName(Node root, String childName, int depth) {
+
+        List<Node> result = new ArrayList<>();
+
+        if (childName.equals(root.getNodeName())) {
+            result.add(root);
+            return result;
+        }
+
+        NodeList children = root.getChildNodes();
+        int len = children.getLength();
+
+        if (len == 0 || depth > 5) {
+            // skip recursive exceed five cascades
+            return result;
+        }
+
+        for (int i = 0; i < len; i++) {
+            Node node = children.item(i);
+            if (matchNode(node, childName)) {
+                result.add(node);
+            }
+        }
+
+        if (CollectionUtils.isEmpty(result)) {
+            // not found in current level
+            // deep dive into second level
+            boolean found = false;
+            int j = 0;
+            while (j < len) {
+                Node node = children.item(j++);
+                List<Node> onceResult = getChildNodesByName(node, childName, depth + 1);
+                if (!CollectionUtils.isEmpty(onceResult)) {
+                    result.addAll(onceResult);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static Map<String, String> parseNodeAttrs(Node node) {
+        Map<String, String> attrMap = new HashMap<>();
+
+        NamedNodeMap nodeAttrs = node.getAttributes();
+        int len = nodeAttrs.getLength();
+
+        if (len <= 0) {
+            return attrMap;
+        }
+
+        for (int i = 0; i < len; i++) {
+            String attrName = nodeAttrs.item(i).getNodeName();
+            String attrValue = nodeAttrs.item(i).getNodeValue();
+            attrMap.put(attrName, attrValue);
+        }
+
+        return attrMap;
     }
 
 }
