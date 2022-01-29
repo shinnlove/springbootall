@@ -2,12 +2,12 @@
 <template id="30001" name="revise_item_order_price_template" desc="单个改价项订单金额子流程" parent="30000">
 
     <metadata>
-        <status no="-1" name="init" desc="流程初始化" ps="-1"/>
-        <status no="1" name="risk_audit" desc="待风控审核" ps="1"/>
-        <status no="2" name="customer_confirm" desc="待客户确认" ps="2"/>
-        <status no="4" name="accepted" desc="改价项已完成" ps="4"/>
-        <status no="5" name="rejected" desc="改价项已拒绝" ps="5"/>
-        <status no="6" name="canceled" desc="改价项已取消" ps="6"/>
+        <status no="-1" seq="1" name="init" desc="流程初始化" ps="-1"/>
+        <status no="1" seq="2" name="risk_audit" desc="待风控审核" ps="1"/>
+        <status no="2" seq="3" name="customer_confirm" desc="待客户确认" ps="2"/>
+        <status no="4" seq="4" name="accepted" desc="改价项已完成" ps="4"/>
+        <status no="5" seq="5" name="rejected" desc="改价项已拒绝" ps="5"/>
+        <status no="6" seq="6" name="canceled" desc="改价项已取消" ps="6"/>
     </metadata>
 
     <init>

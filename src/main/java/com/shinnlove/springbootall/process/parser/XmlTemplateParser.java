@@ -83,6 +83,7 @@ public class XmlTemplateParser {
         XmlProcessStatus xs = new XmlProcessStatus();
 
         xs.setNo(Integer.parseInt(attr.get(ATTR_NO)));
+        xs.setSequence(Integer.parseInt(attr.get(ATTR_SEQUENCE)));
         xs.setName(attr.get(ATTR_NAME));
         xs.setDesc(attr.get(ATTR_DESC));
         xs.setPs(Integer.parseInt(attr.get(ATTR_PARENT_STATUS)));

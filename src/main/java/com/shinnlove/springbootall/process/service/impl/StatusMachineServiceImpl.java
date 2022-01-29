@@ -22,7 +22,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 
 import com.shinnlove.springbootall.process.callback.ProcessCallback;
-import com.shinnlove.springbootall.process.consts.MachineConstants;
+import com.shinnlove.springbootall.process.consts.MachineConstant;
 import com.shinnlove.springbootall.process.core.ProcessBlockingCoreService;
 import com.shinnlove.springbootall.process.core.ProcessStatusCoreService;
 import com.shinnlove.springbootall.process.core.UniversalProcessCoreService;
@@ -212,7 +212,7 @@ public class StatusMachineServiceImpl implements StatusMachineService {
             UniversalProcess uProcess = universalProcessCoreService
                 .getProcessByRefUniqueNo(refUniqueNo, true);
             AssertUtil.isNotNull(uProcess, SystemResultCode.PARAM_INVALID,
-                MachineConstants.NO_PROCESS_IN_SYSTEM);
+                MachineConstant.NO_PROCESS_IN_SYSTEM);
 
             long processNo = uProcess.getProcessNo();
             context.setProcessNo(processNo);
@@ -272,8 +272,8 @@ public class StatusMachineServiceImpl implements StatusMachineService {
                 if (needUpdateParent) {
                     int pacStatus = processAssembleService.getACFinalStatus(pTemplateId);
                     processStatusCoreService.proceedProcessStatus(pTemplateId, pActionId,
-                        parentProcessNo, pcStatus, pacStatus, MachineConstants.DEFAULT_OPERATOR,
-                        MachineConstants.DEFAULT_REMARK);
+                        parentProcessNo, pcStatus, pacStatus, MachineConstant.DEFAULT_OPERATOR,
+                        MachineConstant.DEFAULT_REMARK);
                 }
 
             } // if need reconcile
@@ -316,7 +316,7 @@ public class StatusMachineServiceImpl implements StatusMachineService {
         int contextSize = dataContexts.size();
         if (noSize != contextSize) {
             throw new SystemException(SystemResultCode.PARAM_INVALID,
-                MachineConstants.INVALID_PARAMETERS);
+                MachineConstant.INVALID_PARAMETERS);
         }
 
         // loop to try...catch execute
@@ -389,7 +389,7 @@ public class StatusMachineServiceImpl implements StatusMachineService {
                 int bStatus = bProcess.getCurrentStatus();
                 if (!processAssembleService.isFinalStatus(btId, bStatus)) {
                     throw new SystemException(SystemResultCode.SYSTEM_ERROR,
-                        MachineConstants.STATUS_HAS_BLOCKING_PROCESS);
+                        MachineConstant.STATUS_HAS_BLOCKING_PROCESS);
                 }
             }
         } // if blocking
@@ -410,7 +410,7 @@ public class StatusMachineServiceImpl implements StatusMachineService {
     private void checkSourceStatus(int currentStatus, int source) {
         if (currentStatus != source) {
             throw new SystemException(SystemResultCode.PARAM_INVALID,
-                MachineConstants.SOURCE_STATUS_INCORRECT);
+                MachineConstant.SOURCE_STATUS_INCORRECT);
         }
     }
 

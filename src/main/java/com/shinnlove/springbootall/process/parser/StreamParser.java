@@ -24,6 +24,15 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public class StreamParser {
 
+    /**
+     * Parse template info by given xml file. 
+     * 
+     * @param stream 
+     * @return
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
     public static Node parse(InputStream stream) throws ParserConfigurationException, IOException,
                                                  SAXException {
         InputStream inputStream = stream;

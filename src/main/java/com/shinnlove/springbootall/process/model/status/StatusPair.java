@@ -19,7 +19,8 @@ public class StatusPair implements Serializable {
 
     private static final long serialVersionUID = -8472879298003178644L;
 
-    private int               sourceStatus;
+    /** -1 represents no limit from source */
+    private int               sourceStatus     = -1;
     private int               destinationStatus;
 
     public StatusPair() {

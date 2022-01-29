@@ -6,17 +6,17 @@ package com.shinnlove.springbootall.process.consts;
 
 /**
  * @author Tony Zhao
- * @version $Id: MachineConstants.java, v 0.1 2022-01-10 11:52 PM Tony Zhao Exp $$
+ * @version $Id: MachineConstant.java, v 0.1 2022-01-10 11:52 PM Tony Zhao Exp $$
  */
-public final class MachineConstants {
+public final class MachineConstant {
 
-    private MachineConstants() {
+    private MachineConstant() {
 
     }
 
     public static final String INVALID_PARAMETERS          = "invalid parameters.";
 
-    public static final String DEFAULT_OPERATOR            = "Mission System";
+    public static final String DEFAULT_OPERATOR            = "CommercialOrder System";
 
     public static final String DEFAULT_REMARK              = "Auto reconcile by child process accomplished.";
 

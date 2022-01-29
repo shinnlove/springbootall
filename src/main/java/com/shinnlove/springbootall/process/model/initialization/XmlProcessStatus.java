@@ -21,7 +21,10 @@ public class XmlProcessStatus implements Serializable, Comparable<XmlProcessStat
     private static final long serialVersionUID = 2482692196063669117L;
 
     /** status number No. */
-    private int               no;
+    private int               no               = -1;
+
+    /** status order */
+    private int               sequence         = 0;
 
     /** status name key */
     private String            name;
@@ -32,11 +35,24 @@ public class XmlProcessStatus implements Serializable, Comparable<XmlProcessStat
     /** status refer to parent status if parent exists! default -1 represent no parent. */
     private int               ps               = -1;
 
+    /**
+     * Constructor for reflect.
+     */
     public XmlProcessStatus() {
     }
 
-    public XmlProcessStatus(int no, String name, String desc, int ps) {
+    /**
+     * Constructor with all arguments.
+     * 
+     * @param no 
+     * @param sequence
+     * @param name
+     * @param desc
+     * @param ps
+     */
+    public XmlProcessStatus(int no, int sequence, String name, String desc, int ps) {
         this.no = no;
+        this.sequence = sequence;
         this.name = name;
         this.desc = desc;
         this.ps = ps;
@@ -48,6 +64,14 @@ public class XmlProcessStatus implements Serializable, Comparable<XmlProcessStat
 
     public void setNo(int no) {
         this.no = no;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
     }
 
     public String getName() {
@@ -81,9 +105,9 @@ public class XmlProcessStatus implements Serializable, Comparable<XmlProcessStat
 
     @Override
     public int compareTo(XmlProcessStatus o) {
-        if (this.no < o.getNo()) {
+        if (this.sequence < o.getSequence()) {
             return -1;
-        } else if (this.no == o.getNo()) {
+        } else if (this.sequence == o.getSequence()) {
             return 0;
         } else {
             return 1;

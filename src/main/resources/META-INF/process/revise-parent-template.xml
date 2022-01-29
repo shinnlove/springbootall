@@ -2,13 +2,13 @@
 <template id="30000" name="revise_parent_template" desc="改价父流程" parent="-1">
 
     <metadata>
-        <status no="-1" name="init" desc="流程初始化"/>
-        <status no="1" name="risk_audit" desc="待风控审核"/>
-        <status no="2" name="customer_confirm" desc="待客户确认"/>
-        <status no="3" name="upper_confirm" desc="待UP主确认"/>
-        <status no="4" name="accepted" desc="改价项已完成"/>
-        <status no="5" name="rejected" desc="改价项已拒绝"/>
-        <status no="6" name="canceled" desc="改价项已取消"/>
+        <status no="-1" seq="1" name="init" desc="流程初始化"/>
+        <status no="1" seq="2" name="risk_audit" desc="待风控审核"/>
+        <status no="2" seq="3" name="customer_confirm" desc="待客户确认"/>
+        <status no="3" seq="4" name="upper_confirm" desc="待UP主确认"/>
+        <status no="4" seq="5" name="accepted" desc="改价项已完成"/>
+        <status no="5" seq="6" name="rejected" desc="改价项已拒绝"/>
+        <status no="6" seq="7" name="canceled" desc="改价项已取消"/>
     </metadata>
 
     <init>
