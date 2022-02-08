@@ -241,7 +241,7 @@ public class ProcessAssembleServiceImpl implements ProcessAssembleService, Appli
             Resource[] resources = resolver.getResources("classpath:META-INF/process/*.xml");
             for (Resource resource : resources) {
                 // initialize xml parse and metadata assemble
-                initializeProcessTemplateStatus(resource.getInputStream());
+//                initializeProcessTemplateStatus(resource.getInputStream());
             }
         } catch (Exception e) {
             LoggerUtil.error(logger, e, e.getMessage(),

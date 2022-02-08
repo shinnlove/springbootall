@@ -6,6 +6,7 @@ package com.shinnlove.springbootall.process.service.impl;
 
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.shinnlove.springbootall.process.enums.TemplateTriggerType;
 import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
 import com.shinnlove.springbootall.process.model.initialization.XmlProcessAction;
 import com.shinnlove.springbootall.process.model.initialization.XmlProcessHandler;
@@ -36,6 +38,8 @@ import com.shinnlove.springbootall.util.exception.SystemException;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 
 /**
+ * Service which parse and cache template action into memory. 
+ * 
  * @author Tony Zhao
  * @version $Id: ProcessAssemble2ndServiceImpl.java, v 0.1 2022-01-29 5:42 PM Tony Zhao Exp $$
  */
@@ -57,22 +61,29 @@ public class ProcessAssemble2ndServiceImpl implements ProcessAssemble2ndService,
         XmlProcessTemplate xp = XmlTemplateParser.parse(stream);
 
         // parse action handlers and cache status
-        cacheActionStatus(xp);
-
+        TemplateCache template = cacheTemplate(xp);
+        templateCache.put(xp.getId(), template);
     }
 
-    private TemplateCache cacheActionStatus(XmlProcessTemplate xp) {
+    private TemplateCache cacheTemplate(XmlProcessTemplate xp) {
+        TemplateCache template = new TemplateCache();
 
-        ActionCache actionCache = new ActionCache();
+        Map<Integer, StatusPair> actionStatus = new HashMap<>();
+        Map<Integer, Map<Integer, ActionCache>> reverseFlow = new HashMap<>();
+
+        // step1: action and its reverse reflection
         for (XmlProcessAction a : xp.getActions()) {
             int id = a.getId();
+            int src = a.getSource();
+            int des = a.getDestination();
 
             List<ActionHandler> sync = new ArrayList<>();
             List<ActionHandler> async = new ArrayList<>();
+            ActionCache cache = new ActionCache(id, src, des, sync, async);
 
             XmlProcessAction xa = xp.getActionById(id);
             for (XmlProcessHandler h : xa.getHandlers()) {
-                ActionHandler ah = fetchService(h.getRefBeanId());
+                ActionHandler ah = fetchHandler(h);
                 if (h.isTrans()) {
                     sync.add(ah);
                 } else {
@@ -80,12 +91,12 @@ public class ProcessAssemble2ndServiceImpl implements ProcessAssemble2ndService,
                 }
             }
 
-            actionCache.setHandlers(id, sync, async);
+            actionStatus.put(id, new StatusPair(src, des));
+            twoKeyReflect(src, des, cache, reverseFlow);
         }
 
-        TemplateCache template = new TemplateCache();
+        // step2: status check array
         List<StatusCache> statusCache = new ArrayList<>();
-
         for (XmlProcessStatus s : xp.getStatus()) {
             statusCache.add(new StatusCache(s.getNo(), s.getSequence()));
         }
@@ -96,22 +107,39 @@ public class ProcessAssemble2ndServiceImpl implements ProcessAssemble2ndService,
             return template;
         }
 
-        Map<Integer, StatusPair> statusPairs = new HashMap<>();
-        for (XmlProcessAction pa : xp.getActions()) {
-            int actionId = pa.getId();
-            int source = pa.getSource();
-            int destination = pa.getDestination();
-            List<XmlProcessHandler> handlers = pa.getHandlers();
-
-            statusPairs.put(actionId, new StatusPair(source, destination));
-
-            Map<Integer, Map<Integer, ActionCache>> reverseFlow = new HashMap<>();
-
+        // step3: initializer
+        Map<Integer, List<ActionHandler>> initializer = new HashMap<>();
+        Map<Integer, List<XmlProcessHandler>> inits = xp.getInits();
+        for (Map.Entry<Integer, List<XmlProcessHandler>> entry : inits.entrySet()) {
+            int target = entry.getKey();
+            List<ActionHandler> handlers = fetchHandlers(entry.getValue());
+            initializer.put(target, handlers);
         }
 
-        StatusCache[] statusArray = (StatusCache[]) statusCache.toArray();
+        // step4: triggers
+        Map<String, List<ActionHandler>> triggers = new HashMap<>();
+        triggers.put(TemplateTriggerType.ACCEPT.name(), fetchHandlers(xp.getAccepts()));
+        triggers.put(TemplateTriggerType.REJECT.name(), fetchHandlers(xp.getRejects()));
+        triggers.put(TemplateTriggerType.CANCEL.name(), fetchHandlers(xp.getCancels()));
+
+        // step5: array
+        template.setStatusArray(statusCache.toArray(new StatusCache[statusCache.size()]));
+        template.setActionStatus(actionStatus);
+        template.setReverseFlow(reverseFlow);
+        template.setInitializers(initializer);
+        template.setTriggers(triggers);
 
         return template;
+    }
+
+    private List<ActionHandler> fetchHandlers(List<XmlProcessHandler> handlers) {
+        return Optional.ofNullable(handlers)
+            .map(hs -> hs.stream().map(h -> fetchHandler(h)).collect(Collectors.toList()))
+            .orElse(new ArrayList<>());
+    }
+
+    private ActionHandler fetchHandler(XmlProcessHandler handler) {
+        return fetchService(handler.getRefBeanId());
     }
 
     @SuppressWarnings("rawtypes")
@@ -133,6 +161,26 @@ public class ProcessAssemble2ndServiceImpl implements ProcessAssemble2ndService,
         }
 
         return handlerService;
+    }
+
+    private <T, V> Map<T, Map<T, V>> twoKeyReflect(T key1, T key2, V value, Map<T, Map<T, V>> map) {
+        if (key1 == null || key2 == null || value == null) {
+            return map;
+        }
+
+        if (map == null) {
+            map = new HashMap<>();
+        }
+
+        if (!map.containsKey(key1)) {
+            Map<T, V> reflectMap = new HashMap<>();
+            map.put(key1, reflectMap);
+        }
+
+        Map<T, V> reflection = map.get(key1);
+        reflection.put(key2, value);
+
+        return map;
     }
 
     @Override

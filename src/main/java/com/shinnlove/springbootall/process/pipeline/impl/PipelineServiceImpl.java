@@ -4,6 +4,7 @@
  */
 package com.shinnlove.springbootall.process.pipeline.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -17,7 +18,7 @@ import org.springframework.util.CollectionUtils;
 import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
 import com.shinnlove.springbootall.process.pipeline.PipelineService;
-import com.shinnlove.springbootall.process.service.ProcessAssembleService;
+import com.shinnlove.springbootall.process.service.ProcessAssemble2ndService;
 import com.shinnlove.springbootall.util.exception.SystemException;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 
@@ -32,7 +33,7 @@ public class PipelineServiceImpl implements PipelineService {
 
     /** process template and status metadata autowired service */
     @Autowired
-    private ProcessAssembleService processAssembleService;
+    private ProcessAssemble2ndService processAssemble2ndService;
 
     @Override
     public Object doPipeline(int actionId) {
@@ -40,8 +41,7 @@ public class PipelineServiceImpl implements PipelineService {
         ProcessContext<String> context = new ProcessContext<>();
 
         // prepare handlers
-        List<ActionHandler> syncHandlers = processAssembleService.getActionExecutions(actionId,
-            true);
+        List<ActionHandler> syncHandlers = new ArrayList<>();
 
         return execute(context, syncHandlers);
     }

@@ -35,6 +35,9 @@ public class ActionCache implements Serializable {
     /** action_id => async execute in tx's handlers */
     private List<ActionHandler> asyncHandlers;
 
+    /**
+     * Constructor for reflect.
+     */
     public ActionCache() {
     }
 
@@ -42,6 +45,28 @@ public class ActionCache implements Serializable {
         this.actionId = actionId;
     }
 
+    /**
+     * Constructor with three arguments.
+     * 
+     * @param actionId 
+     * @param source
+     * @param destination
+     */
+    public ActionCache(int actionId, int source, int destination) {
+        this.actionId = actionId;
+        this.source = source;
+        this.destination = destination;
+    }
+
+    /**
+     * Constructor with all arguments.
+     * 
+     * @param actionId 
+     * @param source
+     * @param destination
+     * @param syncHandlers
+     * @param asyncHandlers
+     */
     public ActionCache(int actionId, int source, int destination, List<ActionHandler> syncHandlers,
                        List<ActionHandler> asyncHandlers) {
         this.actionId = actionId;
@@ -89,10 +114,6 @@ public class ActionCache implements Serializable {
 
     public void setAsyncHandlers(List<ActionHandler> asyncHandlers) {
         this.asyncHandlers = asyncHandlers;
-    }
-
-    public void setHandlers(int actionId, List<ActionHandler> sync, List<ActionHandler> async) {
-
     }
 
     @Override

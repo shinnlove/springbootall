@@ -10,6 +10,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
+ * Memory based status number and sort order holder.
+ * 
  * @author Tony Zhao
  * @version $Id: StatusCache.java, v 0.1 2022-01-29 5:28 PM Tony Zhao Exp $$
  */
@@ -17,8 +19,11 @@ public class StatusCache implements Serializable, Comparable<StatusCache> {
 
     private static final long serialVersionUID = -5038079241955526372L;
 
-    private int               no;
-    private int               sequence;
+    /** status unique number */
+    private int               no               = -1;
+
+    /** status sort order */
+    private int               sequence         = -1;
 
     /**
      * Constructor for reflect.

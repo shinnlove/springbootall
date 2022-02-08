@@ -18,8 +18,8 @@ public enum TemplateTriggerType {
 
     ;
 
-    private int code;
-    private String  desc;
+    private int    code;
+    private String desc;
 
     TemplateTriggerType(Integer code, String desc) {
         this.code = code;
