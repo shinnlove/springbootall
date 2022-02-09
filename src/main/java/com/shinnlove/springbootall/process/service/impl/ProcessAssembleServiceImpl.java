@@ -45,6 +45,7 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @version $Id: ProcessAssembleServiceImpl.java, v 0.1 2021-07-06 6:36 PM Tony Zhao Exp $$
  */
 @Service
+@Deprecated
 public class ProcessAssembleServiceImpl implements ProcessAssembleService, ApplicationContextAware,
                                         InitializingBean {
 
@@ -61,15 +62,18 @@ public class ProcessAssembleServiceImpl implements ProcessAssembleService, Appli
     private Map<Integer, Integer>                             templateACStatus    = new HashMap<>();
 
     /** the action id to action info mapping initialized by springboot context */
+    @Deprecated
     private Map<Integer, ProcessAction>                       actionMap           = new HashMap<>();
 
     /** template_id => action_id => current status => destination status */
     private Map<Integer, Map<Integer, Map<Integer, Integer>>> actionStatus        = new HashMap<>();
 
     /** template_id => action_id => sync execute in tx's handlers */
+    @Deprecated
     private Map<Integer, Map<Integer, List<ActionHandler>>>   actionSyncHandlers  = new HashMap<>();
 
     /** template_id => action_id => async execute in tx's handlers */
+    @Deprecated
     private Map<Integer, Map<Integer, List<ActionHandler>>>   actionAsyncHandlers = new HashMap<>();
 
     @Autowired

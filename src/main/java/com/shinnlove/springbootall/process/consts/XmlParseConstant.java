@@ -10,7 +10,13 @@ package com.shinnlove.springbootall.process.consts;
  * @author Tony Zhao
  * @version $Id: XmlParseConstant.java, v 0.1 2022-01-27 5:13 PM Tony Zhao Exp $$
  */
-public class XmlParseConstant {
+public final class XmlParseConstant {
+
+    private XmlParseConstant() {
+        // no constructor
+    }
+
+    public static final String TEMPLATE_PATH             = "classpath:META-INF/process/*.xml";
 
     public static final String SECTION_ROOT_METADATA     = "metadata";
 
@@ -45,6 +51,10 @@ public class XmlParseConstant {
     public static final String ATTR_DESC                 = "desc";
 
     public static final String ATTR_PARENT               = "parent";
+
+    public static final String ATTR_RECONCILE            = "reconcile";
+
+    public static final String ATTR_COORDINATE           = "coordinate";
 
     public static final String ATTR_PARENT_STATUS        = "ps";
 

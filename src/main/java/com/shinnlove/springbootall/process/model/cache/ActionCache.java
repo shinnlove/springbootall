@@ -2,7 +2,7 @@
  * Inc.
  * Copyright (c) 2004-2022 All Rights Reserved.
  */
-package com.shinnlove.springbootall.process.model.template;
+package com.shinnlove.springbootall.process.model.cache;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,10 +18,16 @@ import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
  */
 public class ActionCache implements Serializable {
 
-    private static final long   serialVersionUID = 2364078968927300778L;
+    private static final long   serialVersionUID = -3990743305894582911L;
 
     /** action id */
     private int                 actionId;
+
+    /** action name */
+    private String              name;
+
+    /** action description */
+    private String              desc;
 
     /** action source status, -1 represents no limitation */
     private int                 source           = -1;
@@ -59,7 +65,7 @@ public class ActionCache implements Serializable {
     }
 
     /**
-     * Constructor with all arguments.
+     * Multiple constructors.
      * 
      * @param actionId 
      * @param source
@@ -76,12 +82,50 @@ public class ActionCache implements Serializable {
         this.asyncHandlers = asyncHandlers;
     }
 
+    /**
+     * Constructor with all arguments.
+     * 
+     * @param actionId 
+     * @param name
+     * @param desc
+     * @param source
+     * @param destination
+     * @param syncHandlers
+     * @param asyncHandlers
+     */
+    public ActionCache(int actionId, String name, String desc, int source, int destination,
+                       List<ActionHandler> syncHandlers, List<ActionHandler> asyncHandlers) {
+        this.actionId = actionId;
+        this.name = name;
+        this.desc = desc;
+        this.source = source;
+        this.destination = destination;
+        this.syncHandlers = syncHandlers;
+        this.asyncHandlers = asyncHandlers;
+    }
+
     public int getActionId() {
         return actionId;
     }
 
     public void setActionId(int actionId) {
         this.actionId = actionId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public int getSource() {

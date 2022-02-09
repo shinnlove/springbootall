@@ -39,7 +39,7 @@
         <handler seq="1" ref="cancelProcessHandler" desc="单个改价项流程关闭后的trigger"/>
     </canceled>
 
-    <action id="30103" name="order_audit_pass_pending_confirm" desc="订单金额改价项风控审核通过待客户确认" src="1" dst="2">
+    <action id="30103" name="order_audit_pass_pending_confirm" desc="订单金额改价项风控审核通过待客户确认" source="1" destination="2">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
         <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
     </action>

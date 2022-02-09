@@ -20,7 +20,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class XmlProcessTemplate implements Serializable {
 
     /** uuid */
-    private static final long                     serialVersionUID = 2554229365631674354L;
+    private static final long                     serialVersionUID = 5560785027283706190L;
 
     /** template id */
     private int                                   id;
@@ -33,6 +33,12 @@ public class XmlProcessTemplate implements Serializable {
 
     /** parent template id, default -1 represents no parent */
     private int                                   parent           = -1;
+
+    /** whether need to reconcile parent when child process completed. */
+    private int                                   reconcile        = 0;
+
+    /** reconcile parent mode when child process completed. */
+    private int                                   coordinate       = 1;
 
     /** metadata for status list */
     private List<XmlProcessStatus>                status;
@@ -98,6 +104,8 @@ public class XmlProcessTemplate implements Serializable {
      * @param name
      * @param desc
      * @param parent
+     * @param reconcile
+     * @param coordinate
      * @param status
      * @param inits
      * @param accepts
@@ -105,8 +113,8 @@ public class XmlProcessTemplate implements Serializable {
      * @param cancels
      * @param actions
      */
-    public XmlProcessTemplate(int id, String name, String desc, int parent,
-                              List<XmlProcessStatus> status,
+    public XmlProcessTemplate(int id, String name, String desc, int parent, int reconcile,
+                              int coordinate, List<XmlProcessStatus> status,
                               Map<Integer, List<XmlProcessHandler>> inits,
                               List<XmlProcessHandler> accepts, List<XmlProcessHandler> rejects,
                               List<XmlProcessHandler> cancels, List<XmlProcessAction> actions) {
@@ -114,6 +122,8 @@ public class XmlProcessTemplate implements Serializable {
         this.name = name;
         this.desc = desc;
         this.parent = parent;
+        this.reconcile = reconcile;
+        this.coordinate = coordinate;
         this.status = status;
         this.inits = inits;
         this.accepts = accepts;
@@ -152,6 +162,22 @@ public class XmlProcessTemplate implements Serializable {
 
     public void setParent(int parent) {
         this.parent = parent;
+    }
+
+    public int getReconcile() {
+        return reconcile;
+    }
+
+    public void setReconcile(int reconcile) {
+        this.reconcile = reconcile;
+    }
+
+    public int getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(int coordinate) {
+        this.coordinate = coordinate;
     }
 
     public List<XmlProcessStatus> getStatus() {

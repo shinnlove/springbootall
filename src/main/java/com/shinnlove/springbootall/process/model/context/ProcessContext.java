@@ -5,12 +5,12 @@
 package com.shinnlove.springbootall.process.model.context;
 
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * This is the context of whole process, add some business parameters here.
@@ -55,6 +55,22 @@ public class ProcessContext<T> implements Serializable {
     public ProcessContext(int actionId, long processNo, DataContext<T> dataContext) {
         this.actionId = actionId;
         this.processNo = processNo;
+        this.dataContext = dataContext;
+    }
+
+    /**
+     * Constructor for 2nd status machine to use.
+     * 
+     * @param templateId 
+     * @param processNo
+     * @param refUniqueNo
+     * @param dataContext
+     */
+    public ProcessContext(int templateId, long processNo, long refUniqueNo,
+                          DataContext<T> dataContext) {
+        this.templateId = templateId;
+        this.processNo = processNo;
+        this.refUniqueNo = refUniqueNo;
         this.dataContext = dataContext;
     }
 

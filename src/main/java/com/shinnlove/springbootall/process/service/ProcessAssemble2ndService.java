@@ -13,8 +13,10 @@ import java.io.InputStream;
 public interface ProcessAssemble2ndService {
 
     /**
+     * Initialize process by xml files under classpath.
+     * 
      * @param stream 
      */
-    void initializeProcess(InputStream stream);
+    void initialize(InputStream stream);
 
 }

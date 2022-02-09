@@ -2,7 +2,7 @@
  * Inc.
  * Copyright (c) 2004-2022 All Rights Reserved.
  */
-package com.shinnlove.springbootall.process.model.template;
+package com.shinnlove.springbootall.process.model.cache;
 
 import java.io.Serializable;
 

@@ -86,7 +86,13 @@ public class XmlTemplateParser {
         xs.setSequence(Integer.parseInt(attr.get(ATTR_SEQUENCE)));
         xs.setName(attr.get(ATTR_NAME));
         xs.setDesc(attr.get(ATTR_DESC));
-        xs.setPs(Integer.parseInt(attr.get(ATTR_PARENT_STATUS)));
+
+        String ps = attr.get(ATTR_PARENT_STATUS);
+        if (ps == null) {
+            xs.setPs(-1);
+        } else {
+            xs.setPs(Integer.parseInt(ps));
+        }
 
         return xs;
     }
@@ -110,6 +116,8 @@ public class XmlTemplateParser {
             for (Node des : getNodes(dispatch.get(0), SECTION_THIRD_DESTINATION)) {
 
                 Map<String, String> attrs = parseAttrs(des);
+
+                // destination should not be null, or else should throw ex.
                 Integer destination = Integer.parseInt(attrs.get(ATTR_NO));
 
                 destinations.put(destination, parseHandlers(des));
@@ -275,6 +283,16 @@ public class XmlTemplateParser {
         xp.setName(attr.get(ATTR_NAME));
         xp.setDesc(attr.get(ATTR_DESC));
         xp.setParent(Integer.parseInt(attr.get(ATTR_PARENT)));
+
+        // reconcile 0 represents no reconcile
+        int reconcile = attr.get(ATTR_RECONCILE) == null ? 0
+            : Integer.parseInt(attr.get(ATTR_RECONCILE));
+        xp.setParent(reconcile);
+
+        // coordinate 1 represents and &&
+        int coordinate = attr.get(ATTR_COORDINATE) == null ? 1
+            : Integer.parseInt(attr.get(ATTR_COORDINATE));
+        xp.setCoordinate(coordinate);
     }
 
 }

@@ -15,6 +15,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author Tony Zhao
  * @version $Id: ProcessTemplate.java, v 0.1 2021-07-06 3:57 PM Tony Zhao Exp $$
  */
+@Deprecated
 public class ProcessTemplate implements Serializable {
     private static final long serialVersionUID = 3868454237819062121L;
 

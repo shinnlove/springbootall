@@ -91,6 +91,7 @@ import javax.annotation.Resource;
  * @author Tony Zhao
  * @version $Id: StatusMachineService.java, v 0.1 2021-07-06 6:38 PM Tony Zhao Exp $$
  */
+@Deprecated
 @Service
 public class StatusMachineServiceImpl implements StatusMachineService {
 
@@ -372,6 +373,13 @@ public class StatusMachineServiceImpl implements StatusMachineService {
         return processBlockingCoreService.getBlockingByProcessNo(mainProcessNo);
     }
 
+    private void checkSourceStatus(int currentStatus, int source) {
+        if (currentStatus != source) {
+            throw new SystemException(SystemResultCode.PARAM_INVALID,
+                MachineConstant.SOURCE_STATUS_INCORRECT);
+        }
+    }
+
     /**
      * Check there is no blocking issue or all process have reached final destination status.
      *
@@ -404,13 +412,6 @@ public class StatusMachineServiceImpl implements StatusMachineService {
             LoggerUtil.error(logger, e, "Handler execution has error occurred, ", e.getMessage());
             // special warn: according to meeting discussion, the whole tx should be interrupted if one handler execute failed.
             throw new SystemException(SystemResultCode.SYSTEM_ERROR, e, e.getMessage());
-        }
-    }
-
-    private void checkSourceStatus(int currentStatus, int source) {
-        if (currentStatus != source) {
-            throw new SystemException(SystemResultCode.PARAM_INVALID,
-                MachineConstant.SOURCE_STATUS_INCORRECT);
         }
     }
 

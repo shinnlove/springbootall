@@ -17,6 +17,7 @@ import com.shinnlove.springbootall.process.model.result.ProcessBatchResult;
  * @author Tony Zhao
  * @version $Id: StatusMachineService.java, v 0.1 2021-07-06 3:55 PM Tony Zhao Exp $$
  */
+@Deprecated
 public interface StatusMachineService {
 
     /**
