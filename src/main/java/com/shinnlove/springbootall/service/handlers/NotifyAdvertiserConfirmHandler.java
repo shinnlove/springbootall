@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.shinnlove.springbootall.process.chain.ActionChain;
 import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
+import com.shinnlove.springbootall.service.biz.model.ReviseInfo;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 
 /**
@@ -18,20 +19,24 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @version $Id: NotifyAdvertiserConfirmHandler.java, v 0.1 2022-01-25 3:39 PM Tony Zhao Exp $$
  */
 @Service
-public class NotifyAdvertiserConfirmHandler implements ActionHandler<String, Integer> {
+public class NotifyAdvertiserConfirmHandler implements ActionHandler<ReviseInfo, Integer> {
 
     private static final Logger logger = LoggerFactory
         .getLogger(NotifyAdvertiserConfirmHandler.class);
 
     @Override
-    public Integer process(ActionChain chain, ProcessContext<String> context) {
+    public Integer process(ActionChain chain, ProcessContext<ReviseInfo> context) {
 
         LoggerUtil.info(logger, "NotifyAdvertiserConfirmHandler begin to execute, context",
             context);
 
-        LoggerUtil.info(logger, "3rd execute NotifyRiskAuditHandler handler");
+        LoggerUtil.info(logger, "3rd通知广告主确认");
 
-        return 1;
+        Integer riskResult = result(context, NotifyRiskAuditHandler.class);
+
+        LoggerUtil.info(logger, "riskResult=", riskResult);
+
+        return 3000;
     }
 
 }

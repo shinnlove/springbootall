@@ -16,30 +16,30 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
 
 /**
  * @author Tony Zhao
- * @version $Id: NotifyRiskAuditHandler.java, v 0.1 2022-01-25 3:36 PM Tony Zhao Exp $$
+ * @version $Id: NotifyCrmSyncHandler.java, v 0.1 2022-02-10 4:33 PM Tony Zhao Exp $$
  */
 @Service
-public class NotifyRiskAuditHandler implements ActionHandler<ReviseInfo, Integer> {
+public class NotifyCrmSyncHandler implements ActionHandler<ReviseInfo, Integer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(NotifyRiskAuditHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(NotifyCrmSyncHandler.class);
 
     @Override
     public Integer process(ActionChain chain, ProcessContext<ReviseInfo> context) {
 
-        LoggerUtil.info(logger, "NotifyRiskAuditHandler begin to execute, context", context);
+        LoggerUtil.info(logger, "NotifyCrmSyncHandler begin to execute, context", context);
 
         ReviseInfo parameter = params(context);
 
-        LoggerUtil.info(logger, "2nd 通知风控审核");
+        LoggerUtil.info(logger, "2nd 通知Crm来同步");
 
-        LoggerUtil.info(logger, "NotifyRiskAuditHandler parameter is ", parameter);
+        LoggerUtil.info(logger, "NotifyCrmSyncHandler parameter is ", parameter);
 
         Integer handlerParam1 = result(context, UpdateRegisterStatusHandler.class);
 
         LoggerUtil.info(logger, "handlerParam1 from UpdateRegisterStatusHandler.class is ",
             handlerParam1);
 
-        return 200;
+        return 1;
     }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.shinnlove.springbootall.process.model.context.DataContext;
 import com.shinnlove.springbootall.process.no.SnowflakeIdWorker;
 import com.shinnlove.springbootall.process.service.StatusMachine2ndService;
+import com.shinnlove.springbootall.service.biz.model.ReviseInfo;
 import com.shinnlove.springbootall.service.biz.revise.RevisePriceService;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 
@@ -38,7 +39,8 @@ public class RevisePriceServiceImpl implements RevisePriceService {
     @Override
     public long submitRevise(int itemType, BigDecimal before, BigDecimal after, String operator) {
         long uniqueBizNo = snowflakeIdWorker.nextId();
-        DataContext<String> dataContext = new DataContext<>("Tony created.");
+        ReviseInfo info = new ReviseInfo(123456, "Tony", "create order revise");
+        DataContext<ReviseInfo> dataContext = new DataContext<>(info);
 
         long processNo = statusMachine2ndService.initProcess(itemType, uniqueBizNo, dataContext);
 
