@@ -32,7 +32,7 @@ public class StatusMachineController {
     @RequestMapping("/proceed")
     public String proceedProcess(String name) {
 
-        int actionId = ActionType.AUTO_ONLINE.getActionId();
+        int actionId = ActionType.EXPENSE_REVISE_REJECT.getActionId();
         long refUniqueNo = snowflakeIdWorker.nextId();
         String info = "this is remark";
         DataContext<String> dataContext = new DataContext<>(info);

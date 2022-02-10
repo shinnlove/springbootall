@@ -8,6 +8,7 @@ package com.shinnlove.springbootall.process.enums;
  * @author Tony Zhao
  * @version $Id: ProcessType.java, v 0.1 2022-01-10 11:09 PM Tony Zhao Exp $$
  */
+@Deprecated
 public enum ProcessType {
 
     UNKNOWN(-1,"未知"),

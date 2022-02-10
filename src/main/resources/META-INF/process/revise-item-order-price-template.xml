@@ -39,32 +39,32 @@
         <handler seq="1" ref="cancelProcessHandler" desc="单个改价项流程关闭后的trigger"/>
     </canceled>
 
-    <action id="30103" name="order_audit_pass_pending_confirm" desc="订单金额改价项风控审核通过待客户确认" source="1" destination="2">
+    <action id="30101" name="order_audit_pass_pending_confirm" desc="订单金额改价项风控审核通过待客户确认" source="1" destination="2">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
         <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
     </action>
 
-    <action id="30104" name="order_revise_accomplish" desc="订单金额改价项完成" source="2" destination="4">
+    <action id="30102" name="order_revise_accomplish" desc="订单金额改价项完成" source="2" destination="4">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
         <handler seq="2" ref="notifyAdvertiserHandler" desc="改价通知客户"/>
     </action>
 
-    <action id="30105" name="order_revise_reject" desc="订单金额改价项拒绝" source="1" destination="5">
+    <action id="30103" name="order_revise_reject" desc="订单金额改价项拒绝" source="1" destination="5">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
         <handler seq="2" ref="notifyAdvertiserHandler" desc="改价通知客户"/>
     </action>
 
-    <action id="30105" name="order_revise_reject" desc="订单金额改价项拒绝" source="2" destination="5">
+    <action id="30104" name="order_revise_reject_2" desc="订单金额改价项拒绝" source="2" destination="5">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
         <handler seq="2" ref="notifyAdvertiserHandler" desc="改价通知客户"/>
     </action>
 
-    <action id="30106" name="order_revise_cancel" desc="订单金额改价项取消" source="1" destination="6">
+    <action id="30105" name="order_revise_cancel" desc="订单金额改价项取消" source="1" destination="6">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
         <handler seq="2" ref="notifyAdvertiserHandler" desc="改价通知客户"/>
     </action>
 
-    <action id="30106" name="order_revise_cancel" desc="订单金额改价项取消" source="2" destination="6">
+    <action id="30106" name="order_revise_cancel_2" desc="订单金额改价项取消" source="2" destination="6">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
         <handler seq="2" ref="notifyAdvertiserHandler" desc="改价通知客户"/>
     </action>

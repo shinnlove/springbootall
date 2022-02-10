@@ -22,6 +22,7 @@ import com.shinnlove.springbootall.process.consts.MachineConstant;
 import com.shinnlove.springbootall.process.core.ProcessBlockingCoreService;
 import com.shinnlove.springbootall.process.core.ProcessStatusCoreService;
 import com.shinnlove.springbootall.process.core.UniversalProcessCoreService;
+import com.shinnlove.springbootall.process.enums.TemplateType;
 import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
 import com.shinnlove.springbootall.process.model.blocking.ProcessBlocking;
 import com.shinnlove.springbootall.process.model.cache.ActionCache;
@@ -84,6 +85,19 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
     private ActionExecutor              actionExecutor;
 
     @Override
+    public long initProcess(int templateId, long refUniqueNo, DataContext dataContext) {
+        return initProcess(templateId, refUniqueNo, dataContext, resp -> {
+        });
+    }
+
+    @Override
+    public long initProcess(int templateId, long refUniqueNo, DataContext dataContext,
+                            ProcessCallback callback) {
+        int dst = TemplateType.getDstByTemplateId(templateId);
+        return initProcess(templateId, dst, refUniqueNo, dataContext, callback);
+    }
+
+    @Override
     public long initProcess(int templateId, int destination, long refUniqueNo,
                             DataContext dataContext) {
         return initProcess(templateId, destination, refUniqueNo, dataContext, resp -> {
@@ -93,6 +107,9 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
     @Override
     public long initProcess(int templateId, int destination, long refUniqueNo,
                             DataContext dataContext, ProcessCallback callback) {
+        AssertUtil.largeThanValue(refUniqueNo, 0);
+        final int source = -1;
+
         TemplateCache template = processMetadataService.getTemplateById(templateId);
         AssertUtil.isNotNull(template);
 
@@ -102,7 +119,9 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         }
 
         List<ActionHandler> handlers = inits.get(destination);
-        final int source = -1;
+        if (CollectionUtils.isEmpty(handlers)) {
+            return 0;
+        }
 
         // 4th: prepare proceed context
         ProcessContext context = buildProContext(templateId, refUniqueNo, source, destination,
@@ -112,9 +131,8 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         UniversalProcess nProcess = universalProcessCoreService.getProcessByRefUniqueNo(refUniqueNo,
             false);
         AssertUtil.isNull(nProcess);
-        AssertUtil.largeThanValue(refUniqueNo, 0);
 
-        long processNo = snowflakeIdWorker.nextId();
+        final long processNo = snowflakeIdWorker.nextId();
 
         Long processId = transactionTemplate.execute(status -> {
             execute(context, handlers);
