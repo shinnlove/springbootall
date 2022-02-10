@@ -10,19 +10,19 @@ package com.shinnlove.springbootall.process.enums;
  */
 public enum TemplateType {
 
-                          UNKNOWN(-1, "未知模板流程", -1),
+    UNKNOWN(-1, "未知模板流程", -1),
 
-                          REVISE_PARENT(30000, "改价父流程", 1),
+    REVISE_PARENT(30000, "改价父流程", 1),
 
-                          ORDER_PRICE(30001, "单个改价项订单金额子流程", 1),
+    ORDER_PRICE(30001, "单个改价项订单金额子流程", 1),
 
-                          SERVICE_FEE(30002, "单个改价项信息技术费子流程", 1),
+    SERVICE_FEE(30002, "单个改价项信息技术费子流程", 1),
 
-                          ORDER_EXPENSE(30003, "单个改价项订单支出子流程", 1),
+    ORDER_EXPENSE(30003, "单个改价项订单支出子流程", 1),
 
-                          UPPER_PROFIT(30004, "单个改价项UP主收益子流程", 1),
+    UPPER_PROFIT(30004, "单个改价项UP主收益子流程", 1),
 
-                          VENDOR_PROFIT(30005, "单个改价项服务商收益子流程", 1),
+    VENDOR_PROFIT(30005, "单个改价项服务商收益子流程", 1),
 
     ;
 
