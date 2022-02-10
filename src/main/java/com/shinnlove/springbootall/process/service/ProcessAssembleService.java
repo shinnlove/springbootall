@@ -18,6 +18,7 @@ import com.shinnlove.springbootall.process.model.template.ProcessTemplate;
  * @author Tony Zhao
  * @version $Id: ProcessAssembleService.java, v 0.1 2021-07-06 4:12 PM Tony Zhao Exp $$
  */
+@Deprecated
 public interface ProcessAssembleService {
 
     /**

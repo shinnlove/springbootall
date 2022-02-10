@@ -44,8 +44,8 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @author Tony Zhao
  * @version $Id: ProcessAssembleServiceImpl.java, v 0.1 2021-07-06 6:36 PM Tony Zhao Exp $$
  */
-@Service
 @Deprecated
+@Service
 public class ProcessAssembleServiceImpl implements ProcessAssembleService, ApplicationContextAware,
                                         InitializingBean {
 

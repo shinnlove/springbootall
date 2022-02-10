@@ -18,16 +18,22 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @version $Id: UpdateRegisterStatusHandler.java, v 0.1 2022-01-25 3:35 PM Tony Zhao Exp $$
  */
 @Service
-public class UpdateRegisterStatusHandler implements ActionHandler<Void, Void> {
+public class UpdateRegisterStatusHandler implements ActionHandler<String, Integer> {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdateRegisterStatusHandler.class);
 
     @Override
-    public Void process(ActionChain chain, ProcessContext<Void> context) {
+    public Integer process(ActionChain chain, ProcessContext<String> context) {
 
         LoggerUtil.info(logger, "UpdateRegisterStatusHandler begin to execute, context", context);
 
-        return null;
+        LoggerUtil.info(logger, "1st execute NotifyRiskAuditHandler handler");
+
+        String name = params(context);
+
+        LoggerUtil.info(logger, "name=", name);
+
+        return 1;
     }
 
 }

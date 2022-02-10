@@ -59,7 +59,7 @@ public interface ActionHandler<T, R> {
      * @return
      */
     @SuppressWarnings("unchecked")
-    default R result(ProcessContext x, Class<? extends ActionHandler<T, R>> clazz) {
+    default R result(ProcessContext x, Class<? extends ActionHandler<T, ?>> clazz) {
         return Optional.ofNullable((R) x.getResult().get(clazz.getName())).orElse(null);
     }
 

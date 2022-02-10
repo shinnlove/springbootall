@@ -18,16 +18,26 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @version $Id: NotifyRiskAuditHandler.java, v 0.1 2022-01-25 3:36 PM Tony Zhao Exp $$
  */
 @Service
-public class NotifyRiskAuditHandler implements ActionHandler<Void, Void> {
+public class NotifyRiskAuditHandler implements ActionHandler<String, Integer> {
 
     private static final Logger logger = LoggerFactory.getLogger(NotifyRiskAuditHandler.class);
 
     @Override
-    public Void process(ActionChain chain, ProcessContext<Void> context) {
+    public Integer process(ActionChain chain, ProcessContext<String> context) {
 
         LoggerUtil.info(logger, "NotifyRiskAuditHandler begin to execute, context", context);
 
-        return null;
+        String parameter = params(context);
+
+        LoggerUtil.info(logger, "2nd execute NotifyRiskAuditHandler handler");
+
+        LoggerUtil.info(logger, "parameter is ", parameter);
+
+        Integer handlerParam1 = result(context, CreateReviseProcessHandler.class);
+
+        LoggerUtil.info(logger, "handlerParam1 is ", handlerParam1);
+
+        return 1;
     }
 
 }
