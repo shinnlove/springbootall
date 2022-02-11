@@ -14,4 +14,6 @@ public interface RevisePriceService {
 
     long submitRevise(int itemType, BigDecimal before, BigDecimal after, String operator);
 
+    long auditRevise(int actionId, long refUniqueNo, int approve, String operator);
+
 }

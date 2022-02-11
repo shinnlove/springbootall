@@ -58,6 +58,8 @@ public final class XmlParseConstant {
 
     public static final String ATTR_PARENT_STATUS        = "ps";
 
+    public static final String ATTR_ACCOMPLISH           = "ac";
+
     public static final String ATTR_ENTRANCE             = "entrance";
 
     public static final String ATTR_SOURCE               = "source";

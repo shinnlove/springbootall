@@ -94,6 +94,11 @@ public class XmlTemplateParser {
             xs.setPs(Integer.parseInt(ps));
         }
 
+        // indicate which status is normal accomplish
+        String acTag = attr.get(ATTR_ACCOMPLISH);
+        int ac = acTag == null ? 0 : Integer.parseInt(acTag);
+        xs.setAc(ac);
+
         return xs;
     }
 
@@ -205,7 +210,11 @@ public class XmlTemplateParser {
         xh.setSequence(Integer.parseInt(attr.get(ATTR_SEQUENCE)));
         xh.setRefBeanId(attr.get(ATTR_REFERENCE));
         xh.setDesc(attr.get(ATTR_DESC));
-        xh.setTrans(Boolean.parseBoolean(attr.get(ATTR_TRANS)));
+
+        // parse handler transaction
+        String trans = attr.get(ATTR_TRANS);
+        boolean isTrans = trans == null || Boolean.parseBoolean(trans);
+        xh.setTrans(isTrans);
 
         return xh;
     }

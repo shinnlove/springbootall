@@ -5,6 +5,7 @@
 package com.shinnlove.springbootall.service.biz.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -15,14 +16,24 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class ReviseInfo implements Serializable {
 
-    private int    creatorId;
-    private String creator;
-    private String remark;
+    private static final long serialVersionUID = 6034211686043763317L;
+
+    private int               reviseType;
+    private BigDecimal        before;
+    private BigDecimal        after;
+
+    private int               creatorId;
+    private String            creator;
+    private String            remark;
 
     public ReviseInfo() {
     }
 
-    public ReviseInfo(int creatorId, String creator, String remark) {
+    public ReviseInfo(int reviseType, BigDecimal before, BigDecimal after, int creatorId,
+                      String creator, String remark) {
+        this.reviseType = reviseType;
+        this.before = before;
+        this.after = after;
         this.creatorId = creatorId;
         this.creator = creator;
         this.remark = remark;

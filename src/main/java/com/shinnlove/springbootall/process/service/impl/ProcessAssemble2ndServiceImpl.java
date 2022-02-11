@@ -48,9 +48,8 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @version $Id: ProcessAssemble2ndServiceImpl.java, v 0.1 2022-01-29 5:42 PM Tony Zhao Exp $$
  */
 @Service
-public class ProcessAssemble2ndServiceImpl implements ProcessMetadataService,
-                                           ProcessAssemble2ndService, ApplicationContextAware,
-                                           InitializingBean {
+public class ProcessAssemble2ndServiceImpl implements InitializingBean, ApplicationContextAware,
+                                           ProcessAssemble2ndService, ProcessMetadataService {
 
     private static final Logger         logger          = LoggerFactory
         .getLogger(ProcessAssemble2ndServiceImpl.class);
@@ -106,6 +105,7 @@ public class ProcessAssemble2ndServiceImpl implements ProcessMetadataService,
     private TemplateCache cacheTemplate(XmlProcessTemplate xp) {
         TemplateCache template = new TemplateCache(cacheMetadata(xp));
 
+        Map<Integer, ActionCache> actions = new HashMap<>();
         Map<Integer, Map<Integer, StatusPair>> dstTable = new HashMap<>();
         Map<Integer, Map<Integer, ActionCache>> actionTable = new HashMap<>();
 
@@ -131,6 +131,7 @@ public class ProcessAssemble2ndServiceImpl implements ProcessMetadataService,
                 }
             }
 
+            actions.put(id, cache);
             twoKeyReflect(id, src, new StatusPair(src, des), dstTable);
             twoKeyReflect(src, des, cache, actionTable);
         }
@@ -138,7 +139,7 @@ public class ProcessAssemble2ndServiceImpl implements ProcessMetadataService,
         // step2: status check array
         List<StatusCache> statusCache = new ArrayList<>();
         for (XmlProcessStatus s : xp.getStatus()) {
-            statusCache.add(new StatusCache(s.getNo(), s.getSequence()));
+            statusCache.add(new StatusCache(s.getNo(), s.getSequence(), s.getAc()));
         }
 
         if (CollectionUtils.isEmpty(statusCache)) {
@@ -163,6 +164,7 @@ public class ProcessAssemble2ndServiceImpl implements ProcessMetadataService,
         // step5: assemble
         template.setStatusArray(statusCache.toArray(new StatusCache[statusCache.size()]));
         template.setInitializers(initializer);
+        template.setActions(actions);
         template.setTriggers(triggers);
         template.setDstTable(dstTable);
         template.setActionTable(actionTable);
@@ -307,6 +309,41 @@ public class ProcessAssemble2ndServiceImpl implements ProcessMetadataService,
         } else {
             return action.getAsyncHandlers();
         }
+    }
+
+    @Override
+    public boolean isFinalStatus(int templateId, int status) {
+        TemplateCache cache = getTemplateById(templateId);
+        if (cache == null || CollectionUtils.isEmpty(cache.getDstTable())) {
+            return false;
+        }
+
+        Map<Integer, Map<Integer, StatusPair>> table = cache.getDstTable();
+        for (Map.Entry<Integer, Map<Integer, StatusPair>> entry : table.entrySet()) {
+            Map<Integer, StatusPair> dst = entry.getValue();
+            if (dst.containsKey(status)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int getACStatus(int templateId) {
+        TemplateCache cache = getTemplateById(templateId);
+        if (cache == null || cache.getStatusArray().length == 0) {
+            return -1;
+        }
+
+        StatusCache[] statusCaches = cache.getStatusArray();
+        for (int i = 0; i < statusCaches.length; i++) {
+            if (statusCaches[i].getAccomplish() == 1) {
+                return statusCaches[i].getNo();
+            }
+        }
+
+        return -1;
     }
 
     private ActionCache getActionCache(int actionId) {

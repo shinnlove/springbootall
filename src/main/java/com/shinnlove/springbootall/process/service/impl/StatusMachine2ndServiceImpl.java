@@ -6,6 +6,7 @@ package com.shinnlove.springbootall.process.service.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
@@ -248,19 +249,16 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
                     for (UniversalProcess up : otherChildProcessList) {
                         int uptId = up.getTemplateId();
                         int upStatus = up.getCurrentStatus();
-                        // todo: need to consider
-                        //                        boolean isFinal = processAssembleService.isFinalStatus(uptId, upStatus);
-                        //                        if (!isFinal) {
-                        //                            needUpdateParent = false;
-                        //                        }
+                        boolean isFinal = processMetadataService.isFinalStatus(uptId, upStatus);
+                        if (!isFinal) {
+                            needUpdateParent = false;
+                        }
                     }
                 }
 
                 // need reconcile parent
                 if (needUpdateParent) {
-                    // todo: need to consider
-                    //                    int pacStatus = processAssembleService.getACFinalStatus(pTemplateId);
-                    int pacStatus = -1;
+                    int pacStatus = processMetadataService.getACStatus(pTemplateId);
                     processStatusCoreService.proceedProcessStatus(pTemplateId, pActionId,
                         parentProcessNo, pcStatus, pacStatus, MachineConstant.DEFAULT_OPERATOR,
                         MachineConstant.DEFAULT_REMARK);
@@ -273,7 +271,7 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         }); // 6th execute tx
 
         // At last, execute async handlers outta transaction!
-        execute(context, asyncHandlers);
+        CompletableFuture.runAsync(() -> execute(context, asyncHandlers), asyncExecutor);
 
         return result;
     }
@@ -335,11 +333,10 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
                 UniversalProcess bProcess = universalProcessCoreService.getProcessByNo(bProcessNo);
                 int btId = bProcess.getTemplateId();
                 int bStatus = bProcess.getCurrentStatus();
-                // todo: need to consider.
-                //                if (!processAssembleService.isFinalStatus(btId, bStatus)) {
-                //                    throw new SystemException(SystemResultCode.SYSTEM_ERROR,
-                //                        MachineConstant.STATUS_HAS_BLOCKING_PROCESS);
-                //                }
+                if (!processMetadataService.isFinalStatus(btId, bStatus)) {
+                    throw new SystemException(SystemResultCode.SYSTEM_ERROR,
+                        MachineConstant.STATUS_HAS_BLOCKING_PROCESS);
+                }
             }
         } // if blocking
     }

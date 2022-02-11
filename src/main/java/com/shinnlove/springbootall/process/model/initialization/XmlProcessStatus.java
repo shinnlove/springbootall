@@ -35,6 +35,9 @@ public class XmlProcessStatus implements Serializable, Comparable<XmlProcessStat
     /** status refer to parent status if parent exists! default -1 represent no parent. */
     private int               ps               = -1;
 
+    /** indicate whether a status is normally completed. */
+    private int               ac               = 0;
+
     /**
      * Constructor for reflect.
      */
@@ -49,13 +52,15 @@ public class XmlProcessStatus implements Serializable, Comparable<XmlProcessStat
      * @param name
      * @param desc
      * @param ps
+     * @param ac
      */
-    public XmlProcessStatus(int no, int sequence, String name, String desc, int ps) {
+    public XmlProcessStatus(int no, int sequence, String name, String desc, int ps, int ac) {
         this.no = no;
         this.sequence = sequence;
         this.name = name;
         this.desc = desc;
         this.ps = ps;
+        this.ac = ac;
     }
 
     public int getNo() {
@@ -96,6 +101,14 @@ public class XmlProcessStatus implements Serializable, Comparable<XmlProcessStat
 
     public void setPs(int ps) {
         this.ps = ps;
+    }
+
+    public int getAc() {
+        return ac;
+    }
+
+    public void setAc(int ac) {
+        this.ac = ac;
     }
 
     @Override

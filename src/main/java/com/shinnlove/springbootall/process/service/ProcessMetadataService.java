@@ -37,4 +37,8 @@ public interface ProcessMetadataService {
     @SuppressWarnings("rawtypes")
     List<ActionHandler> getExecutions(int actionId, boolean sync);
 
+    boolean isFinalStatus(int templateId, int status);
+
+    int getACStatus(int templateId);
+
 }

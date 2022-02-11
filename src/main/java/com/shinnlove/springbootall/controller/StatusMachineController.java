@@ -7,15 +7,13 @@ package com.shinnlove.springbootall.controller;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shinnlove.springbootall.process.enums.ActionType;
 import com.shinnlove.springbootall.process.enums.TemplateType;
-import com.shinnlove.springbootall.process.model.context.DataContext;
-import com.shinnlove.springbootall.process.no.SnowflakeIdWorker;
-import com.shinnlove.springbootall.process.service.StatusMachineService;
 import com.shinnlove.springbootall.service.biz.revise.RevisePriceService;
 
 /**
@@ -29,13 +27,7 @@ import com.shinnlove.springbootall.service.biz.revise.RevisePriceService;
 public class StatusMachineController {
 
     @Autowired
-    private StatusMachineService statusMachineService;
-
-    @Autowired
-    private SnowflakeIdWorker    snowflakeIdWorker;
-
-    @Autowired
-    private RevisePriceService   revisePriceService;
+    private RevisePriceService revisePriceService;
 
     @RequestMapping(value = "/init", method = RequestMethod.GET)
     public String initProcess() {
@@ -48,17 +40,14 @@ public class StatusMachineController {
         return String.valueOf(result);
     }
 
-    @RequestMapping("/proceed")
-    public String proceedProcess(String name) {
+    @RequestMapping("/proceed/{id}")
+    public String proceedProcess(@PathVariable(value = "id") long refUniqueNo) {
 
-        int actionId = ActionType.EXPENSE_REVISE_REJECT.getActionId();
-        long refUniqueNo = snowflakeIdWorker.nextId();
-        String info = "this is remark";
-        DataContext<String> dataContext = new DataContext<>(info);
+        int actionId = ActionType.ORDER_PENDING_CONFIRM.getActionId();
 
-        statusMachineService.proceedProcess(actionId, refUniqueNo, dataContext);
+        long result = revisePriceService.auditRevise(actionId, refUniqueNo, 1, "Tony酱");
 
-        return "hello " + name;
+        return String.valueOf(result);
     }
 
 }
