@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.shinnlove.springbootall.process.chain.ActionChain;
 import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
+import com.shinnlove.springbootall.service.biz.model.AuditResult;
 import com.shinnlove.springbootall.service.biz.model.ReviseInfo;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 
@@ -32,9 +33,9 @@ public class NotifyAdvertiserConfirmHandler implements ActionHandler<ReviseInfo,
 
         LoggerUtil.info(logger, "3rd通知广告主确认");
 
-        Integer riskResult = result(context, NotifyRiskAuditHandler.class);
+        AuditResult auditResult = result(context, NotifyRiskAuditHandler.class);
 
-        LoggerUtil.info(logger, "riskResult=", riskResult);
+        LoggerUtil.info(logger, "auditResult=", auditResult);
 
         return 3000;
     }

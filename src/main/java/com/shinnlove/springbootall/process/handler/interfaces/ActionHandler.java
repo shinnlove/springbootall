@@ -4,12 +4,11 @@
  */
 package com.shinnlove.springbootall.process.handler.interfaces;
 
+import java.util.List;
+import java.util.Optional;
 
 import com.shinnlove.springbootall.process.chain.ActionChain;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * The common interface for action handler.
@@ -23,22 +22,11 @@ import java.util.Optional;
 @FunctionalInterface
 public interface ActionHandler<T, R> {
 
-    /**
-     * default implementation of this interface for chain control reverse and result K-Class store.
-     *
-     * @param c     the handler's chain
-     * @param x     the process context
-     */
-    @SuppressWarnings("unchecked")
-    default void doProcess(ActionChain c, ProcessContext<T> x) {
-        cache(c.getActionHandlers(), c.getIndex() - 1, process(c, x), x);
-        c.process(x);
-    }
-
     default void cache(final List<ActionHandler> handlers, final int index, final R result,
                        ProcessContext<T> x) {
         String k = handlers.get(index).getClass().getName();
         x.getResult().put(k, result);
+        x.getClazz().put(k, result.getClass());
     }
 
     /**
@@ -58,9 +46,54 @@ public interface ActionHandler<T, R> {
      * @param clazz     the handler type in process chain
      * @return
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
-    default R result(ProcessContext x, Class<? extends ActionHandler<T, ?>> clazz) {
+    default R result0(ProcessContext x, Class<? extends ActionHandler<T, ?>> clazz) {
         return Optional.ofNullable((R) x.getResult().get(clazz.getName())).orElse(null);
+    }
+
+    /**
+     * Fetch previous data from context.
+     * 
+     * @param x         the context of process
+     * @param clazz     the handler type in process chain
+     * @param <V>       generic type for result to return
+     * @return
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    default <V> V result(ProcessContext x, Class<? extends ActionHandler> clazz) {
+        String cn = clazz.getName();
+        Class<V> c = Optional.ofNullable(x.getClazz().get(cn)).map(r -> (Class<V>) r).orElse(null);
+        Object o = Optional.ofNullable(x.getResult().get(cn)).orElse(null);
+
+        return cast(c, o);
+    }
+
+    /**
+     * Cast result object to specific generic type.
+     * 
+     * @param c 
+     * @param o
+     * @param <V>
+     * @return
+     */
+    default <V> V cast(Class<V> c, Object o) {
+        if (c != null && c.isInstance(o)) {
+            return c.cast(o);
+        }
+        return null;
+    }
+
+    /**
+     * default implementation of this interface for chain control reverse and result K-Class store.
+     *
+     * @param c     the handler's chain
+     * @param x     the process context
+     */
+    @SuppressWarnings("unchecked")
+    default void doProcess(ActionChain c, ProcessContext<T> x) {
+        cache(c.getActionHandlers(), c.getIndex() - 1, process(c, x), x);
+        c.process(x);
     }
 
     /**

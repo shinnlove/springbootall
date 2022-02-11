@@ -4,7 +4,6 @@
  */
 package com.shinnlove.springbootall.service.handlers;
 
-import com.shinnlove.springbootall.service.enums.MissionProcessStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.shinnlove.springbootall.process.chain.ActionChain;
 import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
+import com.shinnlove.springbootall.service.enums.MissionProcessStatus;
 import com.shinnlove.springbootall.service.models.RecruitMission;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 

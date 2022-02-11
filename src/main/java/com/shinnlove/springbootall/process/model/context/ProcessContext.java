@@ -39,6 +39,8 @@ public class ProcessContext<T> implements Serializable {
     /** a result map for storing handler's execute result */
     private Map<String, Object> result            = new HashMap<>();
 
+    private Map<String, Class<?>> clazz             = new HashMap<>();
+
     /**
      * Constructor for reflect.
      */
@@ -150,6 +152,10 @@ public class ProcessContext<T> implements Serializable {
 
     public Map<String, Object> getResult() {
         return result;
+    }
+
+    public Map<String, Class<?>> getClazz() {
+        return clazz;
     }
 
     @Override
