@@ -194,7 +194,7 @@ public class StatusMachineServiceImpl implements StatusMachineService {
 
                 // Warning: give callback a chance to execute outta business codes, callback must after execute!
                 if (callback != null) {
-                    callback.doCallback(dataContext);
+                    callback.doCallback(context);
                 }
 
                 return newProcessId;
@@ -236,7 +236,7 @@ public class StatusMachineServiceImpl implements StatusMachineService {
 
             // give a change for business codes to execute outta logic, callback must after execute!
             if (callback != null) {
-                callback.doCallback(dataContext);
+                callback.doCallback(context);
             }
 
             // if status reached to end, then check reconcile mode

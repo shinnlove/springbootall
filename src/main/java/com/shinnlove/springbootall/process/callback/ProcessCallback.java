@@ -4,7 +4,7 @@
  */
 package com.shinnlove.springbootall.process.callback;
 
-import com.shinnlove.springbootall.process.model.context.DataContext;
+import com.shinnlove.springbootall.process.model.context.ProcessContext;
 
 /**
  * A process callback used by business caller for receive response data and do business in status machine's transaction.
@@ -22,6 +22,6 @@ public interface ProcessCallback {
      *
      * @param resp
      */
-    void doCallback(final DataContext resp);
+    void doCallback(final ProcessContext resp);
 
 }

@@ -22,6 +22,7 @@ import com.shinnlove.springbootall.process.model.context.ProcessContext;
 @FunctionalInterface
 public interface ActionHandler<T, R> {
 
+    @SuppressWarnings("rawtypes")
     default void cache(final List<ActionHandler> handlers, final int index, final R result,
                        ProcessContext<T> x) {
         String k = handlers.get(index).getClass().getName();
@@ -47,7 +48,7 @@ public interface ActionHandler<T, R> {
      * @return
      */
     @Deprecated
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     default R result0(ProcessContext x, Class<? extends ActionHandler<T, ?>> clazz) {
         return Optional.ofNullable((R) x.getResult().get(clazz.getName())).orElse(null);
     }
@@ -90,7 +91,6 @@ public interface ActionHandler<T, R> {
      * @param c     the handler's chain
      * @param x     the process context
      */
-    @SuppressWarnings("unchecked")
     default void doProcess(ActionChain c, ProcessContext<T> x) {
         cache(c.getActionHandlers(), c.getIndex() - 1, process(c, x), x);
         c.process(x);
