@@ -28,7 +28,7 @@ public class NotifyCrmSyncHandler implements ActionHandler<ReviseInfo, Integer> 
 
         LoggerUtil.info(logger, "NotifyCrmSyncHandler begin to execute, context", context);
 
-        ReviseInfo parameter = params(context);
+        ReviseInfo parameter = param(context);
 
         LoggerUtil.info(logger, "2nd 通知Crm来同步");
 

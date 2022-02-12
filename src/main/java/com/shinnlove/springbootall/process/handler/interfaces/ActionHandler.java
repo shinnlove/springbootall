@@ -26,6 +26,9 @@ import com.shinnlove.springbootall.process.model.context.ProcessContext;
 @FunctionalInterface
 public interface ActionHandler<T, R> extends BaseHandler {
 
+    /**
+     * @return 
+     */
     default Class<?> paramType() {
         Type[] types = this.getClass().getGenericInterfaces();
         ParameterizedTypeImpl pType = (ParameterizedTypeImpl) types[0];
@@ -33,6 +36,12 @@ public interface ActionHandler<T, R> extends BaseHandler {
         return (Class<?>) genericTypes[0];
     }
 
+    /**
+     * @param handlers 
+     * @param index
+     * @param result
+     * @param x
+     */
     @SuppressWarnings("rawtypes")
     default void cache(final List<ActionHandler> handlers, final int index, final R result,
                        ProcessContext<T> x) {
@@ -40,35 +49,19 @@ public interface ActionHandler<T, R> extends BaseHandler {
     }
 
     /**
-     * get the original input params from data context holds by process context.
-     *
-     * @param x
+     * Get the original input params from data context holds by process context.
+     * 
+     * @param x 
+     * @param <V>
      * @return
      */
-    @Deprecated
-    default T params(ProcessContext<T> x) {
-        return Optional.ofNullable(x.getDataContext().getData()).orElse(null);
-    }
-
     @SuppressWarnings("unchecked")
     default <V> V param(ProcessContext<T> x) {
         String name = this.getClass().getName();
         Class<V> c = (Class<V>) x.getInputClass().get(name);
-        Object p = x.getInputObject().get(name);
-        return cast(c, p);
-    }
+        Object o = x.getInputObject().get(name);
 
-    /**
-     * fetch previous data from context.
-     *
-     * @param x         the context of process
-     * @param clazz     the handler type in process chain
-     * @return
-     */
-    @Deprecated
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    default R result(ProcessContext x, Class<? extends ActionHandler<T, ?>> clazz) {
-        return Optional.ofNullable((R) x.getResultObject().get(clazz.getName())).orElse(null);
+        return cast(c, o);
     }
 
     /**
@@ -103,8 +96,7 @@ public interface ActionHandler<T, R> extends BaseHandler {
 
         if (!dataClass.isAssignableFrom(handlerType)) {
             // search for inner type
-            Field[] fields = dataClass.getDeclaredFields();
-            for (Field f : fields) {
+            for (Field f : dataClass.getDeclaredFields()) {
                 Class<?> cls = f.getType();
                 if (!isBasicType(cls) && cls.isAssignableFrom(handlerType)) {
                     data = fValue(data, f);
@@ -114,7 +106,6 @@ public interface ActionHandler<T, R> extends BaseHandler {
         }
 
         x.store(this, handlerType, data, true);
-
         cache(c.getActionHandlers(), c.getIndex() - 1, process(c, x), x);
         c.process(x);
     }

@@ -54,7 +54,6 @@ public class ActionChain implements Serializable {
         }
 
         // execute handler in sequence order
-        // todo: add multiple parallel executions here, pay attention to the index for results collection
         ActionHandler handler = actionHandlers.get(index++);
         try {
             handler.doProcess(this, context);

@@ -13,6 +13,8 @@ import org.springframework.util.ReflectionUtils;
 import com.shinnlove.springbootall.process.wrap.ReflectWrapWithResult;
 
 /**
+ * A base handler holds common method for action handler to use.
+ * 
  * @author Tony Zhao
  * @version $Id: BaseHandler.java, v 0.1 2022-02-12 10:23 PM Tony Zhao Exp $$
  */
@@ -61,19 +63,6 @@ public interface BaseHandler {
     }
 
     default Object reflect(ReflectWrapWithResult wrap) {
-        try {
-            return wrap.call();
-        } catch (IllegalAccessException e) {
-
-        } catch (NoSuchFieldException e) {
-
-        } catch (Exception e) {
-
-        }
-        return null;
-    }
-
-    default Object reflect(ReflectWrapWithResult wrap, boolean suppress) {
         try {
             return wrap.call();
         } catch (IllegalAccessException e) {

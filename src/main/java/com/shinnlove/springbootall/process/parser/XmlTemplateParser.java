@@ -50,7 +50,7 @@ public class XmlTemplateParser {
 
         } catch (Exception e) {
             LoggerUtil.error(logger, e,
-                "Mission system could not initialize process templates, ex=", e.getMessage());
+                "System could not initialize process templates, ex=", e.getMessage());
         }
 
         return xp;
