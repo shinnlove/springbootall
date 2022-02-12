@@ -216,6 +216,11 @@ public class XmlTemplateParser {
         boolean isTrans = trans == null || Boolean.parseBoolean(trans);
         xh.setTrans(isTrans);
 
+        // parse prepare parameter for next process's template id
+        String prepare = attr.get(ATTR_PREPARE);
+        Integer prepareId = prepare == null ? -1 : Integer.parseInt(prepare);
+        xh.setPrepareId(prepareId);
+
         return xh;
     }
 

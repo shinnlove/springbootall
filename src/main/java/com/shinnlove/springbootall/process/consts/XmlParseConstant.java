@@ -72,4 +72,6 @@ public final class XmlParseConstant {
 
     public static final String ATTR_TRANS                = "trans";
 
+    public static final String ATTR_PREPARE              = "prepare";
+
 }

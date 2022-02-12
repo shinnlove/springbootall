@@ -29,13 +29,13 @@ public class NotifyRiskAuditHandler implements ActionHandler<ReviseInfo, AuditRe
 
         LoggerUtil.info(logger, "NotifyRiskAuditHandler begin to execute, context", context);
 
-        ReviseInfo parameter = params(context);
+        ReviseInfo parameter = param(context);
 
         LoggerUtil.info(logger, "2nd 通知风控审核");
 
         LoggerUtil.info(logger, "NotifyRiskAuditHandler parameter is ", parameter);
 
-        Integer handlerParam1 = result(context, UpdateRegisterStatusHandler.class);
+        Integer handlerParam1 = results(context, UpdateRegisterStatusHandler.class);
 
         LoggerUtil.info(logger, "handlerParam1 from UpdateRegisterStatusHandler.class is ",
             handlerParam1);

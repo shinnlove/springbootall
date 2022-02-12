@@ -33,7 +33,7 @@ public class NotifyAdvertiserConfirmHandler implements ActionHandler<ReviseInfo,
 
         LoggerUtil.info(logger, "3rd通知广告主确认");
 
-        AuditResult auditResult = result(context, NotifyRiskAuditHandler.class);
+        AuditResult auditResult = results(context, NotifyRiskAuditHandler.class);
 
         LoggerUtil.info(logger, "auditResult=", auditResult);
 

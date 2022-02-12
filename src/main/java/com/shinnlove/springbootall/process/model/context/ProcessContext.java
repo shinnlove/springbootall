@@ -11,6 +11,8 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+
 /**
  * This is the context of whole process, add some business parameters here.
  *
@@ -35,9 +37,13 @@ public class ProcessContext<T> implements Serializable {
     /** the generic parameter pass through a process to do business */
     private DataContext<T>        dataContext;
 
+    /** a input param map for reflect each handler's input. */
+    private Map<String, Class<?>> inputClass        = new HashMap<>();
+    private Map<String, Object>   inputObject       = new HashMap<>();
+
     /** a result map for storing handler's execute result and its type. */
-    private Map<String, Class<?>> clazz             = new HashMap<>();
-    private Map<String, Object>   result            = new HashMap<>();
+    private Map<String, Class<?>> resultClass       = new HashMap<>();
+    private Map<String, Object>   resultObject      = new HashMap<>();
 
     /**
      * Constructor for reflect.
@@ -148,12 +154,33 @@ public class ProcessContext<T> implements Serializable {
         this.dataContext = dataContext;
     }
 
-    public Map<String, Object> getResult() {
-        return result;
+    public Map<String, Class<?>> getInputClass() {
+        return inputClass;
     }
 
-    public Map<String, Class<?>> getClazz() {
-        return clazz;
+    public Map<String, Object> getInputObject() {
+        return inputObject;
+    }
+
+    public Map<String, Class<?>> getResultClass() {
+        return resultClass;
+    }
+
+    public Map<String, Object> getResultObject() {
+        return resultObject;
+    }
+
+    public void store(ActionHandler h, Class<?> c, Object o, boolean isParam) {
+        String name = h.getClass().getName();
+        if (isParam) {
+            // is handler param
+            getInputClass().put(name, c);
+            getInputObject().put(name, o);
+        } else {
+            // is handler result
+            getResultClass().put(name, c);
+            getResultObject().put(name, o);
+        }
     }
 
     @Override

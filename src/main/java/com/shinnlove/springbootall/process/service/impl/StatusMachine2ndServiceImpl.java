@@ -157,13 +157,13 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
     }
 
     @Override
-    public long proceedProcess(int actionId, long refUniqueNo, DataContext dataContext) {
+    public ProcessContext proceedProcess(int actionId, long refUniqueNo, DataContext dataContext) {
         return proceedProcess(actionId, refUniqueNo, dataContext, resp -> {
         });
     }
 
     @Override
-    public long proceedProcess(int actionId, long refUniqueNo, DataContext dataContext,
+    public ProcessContext proceedProcess(int actionId, long refUniqueNo, DataContext dataContext,
                                ProcessCallback callback) {
 
         TemplateCache template = processMetadataService.getTemplateByActionId(actionId);
@@ -270,10 +270,12 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
 
         }); // 6th execute tx
 
+        AssertUtil.largeThanValue(result, 0);
+
         // At last, execute async handlers outta transaction!
         CompletableFuture.runAsync(() -> execute(context, asyncHandlers), asyncExecutor);
 
-        return result;
+        return context;
     }
 
     private ProcessContext buildProContext(int templateId, long refUniqueNo, int source,

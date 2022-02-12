@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shinnlove.springbootall.process.model.context.DataContext;
+import com.shinnlove.springbootall.process.model.context.ProcessContext;
 import com.shinnlove.springbootall.process.no.SnowflakeIdWorker;
 import com.shinnlove.springbootall.process.service.StatusMachine2ndService;
 import com.shinnlove.springbootall.service.biz.model.ApproveInfo;
+import com.shinnlove.springbootall.service.biz.model.ComplexInfo;
 import com.shinnlove.springbootall.service.biz.model.ReviseInfo;
 import com.shinnlove.springbootall.service.biz.revise.RevisePriceService;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
@@ -39,10 +41,13 @@ public class RevisePriceServiceImpl implements RevisePriceService {
 
     @Override
     public long submitRevise(int itemType, BigDecimal before, BigDecimal after, String operator) {
-        long uniqueBizNo = snowflakeIdWorker.nextId();
-        ReviseInfo info = new ReviseInfo(itemType, before, after, 123456, "Tony",
+        ReviseInfo reviseInfo = new ReviseInfo(itemType, before, after, 123456, "Tony",
             "create order revise");
-        DataContext<ReviseInfo> dataContext = new DataContext<>(info);
+        ApproveInfo approveInfo = new ApproveInfo(1, 123456, operator, "This is remark.");
+        ComplexInfo complexInfo = new ComplexInfo(reviseInfo, approveInfo);
+
+        long uniqueBizNo = snowflakeIdWorker.nextId();
+        DataContext<ComplexInfo> dataContext = new DataContext<>(complexInfo);
 
         long processNo = statusMachine2ndService.initProcess(itemType, uniqueBizNo, dataContext);
 
@@ -56,11 +61,12 @@ public class RevisePriceServiceImpl implements RevisePriceService {
         ApproveInfo info = new ApproveInfo(approve, 123456, operator, "This is remark.");
         DataContext<ApproveInfo> dataContext = new DataContext<>(info);
 
-        long result = statusMachine2ndService.proceedProcess(actionId, refUniqueNo, dataContext);
+        ProcessContext context = statusMachine2ndService.proceedProcess(actionId, refUniqueNo,
+            dataContext);
 
-        LoggerUtil.info(logger, "Process proceeded, result=", result);
+        LoggerUtil.info(logger, "Process proceeded, context=", context);
 
-        return result;
+        return 1L;
     }
 
 }

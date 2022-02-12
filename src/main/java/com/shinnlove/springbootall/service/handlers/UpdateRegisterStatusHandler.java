@@ -30,7 +30,7 @@ public class UpdateRegisterStatusHandler implements ActionHandler<ReviseInfo, In
 
         LoggerUtil.info(logger, "1st execute NotifyRiskAuditHandler handler");
 
-        ReviseInfo info = params(context);
+        ReviseInfo info = param(context);
 
         LoggerUtil.info(logger, "name=", info);
 

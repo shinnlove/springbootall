@@ -30,7 +30,7 @@ public class ConfirmNotifyHandler implements ActionHandler<ApproveInfo, Integer>
 
         LoggerUtil.info(logger, "发送确认通知");
 
-        String auditResult = result(context, AuditReviseHandler.class);
+        String auditResult = results(context, AuditReviseHandler.class);
 
         LoggerUtil.info(logger, "auditResult=", auditResult);
 

@@ -45,6 +45,7 @@ public class ActionChain implements Serializable {
      *
      * @param context
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void process(ProcessContext context) {
         // check handler's index won't go out of boundary
         int size = actionHandlers.size();

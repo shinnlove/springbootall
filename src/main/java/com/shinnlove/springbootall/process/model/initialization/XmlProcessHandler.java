@@ -4,11 +4,10 @@
  */
 package com.shinnlove.springbootall.process.model.initialization;
 
+import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import java.io.Serializable;
 
 /**
  * Xml file process handler attributes domain model,
@@ -29,6 +28,8 @@ public class XmlProcessHandler implements Serializable, Comparable<XmlProcessHan
     private String            desc;
     /** handler execution in trans */
     private boolean           trans            = true;
+    /** handler prepare parameter for template id */
+    private int               prepareId        = -1;
 
     /**
      * Constructor for reflect.
@@ -40,11 +41,22 @@ public class XmlProcessHandler implements Serializable, Comparable<XmlProcessHan
         this.trans = trans;
     }
 
-    public XmlProcessHandler(String refBeanId, int sequence, String desc, boolean trans) {
+    /**
+     * Constructor for all arguments.
+     * 
+     * @param refBeanId 
+     * @param sequence
+     * @param desc
+     * @param trans
+     * @param prepareId
+     */
+    public XmlProcessHandler(String refBeanId, int sequence, String desc, boolean trans,
+                             int prepareId) {
         this.refBeanId = refBeanId;
         this.sequence = sequence;
         this.desc = desc;
         this.trans = trans;
+        this.prepareId = prepareId;
     }
 
     public String getRefBeanId() {
@@ -77,6 +89,14 @@ public class XmlProcessHandler implements Serializable, Comparable<XmlProcessHan
 
     public void setTrans(boolean trans) {
         this.trans = trans;
+    }
+
+    public int getPrepareId() {
+        return prepareId;
+    }
+
+    public void setPrepareId(int prepareId) {
+        this.prepareId = prepareId;
     }
 
     @Override

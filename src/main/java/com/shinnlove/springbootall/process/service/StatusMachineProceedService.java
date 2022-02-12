@@ -6,6 +6,7 @@ package com.shinnlove.springbootall.process.service;
 
 import com.shinnlove.springbootall.process.callback.ProcessCallback;
 import com.shinnlove.springbootall.process.model.context.DataContext;
+import com.shinnlove.springbootall.process.model.context.ProcessContext;
 
 /**
  * @author Tony Zhao
@@ -13,9 +14,10 @@ import com.shinnlove.springbootall.process.model.context.DataContext;
  */
 public interface StatusMachineProceedService {
 
-    long proceedProcess(final int actionId, final long refUniqueNo, final DataContext dataContext);
+    ProcessContext proceedProcess(final int actionId, final long refUniqueNo,
+                                  final DataContext dataContext);
 
-    long proceedProcess(final int actionId, final long refUniqueNo, final DataContext dataContext,
-                        final ProcessCallback callback);
+    ProcessContext proceedProcess(final int actionId, final long refUniqueNo,
+                                  final DataContext dataContext, final ProcessCallback callback);
 
 }

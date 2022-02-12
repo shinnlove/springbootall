@@ -41,7 +41,7 @@
 
     <action id="30101" name="order_audit_pass_pending_confirm" desc="订单金额改价项风控审核通过待客户确认" source="1" destination="2">
         <handler seq="1" ref="auditReviseHandler" desc="审核改价项处理器"/>
-        <handler seq="2" ref="confirmNotifyHandler" desc="通知客户审核"/>
+        <handler seq="2" ref="confirmNotifyHandler" desc="通知客户审核" prepare="30000"/>
     </action>
 
     <action id="30102" name="order_revise_accomplish" desc="订单金额改价项完成" source="2" destination="4">

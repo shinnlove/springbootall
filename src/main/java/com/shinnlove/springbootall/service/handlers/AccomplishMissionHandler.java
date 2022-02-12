@@ -35,7 +35,7 @@ public class AccomplishMissionHandler implements ActionHandler<RecruitMission, I
         int result = -1;
 
         // use data
-        Integer o = result(context, AccomplishMissionHandler.class);
+        Integer o = results(context, AccomplishMissionHandler.class);
         System.out.println(o);
 
         return result;

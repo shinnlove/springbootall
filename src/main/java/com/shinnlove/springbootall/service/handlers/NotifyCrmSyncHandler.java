@@ -34,7 +34,7 @@ public class NotifyCrmSyncHandler implements ActionHandler<ReviseInfo, Integer> 
 
         LoggerUtil.info(logger, "NotifyCrmSyncHandler parameter is ", parameter);
 
-        Integer handlerParam1 = result(context, UpdateRegisterStatusHandler.class);
+        Integer handlerParam1 = results(context, UpdateRegisterStatusHandler.class);
 
         LoggerUtil.info(logger, "handlerParam1 from UpdateRegisterStatusHandler.class is ",
             handlerParam1);
