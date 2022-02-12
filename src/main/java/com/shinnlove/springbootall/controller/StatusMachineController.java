@@ -42,10 +42,18 @@ public class StatusMachineController {
 
     @RequestMapping("/proceed/{id}")
     public String proceedProcess(@PathVariable(value = "id") long refUniqueNo) {
-
         int actionId = ActionType.ORDER_PENDING_CONFIRM.getActionId();
 
         long result = revisePriceService.auditRevise(actionId, refUniqueNo, 1, "Tony酱");
+
+        return String.valueOf(result);
+    }
+
+    @RequestMapping("/pipeline")
+    public String pipelineProcess() {
+        int actionId = ActionType.ORDER_PENDING_CONFIRM.getActionId();
+
+        long result = revisePriceService.pipelineAudit(actionId);
 
         return String.valueOf(result);
     }

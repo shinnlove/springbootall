@@ -4,21 +4,24 @@
  */
 package com.shinnlove.springbootall.process.pipeline.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.model.context.DataContext;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
 import com.shinnlove.springbootall.process.pipeline.PipelineService;
-import com.shinnlove.springbootall.process.service.ProcessAssemble2ndService;
+import com.shinnlove.springbootall.process.service.ProcessMetadataService;
+import com.shinnlove.springbootall.service.biz.model.ApproveInfo;
 import com.shinnlove.springbootall.util.exception.SystemException;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 
@@ -31,23 +34,30 @@ public class PipelineServiceImpl implements PipelineService {
 
     private static final Logger    logger = LoggerFactory.getLogger(PipelineServiceImpl.class);
 
+    /** pipeline executor. */
+    @Autowired
+    @Qualifier("processPool")
+    private ExecutorService        executor;
+
     /** process template and status metadata autowired service */
     @Autowired
-    private ProcessAssemble2ndService processAssemble2ndService;
+    private ProcessMetadataService processMetadataService;
 
     @Override
     public Object doPipeline(int actionId) {
         // prepare data context
-        ProcessContext<String> context = new ProcessContext<>();
+        ApproveInfo approveInfo = new ApproveInfo(1, 123456, "tony", "This is remark.");
+        DataContext<ApproveInfo> dataContext = new DataContext<>(approveInfo);
+        ProcessContext<ApproveInfo> context = new ProcessContext<>(dataContext);
 
         // prepare handlers
-        List<ActionHandler> syncHandlers = new ArrayList<>();
+        List<ActionHandler> syncHandlers = processMetadataService.getExecutions(actionId, true);
 
         return execute(context, syncHandlers);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private Object execute(final ProcessContext<String> context,
+    private Object execute(final ProcessContext context,
                            final List<ActionHandler> handlers) throws SystemException {
 
         CompletableFuture<Object> f = CompletableFuture.completedFuture(null);
@@ -64,7 +74,7 @@ public class PipelineServiceImpl implements PipelineService {
                     handler.cache(handlers, i - 1, previous, context);
                 }
                 return handler.pipeline(context);
-            }));
+            }, executor));
         }
 
         return doExecute(f);

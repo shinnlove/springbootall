@@ -51,6 +51,10 @@ public class ProcessContext<T> implements Serializable {
     public ProcessContext() {
     }
 
+    public ProcessContext(DataContext<T> dataContext) {
+        this.dataContext = dataContext;
+    }
+
     /**
      * Constructor for actionId, processNo, and generic data.
      *

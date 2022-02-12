@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.shinnlove.springbootall.process.model.context.DataContext;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
 import com.shinnlove.springbootall.process.no.SnowflakeIdWorker;
+import com.shinnlove.springbootall.process.pipeline.PipelineService;
 import com.shinnlove.springbootall.process.service.StatusMachine2ndService;
 import com.shinnlove.springbootall.service.biz.model.ApproveInfo;
 import com.shinnlove.springbootall.service.biz.model.ComplexInfo;
@@ -38,6 +39,10 @@ public class RevisePriceServiceImpl implements RevisePriceService {
     /** status machine service */
     @Autowired
     private StatusMachine2ndService statusMachine2ndService;
+
+    /** pipeline service. */
+    @Autowired
+    private PipelineService         pipelineService;
 
     @Override
     public long submitRevise(int itemType, BigDecimal before, BigDecimal after, String operator) {
@@ -67,6 +72,12 @@ public class RevisePriceServiceImpl implements RevisePriceService {
         LoggerUtil.info(logger, "Process proceeded, context=", context);
 
         return 1L;
+    }
+
+    @Override
+    public long pipelineAudit(int actionId) {
+        Object result = pipelineService.doPipeline(actionId);
+        return Long.parseLong(String.valueOf(result));
     }
 
 }
