@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.shinnlove.springbootall.process.enums.ActionType;
 import com.shinnlove.springbootall.process.enums.TemplateType;
 import com.shinnlove.springbootall.service.biz.revise.RevisePriceService;
@@ -53,9 +54,9 @@ public class StatusMachineController {
     public String pipelineProcess() {
         int actionId = ActionType.ORDER_PENDING_CONFIRM.getActionId();
 
-        long result = revisePriceService.pipelineAudit(actionId);
+        Object result = revisePriceService.pipelineAudit(actionId);
 
-        return String.valueOf(result);
+        return JSON.toJSONString(result);
     }
 
 }

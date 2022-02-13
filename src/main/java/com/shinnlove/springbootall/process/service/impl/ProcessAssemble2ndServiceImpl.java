@@ -119,7 +119,8 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
 
             List<ActionHandler> sync = new ArrayList<>();
             List<ActionHandler> async = new ArrayList<>();
-            ActionCache cache = new ActionCache(id, name, desc, src, des, sync, async);
+            Map<String, Integer> prepare = new HashMap<>();
+            ActionCache cache = new ActionCache(id, name, desc, src, des, sync, async, prepare);
 
             XmlProcessAction xa = xp.getActionById(id);
             for (XmlProcessHandler h : xa.getHandlers()) {
@@ -128,6 +129,12 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
                     sync.add(ah);
                 } else {
                     async.add(ah);
+                }
+
+                // prepare params for processes recursive call
+                if (h.getPrepareId() > 0) {
+                    String n = ah.getClass().getName();
+                    prepare.put(n, h.getPrepareId());
                 }
             }
 

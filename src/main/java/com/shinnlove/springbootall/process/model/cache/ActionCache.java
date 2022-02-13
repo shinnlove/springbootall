@@ -6,6 +6,7 @@ package com.shinnlove.springbootall.process.model.cache;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -18,28 +19,31 @@ import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
  */
 public class ActionCache implements Serializable {
 
-    private static final long   serialVersionUID = -3990743305894582911L;
+    private static final long    serialVersionUID = -3990743305894582911L;
 
     /** action id */
-    private int                 actionId;
+    private int                  actionId;
 
     /** action name */
-    private String              name;
+    private String               name;
 
     /** action description */
-    private String              desc;
+    private String               desc;
 
     /** action source status, -1 represents no limitation */
-    private int                 source           = -1;
+    private int                  source           = -1;
 
     /** action destination status. */
-    private int                 destination;
+    private int                  destination;
 
     /** action_id => sync execute in tx's handlers */
-    private List<ActionHandler> syncHandlers;
+    private List<ActionHandler>  syncHandlers;
 
     /** action_id => async execute in tx's handlers */
-    private List<ActionHandler> asyncHandlers;
+    private List<ActionHandler>  asyncHandlers;
+
+    /** handler class name => template id */
+    private Map<String, Integer> prepareHandler;
 
     /**
      * Constructor for reflect.
@@ -84,8 +88,8 @@ public class ActionCache implements Serializable {
 
     /**
      * Constructor with all arguments.
-     * 
-     * @param actionId 
+     *
+     * @param actionId
      * @param name
      * @param desc
      * @param source
@@ -94,7 +98,8 @@ public class ActionCache implements Serializable {
      * @param asyncHandlers
      */
     public ActionCache(int actionId, String name, String desc, int source, int destination,
-                       List<ActionHandler> syncHandlers, List<ActionHandler> asyncHandlers) {
+                       List<ActionHandler> syncHandlers, List<ActionHandler> asyncHandlers,
+                       Map<String, Integer> prepareHandler) {
         this.actionId = actionId;
         this.name = name;
         this.desc = desc;
@@ -102,6 +107,7 @@ public class ActionCache implements Serializable {
         this.destination = destination;
         this.syncHandlers = syncHandlers;
         this.asyncHandlers = asyncHandlers;
+        this.prepareHandler = prepareHandler;
     }
 
     public int getActionId() {
@@ -158,6 +164,14 @@ public class ActionCache implements Serializable {
 
     public void setAsyncHandlers(List<ActionHandler> asyncHandlers) {
         this.asyncHandlers = asyncHandlers;
+    }
+
+    public Map<String, Integer> getPrepareHandler() {
+        return prepareHandler;
+    }
+
+    public void setPrepareHandler(Map<String, Integer> prepareHandler) {
+        this.prepareHandler = prepareHandler;
     }
 
     @Override

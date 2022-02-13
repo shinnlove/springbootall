@@ -164,7 +164,7 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
 
     @Override
     public ProcessContext proceedProcess(int actionId, long refUniqueNo, DataContext dataContext,
-                               ProcessCallback callback) {
+                                         ProcessCallback callback) {
 
         TemplateCache template = processMetadataService.getTemplateByActionId(actionId);
         AssertUtil.isNotNull(template);
@@ -177,6 +177,7 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
 
         Map<Integer, ActionCache> actionMap = template.getActions();
         ActionCache actionCache = actionMap.get(actionId);
+        final Map<String, Integer> prepare = actionCache.getPrepareHandler();
         final int source = actionCache.getSource();
         final int destination = actionCache.getDestination();
 
@@ -221,50 +222,36 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
             processStatusCoreService.proceedProcessStatus(templateId, actionId, processNo, source,
                 destination, dataContext.getOperator(), dataContext.getRemark());
 
+            //            reconcileParent(processNo, parentProcessNo, needReconcile, reconcileMode);
+
+            // parent revising action id
+            final int parentActionId = 30001;
+
+            if (!CollectionUtils.isEmpty(prepare)) {
+                for (Map.Entry<String, Integer> entry : prepare.entrySet()) {
+                    String prepareName = entry.getKey();
+                    int prepareId = entry.getValue();
+
+                    Object re = context.getResultObject().get(prepareName);
+                    DataContext d = new DataContext(re);
+
+                    UniversalProcess pProcess = universalProcessCoreService
+                        .getProcessByNo(parentProcessNo);
+                    final long parentRefUniqueNo = pProcess.getRefUniqueNo();
+
+                    ProcessContext pContext = proceedProcess(parentActionId, parentRefUniqueNo, d,
+                        resp -> {
+                        });
+                    LoggerUtil.info(logger, "successfully proceed parent, pContext=", pContext);
+
+                    break;
+                }
+            }
+
             // give a change for business codes to execute outta logic, callback must after execute!
             if (callback != null) {
                 callback.doCallback(context);
             }
-
-            // if status reached to end, then check reconcile mode
-            if (parentProcessNo != -1 && needReconcile == 1) {
-                // get parent process
-                UniversalProcess parentProcess = universalProcessCoreService
-                    .lockProcessByProcessNo(parentProcessNo);
-                int pTemplateId = parentProcess.getTemplateId();
-                int pActionId = -1;
-                int pcStatus = parentProcess.getCurrentStatus();
-
-                // get other sibling process
-                List<UniversalProcess> childProcesses = universalProcessCoreService
-                    .getProcessListByParentProcessNo(parentProcessNo);
-                List<UniversalProcess> otherChildProcessList = childProcesses.stream()
-                    .filter(t -> t.getProcessNo() != processNo).collect(Collectors.toList());
-
-                // check reconcile flag
-                boolean needUpdateParent = true;
-                if (reconcileMode == 1) {
-                    // cooperate mode:
-                    // loop to check each child process status with no lock and update parent status if ok
-                    for (UniversalProcess up : otherChildProcessList) {
-                        int uptId = up.getTemplateId();
-                        int upStatus = up.getCurrentStatus();
-                        boolean isFinal = processMetadataService.isFinalStatus(uptId, upStatus);
-                        if (!isFinal) {
-                            needUpdateParent = false;
-                        }
-                    }
-                }
-
-                // need reconcile parent
-                if (needUpdateParent) {
-                    int pacStatus = processMetadataService.getACStatus(pTemplateId);
-                    processStatusCoreService.proceedProcessStatus(pTemplateId, pActionId,
-                        parentProcessNo, pcStatus, pacStatus, MachineConstant.DEFAULT_OPERATOR,
-                        MachineConstant.DEFAULT_REMARK);
-                }
-
-            } // if need reconcile
 
             return 1;
 
@@ -341,6 +328,49 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
                 }
             }
         } // if blocking
+    }
+
+    private void reconcileParent(long selfProcessNo, long parentProcessNo, int needReconcile,
+                                 int reconcileMode) {
+        // if status reached to end, then check reconcile mode
+        if (parentProcessNo != -1 && needReconcile == 1) {
+            // get parent process
+            UniversalProcess parentProcess = universalProcessCoreService
+                .lockProcessByProcessNo(parentProcessNo);
+            int pTemplateId = parentProcess.getTemplateId();
+            int pActionId = -1;
+            int pcStatus = parentProcess.getCurrentStatus();
+
+            // get other sibling process
+            List<UniversalProcess> childProcesses = universalProcessCoreService
+                .getProcessListByParentProcessNo(parentProcessNo);
+            List<UniversalProcess> otherChildProcessList = childProcesses.stream()
+                .filter(t -> t.getProcessNo() != selfProcessNo).collect(Collectors.toList());
+
+            // check reconcile flag
+            boolean needUpdateParent = true;
+            if (reconcileMode == 1) {
+                // cooperate mode:
+                // loop to check each child process status with no lock and update parent status if ok
+                for (UniversalProcess up : otherChildProcessList) {
+                    int uptId = up.getTemplateId();
+                    int upStatus = up.getCurrentStatus();
+                    boolean isFinal = processMetadataService.isFinalStatus(uptId, upStatus);
+                    if (!isFinal) {
+                        needUpdateParent = false;
+                    }
+                }
+            }
+
+            // need reconcile parent
+            if (needUpdateParent) {
+                int pacStatus = processMetadataService.getACStatus(pTemplateId);
+                processStatusCoreService.proceedProcessStatus(pTemplateId, pActionId,
+                    parentProcessNo, pcStatus, pacStatus, MachineConstant.DEFAULT_OPERATOR,
+                    MachineConstant.DEFAULT_REMARK);
+            }
+
+        } // if need reconcile
     }
 
 }

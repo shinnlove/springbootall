@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.shinnlove.springbootall.process.chain.ActionChain;
 import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
-import com.shinnlove.springbootall.service.biz.model.ReviseInfo;
+import com.shinnlove.springbootall.service.biz.model.ParentProcessInfo;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 
 /**
@@ -19,22 +19,22 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @version $Id: UpdateRegisterStatusHandler.java, v 0.1 2022-01-25 3:35 PM Tony Zhao Exp $$
  */
 @Service
-public class UpdateRegisterStatusHandler implements ActionHandler<ReviseInfo, Integer> {
+public class UpdateRegisterStatusHandler implements ActionHandler<ParentProcessInfo, Integer> {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdateRegisterStatusHandler.class);
 
     @Override
-    public Integer process(ActionChain chain, ProcessContext<ReviseInfo> context) {
+    public Integer process(ActionChain chain, ProcessContext<ParentProcessInfo> context) {
 
         LoggerUtil.info(logger, "UpdateRegisterStatusHandler begin to execute, context", context);
 
-        LoggerUtil.info(logger, "1st execute NotifyRiskAuditHandler handler");
+        LoggerUtil.info(logger, "parent 1st execute UpdateRegisterStatusHandler handler");
 
-        ReviseInfo info = param(context);
+        ParentProcessInfo info = param(context);
 
-        LoggerUtil.info(logger, "name=", info);
+        LoggerUtil.info(logger, "1st ParentProcessInfo=", info);
 
-        return 10;
+        return 10008866;
     }
 
 }

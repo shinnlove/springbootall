@@ -16,6 +16,6 @@ public interface RevisePriceService {
 
     long auditRevise(int actionId, long refUniqueNo, int approve, String operator);
 
-    long pipelineAudit(int actionId);
+    Object pipelineAudit(int actionId);
 
 }

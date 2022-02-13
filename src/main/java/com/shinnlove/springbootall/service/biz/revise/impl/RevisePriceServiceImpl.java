@@ -75,9 +75,9 @@ public class RevisePriceServiceImpl implements RevisePriceService {
     }
 
     @Override
-    public long pipelineAudit(int actionId) {
+    public Object pipelineAudit(int actionId) {
         Object result = pipelineService.doPipeline(actionId);
-        return Long.parseLong(String.valueOf(result));
+        return result;
     }
 
 }

@@ -40,9 +40,9 @@
         <handler seq="1" ref="processCanceledTrigger" desc="改价父流程关闭后trigger"/>
     </canceled>
 
-    <action id="30001" name="revising" desc="改价中" destination="1" entrance="true">
+    <action id="30001" name="revising" desc="改价中" source="1" destination="2" entrance="true">
         <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
+        <handler seq="2" ref="parentRiskAuditHandler" desc="通知风控审核"/>
     </action>
 
     <action id="30002" name="revise_accomplish" desc="改价完成" destination="4">
