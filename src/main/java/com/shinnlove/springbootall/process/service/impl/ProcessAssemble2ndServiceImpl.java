@@ -140,7 +140,8 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
 
             actions.put(id, cache);
             twoKeyReflect(id, src, new StatusPair(src, des), dstTable);
-            twoKeyReflect(src, des, cache, actionTable);
+            // special warning: dst => src => action, reverse order.
+            twoKeyReflect(des, src, cache, actionTable);
         }
 
         // step2: status check array

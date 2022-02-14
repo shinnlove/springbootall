@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import com.shinnlove.springbootall.process.model.blocking.ProcessBlocking;
 import com.shinnlove.springbootall.process.model.cache.ActionCache;
 import com.shinnlove.springbootall.process.model.cache.TemplateCache;
 import com.shinnlove.springbootall.process.model.cache.TemplateMetadata;
+import com.shinnlove.springbootall.process.model.cascade.PrepareParent;
 import com.shinnlove.springbootall.process.model.context.DataContext;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
 import com.shinnlove.springbootall.process.model.process.UniversalProcess;
@@ -176,16 +178,13 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         int reconcileMode = metadata.getCoordinateMode();
 
         Map<Integer, ActionCache> actionMap = template.getActions();
-        ActionCache actionCache = actionMap.get(actionId);
-        final Map<String, Integer> prepare = actionCache.getPrepareHandler();
-        final int source = actionCache.getSource();
-        final int destination = actionCache.getDestination();
+        ActionCache cache = actionMap.get(actionId);
+        final int source = cache.getSource();
+        final int destination = cache.getDestination();
 
-        // prepare proceed context
+        // prepare proceed context and handlers
         ProcessContext context = buildProContext(templateId, actionId, refUniqueNo, source,
             destination, dataContext);
-
-        // prepare handlers
         List<ActionHandler> syncHandlers = processMetadataService.getExecutions(actionId, true);
         List<ActionHandler> asyncHandlers = processMetadataService.getExecutions(actionId, false);
 
@@ -195,7 +194,7 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         AssertUtil.notNull(nProcess);
 
         // 6th: check current process info if process exists
-        Integer result = transactionTemplate.execute(status -> {
+        Integer result = tx(() -> {
 
             // need to lock current process
             UniversalProcess uProcess = universalProcessCoreService
@@ -203,11 +202,10 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
             AssertUtil.isNotNull(uProcess, SystemResultCode.PARAM_INVALID,
                 MachineConstant.NO_PROCESS_IN_SYSTEM);
 
+            int currentStatus = uProcess.getCurrentStatus();
+            long pProcessNo = uProcess.getParentProcessNo();
             long processNo = uProcess.getProcessNo();
             context.setProcessNo(processNo);
-
-            int currentStatus = uProcess.getCurrentStatus();
-            long parentProcessNo = uProcess.getParentProcessNo();
 
             // use status flow reflection to validate state flow correct
             checkSourceStatus(currentStatus, source);
@@ -224,27 +222,17 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
 
             //            reconcileParent(processNo, parentProcessNo, needReconcile, reconcileMode);
 
-            // parent revising action id
-            final int parentActionId = 30001;
+            if (pProcessNo > 0) {
+                UniversalProcess pProcess = universalProcessCoreService.getProcessByNo(pProcessNo);
+                long pRefUniqueNo = pProcess.getRefUniqueNo();
+                int ptId = pProcess.getTemplateId();
+                int pActionId = chooseAction(ptId, source, destination);
+                if (pActionId > 0) {
+                    Object pParam = chooseParam(cache, context, ptId);
+                    DataContext d = new DataContext(pParam);
 
-            if (!CollectionUtils.isEmpty(prepare)) {
-                for (Map.Entry<String, Integer> entry : prepare.entrySet()) {
-                    String prepareName = entry.getKey();
-                    int prepareId = entry.getValue();
-
-                    Object re = context.getResultObject().get(prepareName);
-                    DataContext d = new DataContext(re);
-
-                    UniversalProcess pProcess = universalProcessCoreService
-                        .getProcessByNo(parentProcessNo);
-                    final long parentRefUniqueNo = pProcess.getRefUniqueNo();
-
-                    ProcessContext pContext = proceedProcess(parentActionId, parentRefUniqueNo, d,
-                        resp -> {
-                        });
+                    ProcessContext pContext = proceedProcess(pActionId, pRefUniqueNo, d);
                     LoggerUtil.info(logger, "successfully proceed parent, pContext=", pContext);
-
-                    break;
                 }
             }
 
@@ -263,6 +251,53 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         CompletableFuture.runAsync(() -> execute(context, asyncHandlers), asyncExecutor);
 
         return context;
+    }
+
+    private int chooseAction(int parentTemplateId, int source, int destination) {
+        TemplateCache cache = processMetadataService.getTemplateById(parentTemplateId);
+        Map<Integer, Map<Integer, ActionCache>> parentActionDst = cache.getActionTable();
+        if (parentActionDst.containsKey(destination)) {
+            Map<Integer, ActionCache> dstMapping = parentActionDst.get(destination);
+            if (dstMapping.containsKey(source)) {
+                ActionCache dstAction = dstMapping.get(source);
+                // parent revising action id
+                return dstAction.getActionId();
+            }
+        }
+        return -1;
+    }
+
+    private Object chooseParam(ActionCache cache, ProcessContext context, int parentTemplateId) {
+        PrepareParent prepare = getPrepare(cache.getPrepareHandler());
+        if (prepare != null && prepare.getParentTemplateId() == parentTemplateId) {
+            // has prepare parameter
+            return getResultByClass(context, prepare.getClassName());
+        } else {
+            // use default if not exist
+            List<ActionHandler> syncHandlers = cache.getSyncHandlers();
+            int size = syncHandlers.size();
+            ActionHandler h = syncHandlers.get(size - 1);
+            String name = h.getClass().getName();
+            return getResultByClass(context, name);
+        }
+    }
+
+    private Object getResultByClass(ProcessContext context, String className) {
+        Object result = null;
+        Map<String, Object> results = context.getResultObject();
+        if (!CollectionUtils.isEmpty(results) && results.containsKey(className)) {
+            result = results.get(className);
+        }
+        return result;
+    }
+
+    private PrepareParent getPrepare(Map<String, Integer> prepare) {
+        for (Map.Entry<String, Integer> entry : prepare.entrySet()) {
+            String prepareName = entry.getKey();
+            int prepareId = entry.getValue();
+            return new PrepareParent(prepareName, prepareId);
+        }
+        return null;
     }
 
     private ProcessContext buildProContext(int templateId, long refUniqueNo, int source,
@@ -286,6 +321,10 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         context.setDestinationStatus(destination);
         context.setDataContext(dataContext);
         return context;
+    }
+
+    private <T> T tx(final Supplier<T> supplier) {
+        return transactionTemplate.execute(status -> supplier.get());
     }
 
     private void execute(final ProcessContext context,
