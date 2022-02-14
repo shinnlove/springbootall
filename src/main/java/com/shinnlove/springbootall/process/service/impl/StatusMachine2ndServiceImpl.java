@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 
@@ -194,7 +195,7 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         AssertUtil.notNull(nProcess);
 
         // 6th: check current process info if process exists
-        Integer result = tx(() -> {
+        Integer result = tx(status -> {
 
             // need to lock current process
             UniversalProcess uProcess = universalProcessCoreService
@@ -323,8 +324,8 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         return context;
     }
 
-    private <T> T tx(final Supplier<T> supplier) {
-        return transactionTemplate.execute(status -> supplier.get());
+    private <R> R tx(final Function<TransactionStatus, R> function) {
+        return transactionTemplate.execute(status -> function.apply(status));
     }
 
     private void execute(final ProcessContext context,
