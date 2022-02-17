@@ -3,7 +3,7 @@
 
     <metadata>
         <status no="-1" seq="1" name="init" desc="流程初始化" ps="-1"/>
-        <status no="1" seq="2" name="risk_audit" desc="待风控审核" ps="1"/>
+        <status no="1" seq="2" name="risk_audit" desc="待风控审核" ps="1" default="true"/>
         <status no="4" seq="3" name="accepted" desc="改价项已完成" ps="4"/>
         <status no="5" seq="4" name="rejected" desc="改价项已拒绝" ps="5"/>
         <status no="6" seq="5" name="canceled" desc="改价项已取消" ps="6"/>

@@ -9,12 +9,13 @@ import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.shinnlove.springbootall.process.model.context.DataContext;
-import com.shinnlove.springbootall.process.model.context.ProcessContext;
-import com.shinnlove.springbootall.process.no.SnowflakeIdWorker;
-import com.shinnlove.springbootall.process.pipeline.PipelineService;
-import com.shinnlove.springbootall.process.service.StatusMachine2ndService;
+import com.bilibili.universal.process.model.context.DataContext;
+import com.bilibili.universal.process.model.context.ProcessContext;
+import com.bilibili.universal.process.no.SnowflakeIdWorker;
+import com.bilibili.universal.process.pipeline.PipelineService;
+import com.bilibili.universal.process.service.StatusMachine2ndService;
 import com.shinnlove.springbootall.service.biz.model.ApproveInfo;
 import com.shinnlove.springbootall.service.biz.model.ComplexInfo;
 import com.shinnlove.springbootall.service.biz.model.ReviseInfo;
@@ -25,7 +26,7 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @author Tony Zhao
  * @version $Id: RevisePriceServiceImpl.java, v 0.1 2022-02-10 2:48 PM Tony Zhao Exp $$
  */
-//@Service
+@Service
 public class RevisePriceServiceImpl implements RevisePriceService {
 
     /** logger */

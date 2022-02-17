@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.shinnlove.springbootall.process.chain.ActionChain;
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
-import com.shinnlove.springbootall.process.model.context.ProcessContext;
+import com.bilibili.universal.process.chain.ActionChain;
+import com.bilibili.universal.process.interfaces.ActionHandler;
+import com.bilibili.universal.process.model.context.ProcessContext;
 import com.shinnlove.springbootall.util.log.LoggerUtil;
 
 /**
