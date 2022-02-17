@@ -10,30 +10,28 @@ package com.shinnlove.springbootall.process.enums;
  */
 public enum TemplateType {
 
-    UNKNOWN(-1, "未知模板流程", -1),
+    UNKNOWN(-1, "未知模板流程"),
 
-    REVISE_PARENT(30000, "改价父流程", 1),
+    REVISE_PARENT(30000, "改价父流程"),
 
-    ORDER_PRICE(30001, "单个改价项订单金额子流程", 1),
+    ORDER_PRICE(30001, "单个改价项订单金额子流程"),
 
-    SERVICE_FEE(30002, "单个改价项信息技术费子流程", 1),
+    SERVICE_FEE(30002, "单个改价项信息技术费子流程"),
 
-    ORDER_EXPENSE(30003, "单个改价项订单支出子流程", 1),
+    ORDER_EXPENSE(30003, "单个改价项订单支出子流程"),
 
-    UPPER_PROFIT(30004, "单个改价项UP主收益子流程", 1),
+    UPPER_PROFIT(30004, "单个改价项UP主收益子流程"),
 
-    VENDOR_PROFIT(30005, "单个改价项服务商收益子流程", 1),
+    VENDOR_PROFIT(30005, "单个改价项服务商收益子流程"),
 
     ;
 
     private int    templateId;
     private String desc;
-    private int    defaultInitDst;
 
-    TemplateType(int templateId, String desc, int defaultInitDst) {
+    TemplateType(int templateId, String desc) {
         this.templateId = templateId;
         this.desc = desc;
-        this.defaultInitDst = defaultInitDst;
     }
 
     public int getTemplateId() {
@@ -52,14 +50,6 @@ public enum TemplateType {
         this.desc = desc;
     }
 
-    public int getDefaultInitDst() {
-        return defaultInitDst;
-    }
-
-    public void setDefaultInitDst(int defaultInitDst) {
-        this.defaultInitDst = defaultInitDst;
-    }
-
     public static TemplateType getByTemplateId(int templateId) {
         for (TemplateType type : values()) {
             if (templateId == type.getTemplateId()) {
@@ -67,11 +57,6 @@ public enum TemplateType {
             }
         }
         return UNKNOWN;
-    }
-
-    public static int getDstByTemplateId(int templateId) {
-        TemplateType type = getByTemplateId(templateId);
-        return type.getDefaultInitDst();
     }
 
 }
