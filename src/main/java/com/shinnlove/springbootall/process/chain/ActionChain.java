@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.shinnlove.springbootall.process.ex.StatusBreakException;
 import com.shinnlove.springbootall.process.ex.StatusContinueException;
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
 
 /**
@@ -29,14 +29,14 @@ public class ActionChain implements Serializable {
     private int                 index            = 0;
 
     /** actions that need to do  */
-    private List<ActionHandler> actionHandlers;
+    private List<ActionHandler2nd> actionHandlers;
 
     /**
      * Constructor for inject action's handlers.
      *
      * @param actionHandlers
      */
-    public ActionChain(List<ActionHandler> actionHandlers) {
+    public ActionChain(List<ActionHandler2nd> actionHandlers) {
         this.actionHandlers = actionHandlers;
     }
 
@@ -54,7 +54,7 @@ public class ActionChain implements Serializable {
         }
 
         // execute handler in sequence order
-        ActionHandler handler = actionHandlers.get(index++);
+        ActionHandler2nd handler = actionHandlers.get(index++);
         try {
             handler.doProcess(this, context);
         } catch (StatusContinueException e) {
@@ -70,7 +70,7 @@ public class ActionChain implements Serializable {
         return index;
     }
 
-    public List<ActionHandler> getActionHandlers() {
+    public List<ActionHandler2nd> getActionHandlers() {
         return actionHandlers;
     }
 

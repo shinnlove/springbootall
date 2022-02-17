@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
@@ -26,7 +25,7 @@ import com.shinnlove.springbootall.process.core.ProcessBlockingCoreService;
 import com.shinnlove.springbootall.process.core.ProcessStatusCoreService;
 import com.shinnlove.springbootall.process.core.UniversalProcessCoreService;
 import com.shinnlove.springbootall.process.enums.TemplateType;
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.blocking.ProcessBlocking;
 import com.shinnlove.springbootall.process.model.cache.ActionCache;
 import com.shinnlove.springbootall.process.model.cache.TemplateCache;
@@ -50,7 +49,7 @@ import javax.annotation.Resource;
  * @author Tony Zhao
  * @version $Id: StatusMachine2ndServiceImpl.java, v 0.1 2022-02-09 5:50 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
 
     private static final Logger         logger = LoggerFactory
@@ -117,12 +116,12 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         TemplateCache template = processMetadataService.getTemplateById(templateId);
         AssertUtil.isNotNull(template);
 
-        Map<Integer, List<ActionHandler>> inits = template.getInitializers();
+        Map<Integer, List<ActionHandler2nd>> inits = template.getInitializers();
         if (CollectionUtils.isEmpty(inits) || !inits.containsKey(destination)) {
             return 0;
         }
 
-        List<ActionHandler> handlers = inits.get(destination);
+        List<ActionHandler2nd> handlers = inits.get(destination);
         if (CollectionUtils.isEmpty(handlers)) {
             return 0;
         }
@@ -186,8 +185,9 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
         // prepare proceed context and handlers
         ProcessContext context = buildProContext(templateId, actionId, refUniqueNo, source,
             destination, dataContext);
-        List<ActionHandler> syncHandlers = processMetadataService.getExecutions(actionId, true);
-        List<ActionHandler> asyncHandlers = processMetadataService.getExecutions(actionId, false);
+        List<ActionHandler2nd> syncHandlers = processMetadataService.getExecutions(actionId, true);
+        List<ActionHandler2nd> asyncHandlers = processMetadataService.getExecutions(actionId,
+            false);
 
         // fast query once to check if it's a new process
         UniversalProcess nProcess = universalProcessCoreService.getProcessByRefUniqueNo(refUniqueNo,
@@ -275,9 +275,9 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
             return getResultByClass(context, prepare.getClassName());
         } else {
             // use default if not exist
-            List<ActionHandler> syncHandlers = cache.getSyncHandlers();
+            List<ActionHandler2nd> syncHandlers = cache.getSyncHandlers();
             int size = syncHandlers.size();
-            ActionHandler h = syncHandlers.get(size - 1);
+            ActionHandler2nd h = syncHandlers.get(size - 1);
             String name = h.getClass().getName();
             return getResultByClass(context, name);
         }
@@ -329,7 +329,7 @@ public class StatusMachine2ndServiceImpl implements StatusMachine2ndService {
     }
 
     private void execute(final ProcessContext context,
-                         final List<ActionHandler> handlers) throws SystemException {
+                         final List<ActionHandler2nd> handlers) throws SystemException {
         // real execute action's handlers
         try {
             actionExecutor.proceed(context, handlers);

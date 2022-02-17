@@ -12,7 +12,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.status.StatusPair;
 
 /**
@@ -33,13 +33,13 @@ public class TemplateCache implements Serializable {
     private StatusCache[]                           statusArray;
 
     /** destination status => handlers, initialize status and handlers */
-    private Map<Integer, List<ActionHandler>>       initializers     = new HashMap<>();
+    private Map<Integer, List<ActionHandler2nd>>    initializers     = new HashMap<>();
 
     /** search actions by action id. actionId => action */
     private Map<Integer, ActionCache>               actions          = new HashMap<>();
 
     /** type => handlers accept, reject, cancel trigger handlers */
-    private Map<String, List<ActionHandler>>        triggers         = new HashMap<>();
+    private Map<String, List<ActionHandler2nd>>     triggers         = new HashMap<>();
 
     /** compatible mode: dst search. action id => source => (source + destination) */
     private Map<Integer, Map<Integer, StatusPair>>  dstTable         = new HashMap<>();
@@ -74,9 +74,9 @@ public class TemplateCache implements Serializable {
      * @param actionTable
      */
     public TemplateCache(TemplateMetadata metadata, StatusCache[] statusArray,
-                         Map<Integer, List<ActionHandler>> initializers,
+                         Map<Integer, List<ActionHandler2nd>> initializers,
                          Map<Integer, ActionCache> actions,
-                         Map<String, List<ActionHandler>> triggers,
+                         Map<String, List<ActionHandler2nd>> triggers,
                          Map<Integer, Map<Integer, StatusPair>> dstTable,
                          Map<Integer, Map<Integer, ActionCache>> actionTable) {
         this.metadata = metadata;
@@ -104,11 +104,11 @@ public class TemplateCache implements Serializable {
         this.statusArray = statusArray;
     }
 
-    public Map<Integer, List<ActionHandler>> getInitializers() {
+    public Map<Integer, List<ActionHandler2nd>> getInitializers() {
         return initializers;
     }
 
-    public void setInitializers(Map<Integer, List<ActionHandler>> initializers) {
+    public void setInitializers(Map<Integer, List<ActionHandler2nd>> initializers) {
         this.initializers = initializers;
     }
 
@@ -120,11 +120,11 @@ public class TemplateCache implements Serializable {
         this.actions = actions;
     }
 
-    public Map<String, List<ActionHandler>> getTriggers() {
+    public Map<String, List<ActionHandler2nd>> getTriggers() {
         return triggers;
     }
 
-    public void setTriggers(Map<String, List<ActionHandler>> triggers) {
+    public void setTriggers(Map<String, List<ActionHandler2nd>> triggers) {
         this.triggers = triggers;
     }
 

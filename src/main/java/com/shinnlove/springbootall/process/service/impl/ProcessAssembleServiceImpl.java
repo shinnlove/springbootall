@@ -17,13 +17,12 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.shinnlove.springbootall.process.core.ProcessActionMetadataCoreService;
 import com.shinnlove.springbootall.process.core.ProcessStatusMetadataCoreService;
 import com.shinnlove.springbootall.process.core.ProcessTemplateMetadataCoreService;
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.action.ProcessAction;
 import com.shinnlove.springbootall.process.model.initialization.XmlProcessAction;
 import com.shinnlove.springbootall.process.model.initialization.XmlProcessHandler;
@@ -45,7 +44,7 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @version $Id: ProcessAssembleServiceImpl.java, v 0.1 2021-07-06 6:36 PM Tony Zhao Exp $$
  */
 @Deprecated
-@Service
+//@Service
 public class ProcessAssembleServiceImpl implements ProcessAssembleService, ApplicationContextAware,
                                         InitializingBean {
 
@@ -70,11 +69,11 @@ public class ProcessAssembleServiceImpl implements ProcessAssembleService, Appli
 
     /** template_id => action_id => sync execute in tx's handlers */
     @Deprecated
-    private Map<Integer, Map<Integer, List<ActionHandler>>>   actionSyncHandlers  = new HashMap<>();
+    private Map<Integer, Map<Integer, List<ActionHandler2nd>>> actionSyncHandlers  = new HashMap<>();
 
     /** template_id => action_id => async execute in tx's handlers */
     @Deprecated
-    private Map<Integer, Map<Integer, List<ActionHandler>>>   actionAsyncHandlers = new HashMap<>();
+    private Map<Integer, Map<Integer, List<ActionHandler2nd>>> actionAsyncHandlers = new HashMap<>();
 
     @Autowired
     private ProcessTemplateMetadataCoreService                processTemplateMetadataCoreService;
@@ -122,16 +121,17 @@ public class ProcessAssembleServiceImpl implements ProcessAssembleService, Appli
             buildStatusReflection(templateId, actionId, source, destination);
             initActionHandlerMapping(templateId, actionId, actionSyncHandlers);
             initActionHandlerMapping(templateId, actionId, actionAsyncHandlers);
-            List<ActionHandler> syncHandlers = actionSyncHandlers.get(templateId).get(actionId);
-            List<ActionHandler> asyncHandlers = actionAsyncHandlers.get(templateId).get(actionId);
+            List<ActionHandler2nd> syncHandlers = actionSyncHandlers.get(templateId).get(actionId);
+            List<ActionHandler2nd> asyncHandlers = actionAsyncHandlers.get(templateId)
+                .get(actionId);
 
             // do mapping
             XmlProcessAction xa = xp.getActionById(actionId);
             for (XmlProcessHandler xh : xa.getHandlers()) {
                 String beanId = xh.getRefBeanId();
-                ActionHandler handlerBean = null;
+                ActionHandler2nd handlerBean = null;
                 try {
-                    handlerBean = (ActionHandler) applicationContext.getBean(beanId);
+                    handlerBean = (ActionHandler2nd) applicationContext.getBean(beanId);
                     AssertUtil.isNotNull(handlerBean, SystemResultCode.SYSTEM_ERROR,
                         "Springboot context doesn't have a bean with id=" + beanId);
 
@@ -187,13 +187,13 @@ public class ProcessAssembleServiceImpl implements ProcessAssembleService, Appli
     }
 
     @Override
-    public List<ActionHandler> getActionExecutions(int actionId, boolean sync) {
+    public List<ActionHandler2nd> getActionExecutions(int actionId, boolean sync) {
         // reverse get
         ProcessTemplate template = actionTemplateMap.get(actionId);
         int templateId = template.getTemplateId();
 
         // get action handlers
-        Map<Integer, List<ActionHandler>> actionHandler;
+        Map<Integer, List<ActionHandler2nd>> actionHandler;
         if (sync) {
             // synchronous execute handlers
             actionHandler = actionSyncHandlers.get(templateId);
@@ -202,7 +202,7 @@ public class ProcessAssembleServiceImpl implements ProcessAssembleService, Appli
         }
 
         if (!CollectionUtils.isEmpty(actionHandler)) {
-            List<ActionHandler> handlers = actionHandler.get(actionId);
+            List<ActionHandler2nd> handlers = actionHandler.get(actionId);
             if (!CollectionUtils.isEmpty(handlers)) {
                 return handlers;
             }
@@ -269,14 +269,14 @@ public class ProcessAssembleServiceImpl implements ProcessAssembleService, Appli
     }
 
     private void initActionHandlerMapping(int templateId, int actionId,
-                                          final Map<Integer, Map<Integer, List<ActionHandler>>> handlerMapping) {
+                                          final Map<Integer, Map<Integer, List<ActionHandler2nd>>> handlerMapping) {
         if (!handlerMapping.containsKey(templateId)) {
-            Map<Integer, List<ActionHandler>> aHandlers = new HashMap<>();
+            Map<Integer, List<ActionHandler2nd>> aHandlers = new HashMap<>();
             handlerMapping.put(templateId, aHandlers);
         }
-        Map<Integer, List<ActionHandler>> actionHandlers = handlerMapping.get(templateId);
+        Map<Integer, List<ActionHandler2nd>> actionHandlers = handlerMapping.get(templateId);
         if (!actionHandlers.containsKey(actionId)) {
-            List<ActionHandler> handlers = new ArrayList<>();
+            List<ActionHandler2nd> handlers = new ArrayList<>();
             actionHandlers.put(actionId, handlers);
         }
     }

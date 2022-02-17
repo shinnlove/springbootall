@@ -11,7 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 
 /**
  * @author Tony Zhao
@@ -37,10 +37,10 @@ public class ActionCache implements Serializable {
     private int                  destination;
 
     /** action_id => sync execute in tx's handlers */
-    private List<ActionHandler>  syncHandlers;
+    private List<ActionHandler2nd> syncHandlers;
 
     /** action_id => async execute in tx's handlers */
-    private List<ActionHandler>  asyncHandlers;
+    private List<ActionHandler2nd> asyncHandlers;
 
     /** handler class name => template id */
     private Map<String, Integer> prepareHandler;
@@ -77,8 +77,8 @@ public class ActionCache implements Serializable {
      * @param syncHandlers
      * @param asyncHandlers
      */
-    public ActionCache(int actionId, int source, int destination, List<ActionHandler> syncHandlers,
-                       List<ActionHandler> asyncHandlers) {
+    public ActionCache(int actionId, int source, int destination,
+                       List<ActionHandler2nd> syncHandlers, List<ActionHandler2nd> asyncHandlers) {
         this.actionId = actionId;
         this.source = source;
         this.destination = destination;
@@ -98,7 +98,7 @@ public class ActionCache implements Serializable {
      * @param asyncHandlers
      */
     public ActionCache(int actionId, String name, String desc, int source, int destination,
-                       List<ActionHandler> syncHandlers, List<ActionHandler> asyncHandlers,
+                       List<ActionHandler2nd> syncHandlers, List<ActionHandler2nd> asyncHandlers,
                        Map<String, Integer> prepareHandler) {
         this.actionId = actionId;
         this.name = name;
@@ -150,19 +150,19 @@ public class ActionCache implements Serializable {
         this.destination = destination;
     }
 
-    public List<ActionHandler> getSyncHandlers() {
+    public List<ActionHandler2nd> getSyncHandlers() {
         return syncHandlers;
     }
 
-    public void setSyncHandlers(List<ActionHandler> syncHandlers) {
+    public void setSyncHandlers(List<ActionHandler2nd> syncHandlers) {
         this.syncHandlers = syncHandlers;
     }
 
-    public List<ActionHandler> getAsyncHandlers() {
+    public List<ActionHandler2nd> getAsyncHandlers() {
         return asyncHandlers;
     }
 
-    public void setAsyncHandlers(List<ActionHandler> asyncHandlers) {
+    public void setAsyncHandlers(List<ActionHandler2nd> asyncHandlers) {
         this.asyncHandlers = asyncHandlers;
     }
 

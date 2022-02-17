@@ -7,7 +7,6 @@ package com.shinnlove.springbootall.process.core.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.shinnlove.springbootall.dao.UniversalProcessDao;
@@ -26,7 +25,7 @@ import com.shinnlove.springbootall.util.common.CommonUtil;
  * @author caowei
  * @date 2021/7/9 7:09 下午
  **/
-@Service
+//@Service
 public class UniversalProcessCoreServiceImpl implements UniversalProcessCoreService {
 
     @Autowired

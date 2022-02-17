@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.shinnlove.springbootall.dao.ProcessActionMetadataDao;
@@ -24,7 +23,7 @@ import com.shinnlove.springbootall.util.exception.SystemException;
  * @author Tony Zhao
  * @version $Id: ProcessActionMetadataCoreServiceImpl.java, v 0.1 2021-07-26 10:34 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class ProcessActionMetadataCoreServiceImpl implements ProcessActionMetadataCoreService {
 
     @Autowired

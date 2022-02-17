@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -27,7 +26,7 @@ import com.shinnlove.springbootall.process.core.ProcessBlockingCoreService;
 import com.shinnlove.springbootall.process.core.ProcessStatusCoreService;
 import com.shinnlove.springbootall.process.core.UniversalProcessCoreService;
 import com.shinnlove.springbootall.process.future.FutureUtil;
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.action.ProcessAction;
 import com.shinnlove.springbootall.process.model.blocking.ProcessBlocking;
 import com.shinnlove.springbootall.process.model.context.DataContext;
@@ -92,7 +91,7 @@ import javax.annotation.Resource;
  * @version $Id: StatusMachineService.java, v 0.1 2021-07-06 6:38 PM Tony Zhao Exp $$
  */
 @Deprecated
-@Service
+//@Service
 public class StatusMachineServiceImpl implements StatusMachineService {
 
     /** logger */
@@ -169,9 +168,9 @@ public class StatusMachineServiceImpl implements StatusMachineService {
             destination, dataContext);
 
         // 5th: prepare handlers
-        List<ActionHandler> syncHandlers = processAssembleService.getActionExecutions(actionId,
+        List<ActionHandler2nd> syncHandlers = processAssembleService.getActionExecutions(actionId,
             true);
-        List<ActionHandler> asyncHandlers = processAssembleService.getActionExecutions(actionId,
+        List<ActionHandler2nd> asyncHandlers = processAssembleService.getActionExecutions(actionId,
             false);
 
         // fast query once to check if it's a new process
@@ -404,7 +403,7 @@ public class StatusMachineServiceImpl implements StatusMachineService {
     }
 
     private void execute(final ProcessContext context,
-                         final List<ActionHandler> handlers) throws SystemException {
+                         final List<ActionHandler2nd> handlers) throws SystemException {
         // real execute action's handlers
         try {
             actionExecutor.proceed(context, handlers);

@@ -19,11 +19,10 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.shinnlove.springbootall.process.enums.TemplateTriggerType;
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.cache.ActionCache;
 import com.shinnlove.springbootall.process.model.cache.StatusCache;
 import com.shinnlove.springbootall.process.model.cache.TemplateCache;
@@ -47,7 +46,7 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @author Tony Zhao
  * @version $Id: ProcessAssemble2ndServiceImpl.java, v 0.1 2022-01-29 5:42 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class ProcessAssemble2ndServiceImpl implements InitializingBean, ApplicationContextAware,
                                            ProcessAssemble2ndService, ProcessMetadataService {
 
@@ -117,14 +116,14 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
             String name = a.getName();
             String desc = a.getDesc();
 
-            List<ActionHandler> sync = new ArrayList<>();
-            List<ActionHandler> async = new ArrayList<>();
+            List<ActionHandler2nd> sync = new ArrayList<>();
+            List<ActionHandler2nd> async = new ArrayList<>();
             Map<String, Integer> prepare = new HashMap<>();
             ActionCache cache = new ActionCache(id, name, desc, src, des, sync, async, prepare);
 
             XmlProcessAction xa = xp.getActionById(id);
             for (XmlProcessHandler h : xa.getHandlers()) {
-                ActionHandler ah = fetchHandler(h);
+                ActionHandler2nd ah = fetchHandler(h);
                 if (h.isTrans()) {
                     sync.add(ah);
                 } else {
@@ -157,14 +156,14 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
         Collections.sort(statusCache);
 
         // step3: initializer
-        Map<Integer, List<ActionHandler>> initializer = new HashMap<>();
+        Map<Integer, List<ActionHandler2nd>> initializer = new HashMap<>();
         Map<Integer, List<XmlProcessHandler>> inits = xp.getInits();
         for (Map.Entry<Integer, List<XmlProcessHandler>> entry : inits.entrySet()) {
             initializer.put(entry.getKey(), fetchHandlers(entry.getValue()));
         }
 
         // step4: triggers
-        Map<String, List<ActionHandler>> triggers = new HashMap<>();
+        Map<String, List<ActionHandler2nd>> triggers = new HashMap<>();
         triggers.put(TemplateTriggerType.ACCEPT.name(), fetchHandlers(xp.getAccepts()));
         triggers.put(TemplateTriggerType.REJECT.name(), fetchHandlers(xp.getRejects()));
         triggers.put(TemplateTriggerType.CANCEL.name(), fetchHandlers(xp.getCancels()));
@@ -192,23 +191,23 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
     }
 
     @SuppressWarnings("rawtypes")
-    private List<ActionHandler> fetchHandlers(List<XmlProcessHandler> handlers) {
+    private List<ActionHandler2nd> fetchHandlers(List<XmlProcessHandler> handlers) {
         return Optional.ofNullable(handlers)
             .map(h -> h.stream().map(this::fetchHandler).collect(Collectors.toList()))
             .orElse(new ArrayList<>());
     }
 
     @SuppressWarnings("rawtypes")
-    private ActionHandler fetchHandler(XmlProcessHandler handler) {
+    private ActionHandler2nd fetchHandler(XmlProcessHandler handler) {
         return fetchService(handler.getRefBeanId());
     }
 
     @SuppressWarnings("rawtypes")
-    private ActionHandler fetchService(String serviceId) {
-        ActionHandler handlerService = null;
+    private ActionHandler2nd fetchService(String serviceId) {
+        ActionHandler2nd handlerService = null;
 
         try {
-            handlerService = (ActionHandler) applicationContext.getBean(serviceId);
+            handlerService = (ActionHandler2nd) applicationContext.getBean(serviceId);
             AssertUtil.isNotNull(handlerService, SystemResultCode.SYSTEM_ERROR,
                 "Springboot context doesn't have a bean with id=" + serviceId);
 
@@ -277,10 +276,10 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
         return actionIdCache.get(actionId);
     }
 
-    private List<ActionHandler> getInitializer(int templateId, int destination) {
+    private List<ActionHandler2nd> getInitializer(int templateId, int destination) {
 
         TemplateCache template = getTemplateById(templateId);
-        Map<Integer, List<ActionHandler>> inits = template.getInitializers();
+        Map<Integer, List<ActionHandler2nd>> inits = template.getInitializers();
 
         if (!inits.containsKey(destination)) {
             return new ArrayList<>();
@@ -289,7 +288,7 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
         return inits.get(destination);
     }
 
-    private List<ActionHandler> getTriggers(int templateId, int triggerType) {
+    private List<ActionHandler2nd> getTriggers(int templateId, int triggerType) {
 
         String type = TemplateTriggerType.getNameByCode(triggerType);
 
@@ -298,7 +297,7 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
         }
 
         TemplateCache template = getTemplateById(templateId);
-        Map<String, List<ActionHandler>> triggers = template.getTriggers();
+        Map<String, List<ActionHandler2nd>> triggers = template.getTriggers();
 
         if (CollectionUtils.isEmpty(triggers) || !triggers.containsKey(type)) {
             // empty or no such triggers
@@ -310,7 +309,7 @@ public class ProcessAssemble2ndServiceImpl implements InitializingBean, Applicat
 
     @SuppressWarnings("rawtypes")
     @Override
-    public List<ActionHandler> getExecutions(int actionId, boolean sync) {
+    public List<ActionHandler2nd> getExecutions(int actionId, boolean sync) {
         ActionCache action = getActionCache(actionId);
         if (sync) {
             return action.getSyncHandlers();

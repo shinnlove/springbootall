@@ -13,10 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.context.DataContext;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
 import com.shinnlove.springbootall.process.pipeline.PipelineService;
@@ -29,7 +28,7 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @author Tony Zhao
  * @version $Id: PipelineServiceImpl.java, v 0.1 2021-12-28 11:38 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class PipelineServiceImpl implements PipelineService {
 
     private static final Logger    logger = LoggerFactory.getLogger(PipelineServiceImpl.class);
@@ -51,14 +50,14 @@ public class PipelineServiceImpl implements PipelineService {
         ProcessContext<ApproveInfo> context = new ProcessContext<>(dataContext);
 
         // prepare handlers
-        List<ActionHandler> syncHandlers = processMetadataService.getExecutions(actionId, true);
+        List<ActionHandler2nd> syncHandlers = processMetadataService.getExecutions(actionId, true);
 
         return execute(context, syncHandlers);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Object execute(final ProcessContext context,
-                           final List<ActionHandler> handlers) throws SystemException {
+                           final List<ActionHandler2nd> handlers) throws SystemException {
 
         CompletableFuture<Object> f = CompletableFuture.completedFuture(null);
         if (CollectionUtils.isEmpty(handlers)) {
@@ -68,7 +67,7 @@ public class PipelineServiceImpl implements PipelineService {
         int cursor = 0;
         while (cursor < handlers.size()) {
             final int i = cursor++;
-            final ActionHandler handler = handlers.get(i);
+            final ActionHandler2nd handler = handlers.get(i);
             f = f.thenCompose(previous -> CompletableFuture.supplyAsync(() -> {
                 if (i > 0) {
                     handler.cache(handlers, i - 1, previous, context);

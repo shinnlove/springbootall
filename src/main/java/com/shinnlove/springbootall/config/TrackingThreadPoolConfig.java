@@ -9,7 +9,6 @@ import static com.shinnlove.springbootall.util.consts.ThreadPoolConstants.*;
 import java.util.concurrent.ExecutorService;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import com.shinnlove.springbootall.util.threads.ThreadUtils;
 
@@ -19,7 +18,7 @@ import com.shinnlove.springbootall.util.threads.ThreadUtils;
  * @author Tony Zhao
  * @version $Id: TrackingThreadPoolConfig.java, v 0.1 2021-08-10 6:19 PM Tony Zhao Exp $$
  */
-@Configuration
+//@Configuration
 public class TrackingThreadPoolConfig {
 
     /**

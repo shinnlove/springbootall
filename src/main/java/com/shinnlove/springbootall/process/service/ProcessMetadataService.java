@@ -6,7 +6,7 @@ package com.shinnlove.springbootall.process.service;
 
 import java.util.List;
 
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.cache.TemplateCache;
 
 /**
@@ -35,7 +35,7 @@ public interface ProcessMetadataService {
      * @return
      */
     @SuppressWarnings("rawtypes")
-    List<ActionHandler> getExecutions(int actionId, boolean sync);
+    List<ActionHandler2nd> getExecutions(int actionId, boolean sync);
 
     boolean isFinalStatus(int templateId, int status);
 

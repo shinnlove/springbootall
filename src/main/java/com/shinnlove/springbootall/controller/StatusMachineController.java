@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.shinnlove.springbootall.process.enums.ActionType;
@@ -23,8 +22,8 @@ import com.shinnlove.springbootall.service.biz.revise.RevisePriceService;
  * @author Tony Zhao
  * @version $Id: StatusMachineController.java, v 0.1 2022-01-24 6:39 PM Tony Zhao Exp $$
  */
-@RestController
-@RequestMapping("/status")
+//@RestController
+//@RequestMapping("/status")
 public class StatusMachineController {
 
     @Autowired

@@ -6,11 +6,10 @@ package com.shinnlove.springbootall.process.service.impl;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.shinnlove.springbootall.process.chain.ActionChain;
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
 import com.shinnlove.springbootall.process.service.ActionExecutor;
 
@@ -20,11 +19,11 @@ import com.shinnlove.springbootall.process.service.ActionExecutor;
  * @author Tony Zhao
  * @version $Id: ActionExecutorImpl.java, v 0.1 2021-07-06 5:36 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class ActionExecutorImpl implements ActionExecutor {
 
     @Override
-    public void proceed(ProcessContext context, List<ActionHandler> handlers) {
+    public void proceed(ProcessContext context, List<ActionHandler2nd> handlers) {
         // no handlers no executions, exception will not execute
         if (CollectionUtils.isEmpty(handlers)) {
             return;

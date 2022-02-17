@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.shinnlove.springbootall.process.model.context.DataContext;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
@@ -26,7 +25,7 @@ import com.shinnlove.springbootall.util.log.LoggerUtil;
  * @author Tony Zhao
  * @version $Id: RevisePriceServiceImpl.java, v 0.1 2022-02-10 2:48 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class RevisePriceServiceImpl implements RevisePriceService {
 
     /** logger */

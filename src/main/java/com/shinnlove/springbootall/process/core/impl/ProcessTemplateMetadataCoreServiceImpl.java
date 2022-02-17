@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.shinnlove.springbootall.dao.ProcessTemplateMetadataDao;
@@ -25,7 +24,7 @@ import com.shinnlove.springbootall.util.exception.SystemException;
  * @author Tony Zhao
  * @version $Id: ProcessTemplateMetadataCoreServiceImpl.java, v 0.1 2021-07-06 6:22 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class ProcessTemplateMetadataCoreServiceImpl implements ProcessTemplateMetadataCoreService {
 
     @Autowired

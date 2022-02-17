@@ -11,7 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 
 /**
  * This is the context of whole process, add some business parameters here.
@@ -174,7 +174,7 @@ public class ProcessContext<T> implements Serializable {
         return resultObject;
     }
 
-    public void store(ActionHandler h, Class<?> c, Object o, boolean isParam) {
+    public void store(ActionHandler2nd h, Class<?> c, Object o, boolean isParam) {
         String name = h.getClass().getName();
         if (isParam) {
             // is handler param

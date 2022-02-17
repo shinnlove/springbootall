@@ -7,7 +7,7 @@ package com.shinnlove.springbootall.process.service;
 import java.io.InputStream;
 import java.util.List;
 
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.action.ProcessAction;
 import com.shinnlove.springbootall.process.model.status.StatusPair;
 import com.shinnlove.springbootall.process.model.template.ProcessTemplate;
@@ -61,7 +61,7 @@ public interface ProcessAssembleService {
      * @param sync              if true, return sync execute handlers, else return async handlers
      * @return
      */
-    List<ActionHandler> getActionExecutions(int actionId, boolean sync);
+    List<ActionHandler2nd> getActionExecutions(int actionId, boolean sync);
 
     /**
      *  Check whether a status is final status of a process/template.

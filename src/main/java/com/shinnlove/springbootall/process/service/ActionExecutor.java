@@ -6,7 +6,7 @@ package com.shinnlove.springbootall.process.service;
 
 import java.util.List;
 
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 import com.shinnlove.springbootall.process.model.context.ProcessContext;
 
 /**
@@ -23,6 +23,6 @@ public interface ActionExecutor {
      * @param context               process context
      * @param actionHandlers        action flows passed into process
      */
-    void proceed(final ProcessContext context, List<ActionHandler> actionHandlers);
+    void proceed(final ProcessContext context, List<ActionHandler2nd> actionHandlers);
 
 }

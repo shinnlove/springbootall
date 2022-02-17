@@ -7,7 +7,6 @@ package com.shinnlove.springbootall.process.core.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.shinnlove.springbootall.dao.ProcessBlockingDao;
 import com.shinnlove.springbootall.dao.model.ProcessBlockingPo;
@@ -23,7 +22,7 @@ import com.shinnlove.springbootall.util.common.CommonUtil;
  * @author Tony Zhao
  * @version $Id: ProcessBlockingCoreServiceImpl.java, v 0.1 2021-07-14 3:34 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class ProcessBlockingCoreServiceImpl implements ProcessBlockingCoreService {
 
     @Autowired

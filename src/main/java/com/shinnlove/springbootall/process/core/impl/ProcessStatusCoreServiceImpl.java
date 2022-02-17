@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.shinnlove.springbootall.process.core.ProcessStatusCoreService;
 import com.shinnlove.springbootall.process.core.ProcessStatusLogCoreService;
@@ -22,7 +21,7 @@ import com.shinnlove.springbootall.process.model.process.UniversalProcess;
  * @author Tony Zhao
  * @version $Id: ProcessStatusCoreServiceImpl.java, v 0.1 2021-07-20 8:00 PM Tony Zhao Exp $$
  */
-@Service
+//@Service
 public class ProcessStatusCoreServiceImpl implements ProcessStatusCoreService {
 
     @Autowired

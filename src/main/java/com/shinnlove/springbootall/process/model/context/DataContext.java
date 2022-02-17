@@ -5,13 +5,14 @@
 package com.shinnlove.springbootall.process.model.context;
 
 
-import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.shinnlove.springbootall.process.handler.interfaces.ActionHandler2nd;
 
 /**
  * A context hold process entrance data to do business.<br>
@@ -106,7 +107,7 @@ public class DataContext<T> implements Serializable {
      * @param clazz
      * @return
      */
-    public Object getHandlerResultByName(Class<? extends ActionHandler> clazz) {
+    public Object getHandlerResultByName(Class<? extends ActionHandler2nd> clazz) {
         String className = clazz.getName();
         if (handlerResult.containsKey(className)) {
             return handlerResult.get(className);
@@ -121,7 +122,7 @@ public class DataContext<T> implements Serializable {
      * @param result        the execute result
      */
     @Deprecated
-    public void storeHandlerResult(Class<? extends ActionHandler> clazz, Object result) {
+    public void storeHandlerResult(Class<? extends ActionHandler2nd> clazz, Object result) {
         String className = clazz.getName();
         handlerResult.put(className, result);
     }
