@@ -24,6 +24,18 @@
         <apache.common.lang>3.4</apache.common.lang>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>bili-nexus-release-server</id>
+            <url>http://nexus.bilibili.co/content/groups/public/</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>bili-nexus-snapshots-server</id>
+            <url>http://nexus.bilibili.co/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -34,6 +46,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.bilibili.process</groupId>
+            <artifactId>universal-process-spring-boot-starter</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <!-- transaction support -->
