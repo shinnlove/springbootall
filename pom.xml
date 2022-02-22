@@ -51,7 +51,7 @@
         <dependency>
             <groupId>com.bilibili.process</groupId>
             <artifactId>universal-process-spring-boot-starter</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
         <!-- transaction support -->

@@ -41,6 +41,16 @@ public class StatusMachineController {
         return String.valueOf(result);
     }
 
+    @RequestMapping(value = "/parent", method = RequestMethod.GET)
+    public String initParentProcess() {
+        BigDecimal before = new BigDecimal(127.00);
+        BigDecimal after = new BigDecimal(315.00);
+
+        long parentRefNo = revisePriceService.submitMultipleRevise(before, after, "Tony");
+
+        return String.valueOf(parentRefNo);
+    }
+
     @RequestMapping("/proceed/{id}")
     public String proceedProcess(@PathVariable(value = "id") long refUniqueNo) {
         int actionId = ActionType.ORDER_PENDING_CONFIRM.getActionId();

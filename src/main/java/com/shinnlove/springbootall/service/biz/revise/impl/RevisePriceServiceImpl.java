@@ -5,7 +5,13 @@
 package com.shinnlove.springbootall.service.biz.revise.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.bilibili.universal.process.model.batch.BatchInitParam;
+import com.bilibili.universal.process.model.batch.BatchInitResult;
+import com.bilibili.universal.process.model.batch.InitParam;
+import com.shinnlove.springbootall.process.enums.TemplateType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +49,33 @@ public class RevisePriceServiceImpl implements RevisePriceService {
     /** pipeline service. */
     @Autowired
     private PipelineService         pipelineService;
+
+    @Override
+    public long submitMultipleRevise(BigDecimal before, BigDecimal after, String operator) {
+
+        int id = TemplateType.ORDER_PRICE.getTemplateId();
+        long refUniqueNo = snowflakeIdWorker.nextId();
+
+        ReviseInfo reviseInfo = new ReviseInfo(id, before, after, 654321, "Tony",
+            "create order revise");
+        DataContext<ReviseInfo> cData = new DataContext<>(reviseInfo);
+
+        ReviseInfo parentReviseInfo = new ReviseInfo(id, before, after, 876543, "Tony Father",
+            "create parent order revise");
+        DataContext<ReviseInfo> pData = new DataContext<>(parentReviseInfo);
+
+        List<InitParam> ips = new ArrayList<>();
+        InitParam ip = new InitParam(id, refUniqueNo, cData);
+        ips.add(ip);
+
+        BatchInitParam initParam = new BatchInitParam();
+        initParam.setParams(ips);
+        initParam.setParentDataContext(pData);
+
+        BatchInitResult result = statusMachine2ndService.batchInitProcess(initParam);
+
+        return result.getParentRefUniqueNo();
+    }
 
     @Override
     public long submitRevise(int itemType, BigDecimal before, BigDecimal after, String operator) {
