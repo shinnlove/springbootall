@@ -53,7 +53,7 @@ public class StatusMachineController {
 
     @RequestMapping("/proceed/{id}")
     public String proceedProcess(@PathVariable(value = "id") long refUniqueNo) {
-        int actionId = ActionType.ORDER_PENDING_CONFIRM.getActionId();
+        int actionId = ActionType.REVISING.getActionId();
 
         long result = revisePriceService.auditRevise(actionId, refUniqueNo, 1, "Tony酱");
 

@@ -109,7 +109,13 @@ public class RevisePriceServiceImpl implements RevisePriceService {
 
     @Override
     public Object pipelineAudit(int actionId) {
-        Object result = pipelineService.doPipeline(actionId);
+        // prepare data context
+        DataContext<String> dataContext = new DataContext<>("This is a input parameter.");
+
+        Object result = pipelineService.doPipeline(actionId, dataContext, context -> {
+            System.out.println(context.getResultObject());
+        });
+
         return result;
     }
 
