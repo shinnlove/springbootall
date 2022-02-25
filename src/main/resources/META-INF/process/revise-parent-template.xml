@@ -2,18 +2,16 @@
 <template id="30000" name="revise_parent_template" desc="改价父流程" parent="-1">
 
     <metadata>
-        <status no="-1" seq="1" name="init" desc="流程初始化"/>
-        <status no="1" seq="2" name="risk_audit" desc="待风控审核" default="true"/>
-        <status no="2" seq="3" name="upper_confirm" desc="待确认"/>
-        <status no="3" seq="4" name="accepted" desc="改价项已完成" ac="1"/>
-        <status no="4" seq="5" name="rejected" desc="改价项已拒绝"/>
-        <status no="5" seq="6" name="canceled" desc="改价项已取消"/>
+        <status no="-1" seq="-1" name="init" desc="流程初始化"/>
+        <status no="1" seq="1" name="risk_audit" desc="待风控审核" default="true"/>
+        <status no="2" seq="2" name="advertiser_confirm" desc="待客户确认"/>
+        <status no="3" seq="3" name="upper_confirm" desc="待UP主确认"/>
+        <status no="4" seq="4" name="accepted" desc="改价项已完成" ac="1"/>
+        <status no="5" seq="5" name="rejected" desc="改价项已拒绝" ac="2"/>
+        <status no="6" seq="6" name="canceled" desc="改价项已取消" ac="3"/>
     </metadata>
 
     <init>
-        <pre>
-            <handler seq="1" ref="processCreateReviseHandler" desc="创建改价父流程"/>
-        </pre>
         <dispatch>
             <destination no="1">
                 <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
@@ -22,9 +20,6 @@
                 <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
             </destination>
         </dispatch>
-        <post>
-            <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
-        </post>
     </init>
 
     <accepted>
@@ -39,22 +34,19 @@
         <handler seq="1" ref="processCanceledTrigger" desc="改价父流程关闭后trigger"/>
     </canceled>
 
-    <action id="30001" name="revising" desc="改价中" source="1" destination="2" entrance="true">
-        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="parentRiskAuditHandler" desc="通知风控审核"/>
+    <action id="30001" name="audit_accept" desc="审核通过" source="1" destination="2">
     </action>
 
-    <action id="30002" name="revise_accomplish" desc="改价完成" destination="4">
-        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+    <action id="30002" name="advertiser_accept" desc="客户同意" source="2" destination="3">
     </action>
 
-    <action id="30003" name="revise_reject" desc="改价已拒绝" destination="5">
-        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+    <action id="30003" name="upper_accept" desc="UP主同意" source="3" destination="4">
     </action>
 
-    <action id="30004" name="revise_cancel" desc="改价已关闭" destination="6">
-        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+    <action id="30004" name="revise_reject" desc="改价全部拒绝" destination="5">
+    </action>
+
+    <action id="30005" name="revise_cancel" desc="改价全部取消" destination="6">
     </action>
 
 </template>

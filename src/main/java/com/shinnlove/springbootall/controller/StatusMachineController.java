@@ -16,6 +16,8 @@ import com.alibaba.fastjson.JSON;
 import com.shinnlove.springbootall.process.enums.ActionType;
 import com.shinnlove.springbootall.process.enums.TemplateType;
 import com.shinnlove.springbootall.service.biz.revise.RevisePriceService;
+import com.shinnlove.springbootall.service.revise.model.UpperReviseInfo;
+import com.shinnlove.springbootall.service.revise.service.ReviseService;
 
 /**
  * Test status machine controller.
@@ -30,6 +32,9 @@ public class StatusMachineController {
     @Autowired
     private RevisePriceService revisePriceService;
 
+    @Autowired
+    private ReviseService      reviseService;
+
     @RequestMapping(value = "/init", method = RequestMethod.GET)
     public String initProcess() {
         int id = TemplateType.ORDER_PRICE.getTemplateId();
@@ -39,6 +44,14 @@ public class StatusMachineController {
         long result = revisePriceService.submitRevise(id, before, after, "tony");
 
         return String.valueOf(result);
+    }
+
+    @RequestMapping(value = "/submit_revise", method = RequestMethod.GET)
+    public String initRevise(UpperReviseInfo reviseInfo) {
+        long result = reviseService.submitRevise(reviseInfo);
+
+        // return parent ref unique no
+        return JSON.toJSONString(result);
     }
 
     @RequestMapping(value = "/parent", method = RequestMethod.GET)

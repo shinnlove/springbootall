@@ -2,28 +2,22 @@
 <template id="30005" name="revise_item_vendor_profit_template" desc="单个改价项服务商收益子流程" parent="30000">
 
     <metadata>
-        <status no="-1" seq="1" name="init" desc="流程初始化" ps="-1"/>
-        <status no="1" seq="2" name="risk_audit" desc="待风控审核" ps="1" default="true"/>
-        <status no="4" seq="3" name="accepted" desc="改价项已完成" ps="4" ac="1"/>
-        <status no="5" seq="4" name="rejected" desc="改价项已拒绝" ps="5"/>
-        <status no="6" seq="5" name="canceled" desc="改价项已取消" ps="6"/>
+        <status no="-1" seq="-1" name="init" desc="流程初始化" ps="-1"/>
+        <status no="1" seq="1" name="risk_audit" desc="待风控审核" ps="1" default="true"/>
+        <status no="4" seq="4" name="accepted" desc="改价项已完成" ps="4" ac="1"/>
+        <status no="5" seq="5" name="rejected" desc="改价项已拒绝" ps="5" ac="2"/>
+        <status no="6" seq="6" name="canceled" desc="改价项已取消" ps="6" ac="3"/>
     </metadata>
 
     <init>
-        <pre>
-            <handler seq="1" ref="createReviseProcessHandler" desc="创建单个改价项流程"/>
-        </pre>
         <dispatch>
             <destination no="1">
-                <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
+                <handler seq="1" ref="notifyRiskAuditHandler" desc="服务商改价项触发阈值待风控审核"/>
             </destination>
-            <destination no="2">
-                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+            <destination no="4">
+                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知服务商收益更改"/>
             </destination>
         </dispatch>
-        <post>
-            <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
-        </post>
     </init>
 
     <accepted>
@@ -38,23 +32,13 @@
         <handler seq="1" ref="cancelProcessHandler" desc="单个改价项流程关闭后的trigger"/>
     </canceled>
 
-    <action id="30501" name="vendor_revise_pending_audit" desc="服务商改价项触发阈值待风控审核" destination="1" entrance="true">
-        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
+    <action id="30501" name="revise_audit" desc="审核同意" source="1" destination="4">
     </action>
 
-    <action id="30502" name="vendor_revise_accomplish" desc="服务商改价项已完成" destination="4">
-        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
+    <action id="30502" name="vendor_revise_reject" desc="服务商改价项已拒绝" destination="5">
     </action>
 
-    <action id="30503" name="vendor_revise_reject" desc="服务商改价项已拒绝" destination="5">
-        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="notifyServiceProviderHandler" desc="通知服务商"/>
-    </action>
-
-    <action id="30504" name="vendor_revise_cancel" desc="服务商改价已取消" destination="6">
-        <handler seq="1" ref="updateRegisterStatusHandler" desc="更新注册表状态"/>
-        <handler seq="2" ref="notifyServiceProviderHandler" desc="通知服务商"/>
+    <action id="30503" name="vendor_revise_cancel" desc="服务商改价项已取消" destination="6">
     </action>
 
 </template>
