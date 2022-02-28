@@ -5,9 +5,14 @@
 package com.shinnlove.springbootall.service.revise.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bilibili.universal.process.model.context.ProcessContext;
+import com.shinnlove.springbootall.process.enums.ActionType;
+import com.shinnlove.springbootall.service.biz.model.ApproveInfo;
+import com.shinnlove.springbootall.util.log.LoggerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +57,10 @@ public class ReviseServiceImpl implements ReviseService {
         BigDecimal upperProfitAfter = upperReviseInfo.getUpperProfitAfter();
         String reason = upperReviseInfo.getReason();
 
-        BigDecimal orderPriceBefore = upperProfitBefore.divide(upperDiscountRate);
-        BigDecimal orderPriceAfter = upperProfitAfter.divide(upperDiscountRate);
+        BigDecimal orderPriceBefore = upperProfitBefore.divide(upperDiscountRate, 2,
+            RoundingMode.HALF_UP);
+        BigDecimal orderPriceAfter = upperProfitAfter.divide(upperDiscountRate, 2,
+            RoundingMode.HALF_UP);
 
         BigDecimal serviceFeeBefore = orderPriceBefore.multiply(initServiceFeeRate);
         BigDecimal serviceFeeAfter = orderPriceAfter.multiply(initServiceFeeRate);
@@ -104,6 +111,21 @@ public class ReviseServiceImpl implements ReviseService {
         BatchInitResult initResult = statusMachine2ndService.batchInitProcess(batchInitParam);
 
         return initResult.getParentRefUniqueNo();
+    }
+
+    @Override
+    public long auditSuccess(long parentRefUniqueNo, int approve, String operator, String remark) {
+        ApproveInfo info = new ApproveInfo(approve, 123456, operator, "This is remark.");
+        DataContext<ApproveInfo> dataContext = new DataContext<>(info);
+
+        int actionId = ActionType.PARENT_AUDIT_ACCEPT.getActionId();
+
+        ProcessContext context = statusMachine2ndService.proceedProcess(actionId, parentRefUniqueNo,
+            dataContext);
+
+        LoggerUtil.info(logger, "Process proceeded, context=", context);
+
+        return 1L;
     }
 
     private long getUniqueNo() {

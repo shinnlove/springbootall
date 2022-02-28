@@ -35,7 +35,7 @@ public class StatusMachineController {
     @Autowired
     private ReviseService      reviseService;
 
-    @RequestMapping(value = "/init", method = RequestMethod.GET)
+    @RequestMapping(value = "/single/init", method = RequestMethod.GET)
     public String initProcess() {
         int id = TemplateType.ORDER_PRICE.getTemplateId();
         BigDecimal before = new BigDecimal(127.00);
@@ -46,7 +46,7 @@ public class StatusMachineController {
         return String.valueOf(result);
     }
 
-    @RequestMapping(value = "/submit_revise", method = RequestMethod.GET)
+    @RequestMapping(value = "/parent/init", method = RequestMethod.GET)
     public String initRevise(UpperReviseInfo reviseInfo) {
         long result = reviseService.submitRevise(reviseInfo);
 
@@ -54,22 +54,18 @@ public class StatusMachineController {
         return JSON.toJSONString(result);
     }
 
-    @RequestMapping(value = "/parent", method = RequestMethod.GET)
-    public String initParentProcess() {
-        BigDecimal before = new BigDecimal(127.00);
-        BigDecimal after = new BigDecimal(315.00);
-
-        long parentRefNo = revisePriceService.submitMultipleRevise(before, after, "Tony");
-
-        return String.valueOf(parentRefNo);
-    }
-
     @RequestMapping("/proceed/{id}")
     public String proceedProcess(@PathVariable(value = "id") long refUniqueNo) {
-        int actionId = ActionType.ORDER_PENDING_CONFIRM.getActionId();
+        int actionId = ActionType.UPPER_PROFIT_ACCEPT.getActionId();
 
         long result = revisePriceService.auditRevise(actionId, refUniqueNo, 1, "Tony酱");
 
+        return String.valueOf(result);
+    }
+
+    @RequestMapping("/parent/proceed/{refUniqueNo}")
+    public String parentProceedProcess(@PathVariable(value = "refUniqueNo") long refUniqueNo) {
+        long result = reviseService.auditSuccess(refUniqueNo, 1, "Tony酱", "approved.");
         return String.valueOf(result);
     }
 

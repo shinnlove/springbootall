@@ -14,4 +14,6 @@ public interface ReviseService {
 
     long submitRevise(UpperReviseInfo upperReviseInfo);
 
+    long auditSuccess(long parentRefUniqueNo, int approve, String operator, String remark);
+
 }

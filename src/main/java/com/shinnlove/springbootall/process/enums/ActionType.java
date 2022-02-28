@@ -12,17 +12,19 @@ package com.shinnlove.springbootall.process.enums;
  */
 public enum ActionType {
 
-    REVISING(30001, 30000, "改价中"),
+    PARENT_AUDIT_ACCEPT(30001, 30000, "审核同意"),
 
-    REVISE_AC(30002, 30000, "改价完成"),
+    PARENT_ADVERTISER_ACCEPT(30002, 30000, "客户同意"),
 
-    REVISE_REJECT(30003, 30000, "改价已拒绝"),
+    PARENT_UPPER_ACCEPT(30003, 30000, "UP主同意"),
 
-    REVISE_CANCEL(30004, 30000, "改价已关闭"),
+    REVISE_REJECT(30004, 30000, "改价全部拒绝"),
+
+    REVISE_CANCEL(30005, 30000, "改价全部取消"),
 
     ORDER_PENDING_CONFIRM(30101, 30001, "订单金额改价项风控审核通过待客户确认"),
 
-    ORDER_REVISE_AC(30102, 30001, "订单金额改价项完成"),
+    ORDER_REVISE_ADVERTISER_ACCEPT(30102, 30001, "订单金额改价项客户同意"),
 
     ORDER_REVISE_REJECT(30103, 30001, "订单金额改价项拒绝"),
 
@@ -34,7 +36,7 @@ public enum ActionType {
 
     FEE_REVISE_AUDIT(30201, 30002, "信息技术费项触发阈值待风控审核"),
 
-    FEE_PENDING_CONFIRM(30202, 30002, "信息技术费待客户确认"),
+    FEE_ADVERTISER_ACCEPT(30202, 30002, "信息技术费客户同意"),
 
     FEE_REVISE_AC(30203, 30002, "信息技术费改价项完成"),
 
@@ -52,7 +54,7 @@ public enum ActionType {
 
     UPPER_REVISE_AUDIT(30401, 30004, "UP主收益项触发阈值待风控审核"),
 
-    PENDING_UPPER_CONFIRM(30402, 30004, "UP主收益项待UP主确认"),
+    UPPER_PROFIT_ACCEPT(30402, 30004, "UP主收益项UP主同意"),
 
     UPPER_REVISE_AC(30403, 30004, "UP主收益项改价项完成"),
 
