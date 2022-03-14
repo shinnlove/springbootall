@@ -9,6 +9,9 @@ import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.shinnlove.springbootall.util.LongJsonSerializer;
+
 /**
  * Student domain model.
  * 
@@ -19,6 +22,7 @@ public class Student implements Serializable {
 
     private static final long serialVersionUID = -7942604549849788112L;
 
+    @JsonSerialize(using = LongJsonSerializer.class)
     private Long              studentId;
     private String            studentName;
     private int               sex;

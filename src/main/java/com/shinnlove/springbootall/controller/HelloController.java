@@ -18,13 +18,13 @@ import com.shinnlove.springbootall.model.Teacher;
 public class HelloController {
 
     @RequestMapping("/hello")
-    public Teacher sayHello() {
+    public Student sayHello() {
 
         long no = 605428980236943362L;
         Student s = new Student(no, "tony", 1);
         Teacher t = new Teacher(String.valueOf(no), "evelyn", 2);
 
-        return t;
+        return s;
     }
 
 }
