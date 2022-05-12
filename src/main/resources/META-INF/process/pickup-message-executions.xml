@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template id="40000" name="pickup_message_executions" desc="消息执行流程" parent="-1">
+
+    <!-- 稿件流事件-上传稿件处理：UP主投稿消息过来之后，订单状态首次会翻转 -->
+    <action id="40101" name="draft_upload_handle" desc="终稿投稿上传">
+        <handler seq="1" ref="draftBindingRecordHandler" desc="稿件绑定关系的行为服务"/>
+        <handler seq="2" ref="parseDraftUploadHandler" desc="解析终稿消息体"/>
+        <handler seq="3" ref="queryUploadArchiveHandler" desc="查询上传稿件信息"/>
+        <handler seq="4" ref="storeFinalDraftHandler" desc="存储终稿"/>
+        <handler seq="5" ref="adAuthBindAvIdHandler" desc="广告授权绑定avId"/>
+    </action>
+
+    <!-- 稿件事件流消息-业务终审审核通过消息处理：要翻转成视频待上线 -->
+    <action id="40102" name="draft_business_final_audit_approve" desc="业务终审审核通过消息处理">
+        <handler seq="1" ref="draftBindingRecordHandler" desc="稿件绑定关系的行为服务"/>
+        <handler seq="2" ref="draftOrderExistHandler" desc="判断稿件对应订单是否存在"/>
+        <handler seq="3" ref="finalAuditApproveHandler" desc="终稿终审通过"/>
+    </action>
+
+    <!-- 稿件事件流消息-终稿审核驳回：稿件被打回或锁定的消息处理；不但要处理原来的逻辑，还要兼顾稿件重审发出的事件 -->
+    <action id="40103" name="draft_final_draft_audit_reject" desc="终稿审核驳回消息处理">
+        <handler seq="1" ref="draftBindingRecordHandler" desc="稿件绑定关系的行为服务"/>
+        <handler seq="2" ref="draftOrderExistHandler" desc="判断稿件对应订单是否存在"/>
+        <handler seq="3" ref="finalAuditRejectHandler" desc="终稿终审拒绝"/>
+        <handler seq="4" ref="updateRebindRejectReasonHandler" desc="稿件审核驳回时更新补绑定理由"/>
+    </action>
+
+    <!-- 稿件事件流消息-终稿锁定消息处理：视频准备待上线了 -->
+    <action id="40104" name="draft_archive_lock_handle" desc="终稿锁定消息处理">
+        <handler seq="1" ref="draftBindingRecordHandler" desc="稿件绑定关系的行为服务"/>
+        <handler seq="2" ref="draftOrderExistHandler" desc="判断稿件对应订单是否存在"/>
+        <handler seq="3" ref="draftArchiveLockHandler" desc="稿件锁定处理"/>
+    </action>
+
+    <!-- 稿件事件流消息-删除终稿消息处理：在收到主站稿件-100状态的消息后清空订单上的终稿 -->
+    <action id="40105" name="draft_delete_final_draft" desc="删除终稿消息处理">
+        <handler seq="1" ref="testFieldAssignHandler" desc="测试assign field"/>
+        <handler seq="2" ref="draftBindingRecordHandler" desc="稿件绑定关系的行为服务"/>
+        <handler seq="3" ref="draftOrderExistHandler" desc="判断稿件对应订单是否存在"/>
+        <handler seq="4" ref="deleteFinalDraftHandler" desc="删除终稿处理"/>
+        <handler seq="5" ref="cancelOrderRebindHandler" desc="取消订单补绑定"/>
+    </action>
+
+    <!-- 稿件事件流消息-视频上线消息处理：更新订单和稿件、发消息、发稿件、绑邀约等 -->
+    <action id="40106" name="draft_launch_video" desc="视频上线消息处理">
+        <handler seq="1" ref="draftBindingRecordHandler" desc="稿件绑定关系的行为服务"/>
+        <handler seq="2" ref="draftOrderExistHandler" desc="判断稿件对应订单是否存在"/>
+        <handler seq="3" ref="draftLaunchVideoHandler" desc="稿件视频上线处理"/>
+    </action>
+
+</template>

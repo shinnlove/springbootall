@@ -29,7 +29,7 @@ public class CreateReviseProcessHandler implements ActionHandler<ReviseInfo, Str
     @Override
     public String process(ActionChain chain, ProcessContext<ReviseInfo> context) {
 
-        LoggerUtil.info(logger, "NotifyAdvertiserConfirmHandler begin to execute, context",
+        LoggerUtil.info(logger, "CreateReviseProcessHandler begin to execute, context",
             context);
 
         return null;

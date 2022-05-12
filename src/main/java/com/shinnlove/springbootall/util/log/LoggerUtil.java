@@ -21,8 +21,8 @@ import org.slf4j.Logger;
  *   </ol>
  * </p>
  *
- * @author shinnlove.jinsheng
- * @version $Id: LoggerUtil.java, v 0.1 2018-07-31 下午11:42 shinnlove.jinsheng Exp $$
+ * @author Tony Zhao
+ * @version $Id: LoggerUtil.java, v 0.1 2018-07-31 下午11:42 Tony Zhao Exp $$
  */
 public final class LoggerUtil {
 

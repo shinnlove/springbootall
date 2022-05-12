@@ -9,10 +9,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bilibili.universal.process.model.context.ProcessContext;
-import com.shinnlove.springbootall.process.enums.ActionType;
-import com.shinnlove.springbootall.service.biz.model.ApproveInfo;
-import com.shinnlove.springbootall.util.log.LoggerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +18,16 @@ import com.bilibili.universal.process.model.batch.BatchInitParam;
 import com.bilibili.universal.process.model.batch.BatchInitResult;
 import com.bilibili.universal.process.model.batch.InitParam;
 import com.bilibili.universal.process.model.context.DataContext;
+import com.bilibili.universal.process.model.context.ProcessContext;
 import com.bilibili.universal.process.no.SnowflakeIdWorker;
 import com.bilibili.universal.process.service.StatusMachine2ndService;
+import com.shinnlove.springbootall.process.enums.ActionType;
 import com.shinnlove.springbootall.process.enums.TemplateType;
-import com.shinnlove.springbootall.service.revise.model.ReviseEntireInfo;
+import com.shinnlove.springbootall.service.biz.model.ApproveInfo;
+import com.shinnlove.springbootall.service.models.ReviseEntireInfo;
 import com.shinnlove.springbootall.service.revise.model.UpperReviseInfo;
 import com.shinnlove.springbootall.service.revise.service.ReviseService;
+import com.shinnlove.springbootall.util.log.LoggerUtil;
 
 /**
  * @author Tony Zhao
@@ -69,17 +69,17 @@ public class ReviseServiceImpl implements ReviseService {
         BigDecimal orderExpenseAfter = upperProfitAfter;
 
         ReviseEntireInfo reviseInfo = new ReviseEntireInfo();
-        reviseInfo.setUpperProfitBefore(upperProfitBefore);
-        reviseInfo.setUpperProfitAfter(upperProfitAfter);
-
-        reviseInfo.setOrderPriceBefore(orderPriceBefore);
-        reviseInfo.setOrderPriceAfter(orderPriceAfter);
-
-        reviseInfo.setServiceFeeBefore(serviceFeeBefore);
-        reviseInfo.setServiceFeeAfter(serviceFeeAfter);
-
-        reviseInfo.setOrderExpenseBefore(orderExpenseBefore);
-        reviseInfo.setOrderExpenseAfter(orderExpenseAfter);
+        //        reviseInfo.setUpperProfitBefore(upperProfitBefore);
+        //        reviseInfo.setUpperProfitAfter(upperProfitAfter);
+        //
+        //        reviseInfo.setOrderPriceBefore(orderPriceBefore);
+        //        reviseInfo.setOrderPriceAfter(orderPriceAfter);
+        //
+        //        reviseInfo.setServiceFeeBefore(serviceFeeBefore);
+        //        reviseInfo.setServiceFeeAfter(serviceFeeAfter);
+        //
+        //        reviseInfo.setOrderExpenseBefore(orderExpenseBefore);
+        //        reviseInfo.setOrderExpenseAfter(orderExpenseAfter);
 
         DataContext<ReviseEntireInfo> dataContext = new DataContext(reviseInfo);
 
@@ -118,7 +118,7 @@ public class ReviseServiceImpl implements ReviseService {
         ApproveInfo info = new ApproveInfo(approve, 123456, operator, "This is remark.");
         DataContext<ApproveInfo> dataContext = new DataContext<>(info);
 
-        int actionId = ActionType.PARENT_AUDIT_ACCEPT.getActionId();
+        int actionId = ActionType.AUDIT_ACCEPT_2_AD.getActionId();
 
         ProcessContext context = statusMachine2ndService.proceedProcess(actionId, parentRefUniqueNo,
             dataContext);

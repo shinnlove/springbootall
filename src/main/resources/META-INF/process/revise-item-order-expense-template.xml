@@ -3,42 +3,29 @@
 
     <metadata>
         <status no="-1" seq="-1" name="init" desc="流程初始化" ps="-1"/>
-        <status no="1" seq="1" name="risk_audit" desc="待风控审核" ps="1" default="true"/>
+        <status no="1" seq="1" name="risk_audit" desc="待政策审核" ps="1" default="true"/>
         <status no="4" seq="4" name="accepted" desc="改价项已完成" ps="4" ac="1"/>
         <status no="5" seq="5" name="rejected" desc="改价项已拒绝" ps="5" ac="2"/>
         <status no="6" seq="6" name="canceled" desc="改价项已取消" ps="6" ac="3"/>
     </metadata>
 
     <init>
+        <pre>
+            <handler seq="1" ref="queryOrderInfoHandler" desc="查询订单最新信息"/>
+            <handler seq="2" ref="reviseRegisterChildHandler" desc="改价子流程注册"/>
+        </pre>
         <dispatch>
-            <destination no="1">
-                <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
-            </destination>
-            <destination no="4">
-                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="订单支出改价项完成"/>
-            </destination>
+            <destination no="1"/>
+            <destination no="4"/>
         </dispatch>
     </init>
 
-    <accept>
-        <handler seq="1" ref="acceptProcessHandler" desc="单个改价项完成后trigger"/>
-    </accept>
+    <action id="30301" name="expense_audit_accept" desc="订单支出项审核同意" source="1" destination="4"/>
 
-    <reject>
-        <handler seq="1" ref="rejectProcessHandler" desc="单个改价项拒绝后trigger"/>
-    </reject>
+    <action id="30302" name="expense_audit_reject" desc="订单支出项改价政策驳回" source="1" destination="5"/>
 
-    <cancel>
-        <handler seq="1" ref="cancelProcessHandler" desc="单个改价项流程关闭后的trigger"/>
-    </cancel>
+    <action id="30303" name="expense_revise_reject" desc="订单支出项改价被拒绝" source="4" destination="5"/>
 
-    <action id="30301" name="audit_accept" desc="订单支出项审核同意" source="1" destination="4">
-    </action>
-
-    <action id="30302" name="expense_revise_reject" desc="订单支出项改价拒绝" destination="5">
-    </action>
-
-    <action id="30303" name="expense_revise_cancel" desc="订单支出项改价关闭" destination="6">
-    </action>
+    <action id="30304" name="expense_revise_cancel" desc="订单支出项改价关闭" destination="6"/>
 
 </template>

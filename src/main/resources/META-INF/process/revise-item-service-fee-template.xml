@@ -3,7 +3,7 @@
 
     <metadata>
         <status no="-1" seq="-1" name="init" desc="流程初始化" ps="-1"/>
-        <status no="1" seq="1" name="risk_audit" desc="待风控审核" ps="1" default="true"/>
+        <status no="1" seq="1" name="risk_audit" desc="待政策审核" ps="1" default="true"/>
         <status no="2" seq="2" name="advertiser_confirm" desc="待客户确认" ps="2"/>
         <status no="4" seq="4" name="accepted" desc="改价项已完成" ps="4" ac="1"/>
         <status no="5" seq="5" name="rejected" desc="改价项已拒绝" ps="5" ac="2"/>
@@ -11,38 +11,26 @@
     </metadata>
 
     <init>
+        <pre>
+            <handler seq="1" ref="queryOrderInfoHandler" desc="查询订单最新信息"/>
+            <handler seq="2" ref="reviseRegisterChildHandler" desc="改价子流程注册"/>
+        </pre>
         <dispatch>
-            <destination no="1">
-                <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
-            </destination>
-            <destination no="2">
-                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
-            </destination>
+            <destination no="1"/>
+            <destination no="2"/>
         </dispatch>
     </init>
 
-    <accepted>
-        <handler seq="1" ref="acceptProcessHandler" desc="单个改价项完成后trigger"/>
-    </accepted>
+    <action id="30201" name="fee_audit_accept" desc="信息技术费改价项风控审核通过" source="1" destination="2"/>
 
-    <rejected>
-        <handler seq="1" ref="rejectProcessHandler" desc="单个改价项拒绝后trigger"/>
-    </rejected>
+    <action id="30202" name="fee_advertiser_accept" desc="信息技术费改价项客户同意" source="2" destination="4"/>
 
-    <canceled>
-        <handler seq="1" ref="cancelProcessHandler" desc="单个改价项流程关闭后的trigger"/>
-    </canceled>
+    <action id="30203" name="fee_audit_reject" desc="信息技术费改价项政审拒绝" source="1" destination="5"/>
 
-    <action id="30201" name="fee_revise_audit_accept" desc="信息技术费项风控审核同意" source="1" destination="2">
-    </action>
+    <action id="30204" name="fee_ad_reject" desc="信息技术费改价项客户拒绝" source="2" destination="5"/>
 
-    <action id="30202" name="fee_pending_advertiser_confirm" desc="信息技术费客户同意" source="2" destination="4">
-    </action>
+    <action id="30205" name="fee_revise_reject" desc="信息技术费改价项被拒绝" source="4" destination="5"/>
 
-    <action id="30203" name="fee_revise_reject" desc="信息技术费改价项拒绝" destination="5">
-    </action>
-
-    <action id="30204" name="fee_revise_cancel" desc="信息技术费改价项取消" destination="6">
-    </action>
+    <action id="30206" name="fee_revise_cancel" desc="信息技术费改价项取消" destination="6"/>
 
 </template>

@@ -7,8 +7,8 @@ package com.shinnlove.springbootall.util.enums;
 /**
  * 基础枚举接口。
  *
- * @author shinnlove.jinsheng
- * @version $Id: BaseEnum.java, v 0.1 2018-01-17 下午8:11 shinnlove.jinsheng Exp $$
+ * @author Tony Zhao
+ * @version $Id: BaseEnum.java, v 0.1 2018-01-17 下午8:11 Tony Zhao Exp $$
  */
 public interface BaseEnum {
 

@@ -81,8 +81,8 @@ import com.shinnlove.springbootall.util.code.SystemResultCode;
  * }
  *
  *
- * @author shinnlove.jinsheng
- * @version $Id: SystemException.java, v 0.1 2018-01-17 下午8:16 shinnlove.jinsheng Exp $$
+ * @author Tony Zhao
+ * @version $Id: SystemException.java, v 0.1 2018-01-17 下午8:16 Tony Zhao Exp $$
  */
 public class SystemException extends RuntimeException implements BaseException {
 

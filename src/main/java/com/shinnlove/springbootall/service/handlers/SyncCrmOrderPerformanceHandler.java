@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bilibili.universal.process.chain.ActionChain;
 import com.bilibili.universal.process.interfaces.ActionHandler;
 import com.bilibili.universal.process.model.context.ProcessContext;
-import com.shinnlove.springbootall.util.log.LoggerUtil;
+import com.bilibili.universal.util.log.LoggerUtil;
 
 /**
  * @author Tony Zhao
@@ -25,6 +25,8 @@ public class SyncCrmOrderPerformanceHandler implements ActionHandler<Void, Void>
 
     @Override
     public Void process(ActionChain chain, ProcessContext<Void> context) {
+
+        LoggerUtil.warn(logger, "AdAuthBindAvIdHandler handler executed");
 
         LoggerUtil.info(logger, "SyncCrmOrderPerformanceHandler begin to execute, context",
             context);

@@ -11,33 +11,37 @@ import org.springframework.stereotype.Service;
 import com.bilibili.universal.process.chain.ActionChain;
 import com.bilibili.universal.process.interfaces.ActionHandler;
 import com.bilibili.universal.process.model.context.ProcessContext;
-import com.shinnlove.springbootall.service.biz.model.ReviseInfo;
-import com.shinnlove.springbootall.util.log.LoggerUtil;
+import com.bilibili.universal.util.log.LoggerUtil;
+import com.shinnlove.springbootall.service.handlers.pipeline.DeleteFinalDraftHandler;
+import com.shinnlove.springbootall.service.models.CmOrderPo;
+import com.shinnlove.springbootall.service.models.ReviseAttitude;
 
 /**
+ * 订单发生变更通知Crm来更新。
+ * 
  * @author Tony Zhao
  * @version $Id: NotifyCrmSyncHandler.java, v 0.1 2022-02-10 4:33 PM Tony Zhao Exp $$
  */
 @Service
-public class NotifyCrmSyncHandler implements ActionHandler<ReviseInfo, Integer> {
+public class NotifyCrmSyncHandler implements ActionHandler<ReviseAttitude, Integer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(NotifyCrmSyncHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeleteFinalDraftHandler.class);
 
     @Override
-    public Integer process(ActionChain chain, ProcessContext<ReviseInfo> context) {
+    public Integer process(ActionChain chain, ProcessContext<ReviseAttitude> context) {
 
-        LoggerUtil.info(logger, "NotifyCrmSyncHandler begin to execute, context", context);
+        LoggerUtil.warn(logger, "AdAuthBindAvIdHandler handler executed");
 
-        ReviseInfo parameter = param(context);
+        int updateResult = results(context, ReviseCompleteModifyPriceHandler.class);
+        if (updateResult < 0) {
+            // 订单没有更新成功不往下发Crm同步消息
+            chain.continue0();
+        }
 
-        LoggerUtil.info(logger, "2nd 通知Crm来同步");
+        ReviseAttitude attitude = param(context);
+        CmOrderPo orderPo = results(context, QueryOrderInfo2Handler.class);
 
-        LoggerUtil.info(logger, "NotifyCrmSyncHandler parameter is ", parameter);
-
-        Integer handlerParam1 = results(context, UpdateRegisterStatusHandler.class);
-
-        LoggerUtil.info(logger, "handlerParam1 from UpdateRegisterStatusHandler.class is ",
-            handlerParam1);
+        // 发消息让Crm来同步订单更新        
 
         return 1;
     }

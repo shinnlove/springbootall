@@ -3,7 +3,7 @@
 
     <metadata>
         <status no="-1" seq="-1" name="init" desc="流程初始化"/>
-        <status no="1" seq="1" name="risk_audit" desc="待风控审核" default="true"/>
+        <status no="1" seq="1" name="risk_audit" desc="待政策审核" default="true"/>
         <status no="2" seq="2" name="advertiser_confirm" desc="待客户确认"/>
         <status no="3" seq="3" name="upper_confirm" desc="待UP主确认"/>
         <status no="4" seq="4" name="accepted" desc="改价项已完成" ac="1"/>
@@ -12,41 +12,127 @@
     </metadata>
 
     <init>
+        <pre>
+            <handler seq="1" ref="queryOrderInfoHandler" desc="查询订单最新信息"/>
+            <handler seq="2" ref="reviseOrderSnapshotHandler" desc="改价订单记录快照"/>
+            <handler seq="3" ref="reviseAuditInitHandler" desc="改价审核触发初始化"/>
+            <!-- 存在初始化就完成流程的可能性，这里注册表status也要区分dst -->
+            <handler seq="4" ref="reviseRegisterParentHandler" desc="改价父流程注册"/>
+            <handler seq="5" ref="reviseItemInitHandler" desc="改价项初始化"/>
+        </pre>
         <dispatch>
-            <destination no="1">
-                <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
-            </destination>
+            <destination no="1"/>
             <destination no="2">
-                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知客户审核"/>
+                <handler seq="1" ref="initNotifyAdvertiser2ConfirmHandler" desc="通知客户确认"/>
+            </destination>
+            <destination no="3">
+                <handler seq="1" ref="initNotifyUpper2ConfirmHandler" desc="通知UP主确认"/>
+            </destination>
+            <destination no="4">
+                <!-- 改价无政审即改即生效路径 -->
+                <!-- 即改即生效注册表初始化就是完成，也不需要更新 -->
+                <!-- 因订单金额不等于订单支出规则会进入政审，当改回来时，这条路径 -1 => 4 就会走到，必须加上 -->
+                <handler seq="1" ref="initReviseCompleteModifyPriceHandler" desc="初始化即改价完成修改金额"/>
+                <handler seq="2" ref="initNotifyCrmSyncHandler" desc="初始化即订单更新通知Crm来更新"/>
             </destination>
         </dispatch>
     </init>
 
-    <accepted>
-        <handler seq="1" ref="processAcceptedTrigger" desc="改价父流程完成后trigger"/>
-    </accepted>
-
-    <rejected>
-        <handler seq="1" ref="processRejectedTrigger" desc="改价父流程拒绝后trigger"/>
-    </rejected>
-
-    <canceled>
-        <handler seq="1" ref="processCanceledTrigger" desc="改价父流程关闭后trigger"/>
-    </canceled>
-
-    <action id="30001" name="audit_accept" desc="审核通过" source="1" destination="2">
+    <action id="30001" name="audit_accept_2_ad" desc="审核通过" source="1" destination="2">
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="4" ref="updateReviseAuditStatusHandler" desc="更新改价审核状态"/>
+        <handler seq="5" ref="notifyAdvertiser2ConfirmHandler" desc="通知客户确认"/>
     </action>
 
-    <action id="30002" name="advertiser_accept" desc="客户同意" source="2" destination="3">
+    <action id="30002" name="audit_accept_2_up" desc="审核同意到UP主确认" source="1" destination="3">
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="4" ref="updateReviseAuditStatusHandler" desc="更新改价审核状态"/>
+        <handler seq="5" ref="notifyUpperToConfirmHandler" desc="通知UP主确认"/>
     </action>
 
-    <action id="30003" name="upper_accept" desc="UP主同意" source="3" destination="4">
+    <action id="30003" name="audit_accept_2_ac" desc="审核同意直接完成" source="1" destination="4">
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="queryReviseItemHandler" desc="查询订单改价项"/>
+        <handler seq="4" ref="reviseCompleteModifyPriceHandler" desc="改价完成修改金额"/>
+        <handler seq="5" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="6" ref="refreshExistingUnionPublishHandler" desc="更新存在的联合投稿价格"/>
+        <handler seq="7" ref="updateReviseAuditStatusHandler" desc="更新改价审核状态"/>
+        <handler seq="8" ref="notifyCrmSyncHandler" desc="订单更新通知Crm来更新"/>
     </action>
 
-    <action id="30004" name="revise_reject" desc="改价全部拒绝" destination="5">
+    <action id="30004" name="ad_accept_2_up" desc="客户同意到UP主审核" source="2" destination="3">
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="4" ref="notifyAdDelegateHandler" desc="通知客户运营代操作改价"/>
+        <handler seq="5" ref="notifyUpperToConfirmHandler" desc="通知UP主确认"/>
     </action>
 
-    <action id="30005" name="revise_cancel" desc="改价全部取消" destination="6">
+    <action id="30005" name="ad_accept_2_ac" desc="客户同意到完成" source="2" destination="4">
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="queryReviseItemHandler" desc="查询订单改价项"/>
+        <handler seq="4" ref="reviseCompleteModifyPriceHandler" desc="改价完成修改金额"/>
+        <handler seq="5" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="6" ref="refreshExistingUnionPublishHandler" desc="更新存在的联合投稿价格"/>
+        <handler seq="7" ref="notifyCrmSyncHandler" desc="订单更新通知Crm来更新"/>
+        <handler seq="8" ref="notifyAdDelegateHandler" desc="通知客户运营代操作改价"/>
+        <handler seq="9" ref="notifyAdvertiserConfirmedHandler" desc="自助改价客户同意通知UP主"/>
+    </action>
+
+    <action id="30006" name="up_accept" desc="UP主同意" source="3" destination="4">
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="queryReviseItemHandler" desc="查询订单改价项"/>
+        <handler seq="4" ref="reviseCompleteModifyPriceHandler" desc="改价完成修改金额"/>
+        <handler seq="5" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="6" ref="refreshExistingUnionPublishHandler" desc="更新存在的联合投稿价格"/>
+        <handler seq="7" ref="notifyCrmSyncHandler" desc="订单更新通知Crm来更新"/>
+        <handler seq="8" ref="notifyUpDelegateHandler" desc="通知UP主运营代操作改价(后台改价)"/>
+        <!-- 接单端处理投放端联动日志要去日志里动态补一条 -->
+        <!--<handler seq="9" ref="upperHandleAdHandler" desc="接单端处理投放端收到联动日志"/>-->
+    </action>
+
+    <action id="30007" name="revise_audit_reject" desc="改价审核拒绝" source="1" destination="5">
+        <!-- 后台改价独有路径 -->
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="4" ref="updateReviseAuditStatusHandler" desc="更新改价审核状态"/>
+        <handler seq="5" ref="reviseRejectMailCreatorHandler" desc="改价关闭邮件发起人"/>
+    </action>
+
+    <action id="30008" name="revise_ad_reject" desc="改价投放端拒绝" source="2" destination="5">
+        <!-- 自助改价客户拒绝或后台改价客户拒绝 -->
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="4" ref="notifyAdDelegateHandler" desc="通知客户运营代操作改价"/>
+        <handler seq="5" ref="notifyUpReviseRefuseHandler" desc="改价拒绝UP主侧消息通知"/>
+        <handler seq="6" ref="reviseRejectMailCreatorHandler" desc="改价关闭邮件发起人"/>
+    </action>
+
+    <action id="30009" name="revise_up_reject" desc="改价接单端拒绝" source="3" destination="5">
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="4" ref="notifyUpDelegateHandler" desc="通知UP主运营代操作改价(后台改价)"/>
+        <handler seq="5" ref="notifyUpReviseRefuseHandler" desc="改价拒绝UP主侧消息通知"/>
+        <!-- 现在拒绝会自动联动 -->
+        <handler seq="6" ref="reviseRejectMailCreatorHandler" desc="改价关闭邮件发起人"/>
+    </action>
+
+    <action id="30010" name="revise_cancel" desc="改价全部取消" destination="6">
+        <handler seq="1" ref="queryReviseInfoHandler" desc="查询改价信息"/>
+        <handler seq="2" ref="queryOrderInfo2Handler" desc="改价订单记录快照2"/>
+        <handler seq="3" ref="updateRegisterStatusHandler" desc="更新改价注册表的状态"/>
+        <handler seq="4" ref="updateReviseAuditStatusHandler" desc="更新改价审核状态"/>
+        <handler seq="5" ref="reviseRejectMailCreatorHandler" desc="改价关闭邮件发起人"/>
     </action>
 
 </template>

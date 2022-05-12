@@ -7,8 +7,8 @@ package com.shinnlove.springbootall.util.consts;
 /**
  * 系统常用公共量。
  *
- * @author shinnlove.jinsheng
- * @version $Id: SystemConsts.java, v 0.1 2018-08-10 下午4:09 shinnlove.jinsheng Exp $$
+ * @author Tony Zhao
+ * @version $Id: SystemConsts.java, v 0.1 2018-08-10 下午4:09 Tony Zhao Exp $$
  */
 public final class SystemConsts {
 

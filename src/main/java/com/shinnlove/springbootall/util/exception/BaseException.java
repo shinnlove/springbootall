@@ -10,8 +10,8 @@ import java.util.Map;
 /**
  * 系统内的基础异常接口。
  *
- * @author shinnlove.jinsheng
- * @version $Id: BaseException.java, v 0.1 2018-01-17 下午8:16 shinnlove.jinsheng Exp $$
+ * @author Tony Zhao
+ * @version $Id: BaseException.java, v 0.1 2018-01-17 下午8:16 Tony Zhao Exp $$
  */
 public interface BaseException {
 

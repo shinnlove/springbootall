@@ -6,6 +6,7 @@ package com.shinnlove.springbootall.controller;
 
 import java.math.BigDecimal;
 
+import com.shinnlove.springbootall.pipeline.enums.PipelineAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +57,7 @@ public class StatusMachineController {
 
     @RequestMapping("/proceed/{id}")
     public String proceedProcess(@PathVariable(value = "id") long refUniqueNo) {
-        int actionId = ActionType.UPPER_PROFIT_ACCEPT.getActionId();
+        int actionId = ActionType.UP_ACCEPT.getActionId();
 
         long result = revisePriceService.auditRevise(actionId, refUniqueNo, 1, "Tony酱");
 
@@ -71,7 +72,7 @@ public class StatusMachineController {
 
     @RequestMapping("/pipeline")
     public String pipelineProcess() {
-        int actionId = ActionType.ORDER_PENDING_CONFIRM.getActionId();
+        int actionId = PipelineAction.DRAFT_UPLOAD_HANDLE.getActionId();
 
         Object result = revisePriceService.pipelineAudit(actionId);
 

@@ -9,8 +9,8 @@ import com.shinnlove.springbootall.util.enums.BaseEnum;
 /**
  * 系统码枚举类。
  *
- * @author shinnlove.jinsheng
- * @version $Id: SystemResultCode.java, v 0.1 2018-01-17 下午8:12 shinnlove.jinsheng Exp $$
+ * @author Tony Zhao
+ * @version $Id: SystemResultCode.java, v 0.1 2018-01-17 下午8:12 Tony Zhao Exp $$
  */
 public enum SystemResultCode implements BaseEnum {
 

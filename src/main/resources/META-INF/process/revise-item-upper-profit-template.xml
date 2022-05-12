@@ -3,7 +3,7 @@
 
     <metadata>
         <status no="-1" seq="-1" name="init" desc="流程初始化" ps="-1"/>
-        <status no="1" seq="1" name="risk_audit" desc="待风控审核" ps="1" default="true"/>
+        <status no="1" seq="1" name="risk_audit" desc="待政策审核" ps="1" default="true"/>
         <status no="3" seq="3" name="upper_confirm" desc="待UP主确认" ps="3"/>
         <status no="4" seq="4" name="accepted" desc="改价项已完成" ps="4" ac="1"/>
         <status no="5" seq="5" name="rejected" desc="改价项已拒绝" ps="5" ac="2"/>
@@ -11,26 +11,27 @@
     </metadata>
 
     <init>
+        <pre>
+            <handler seq="1" ref="queryOrderInfoHandler" desc="查询订单最新信息"/>
+            <handler seq="2" ref="reviseRegisterChildHandler" desc="改价子流程注册"/>
+        </pre>
         <dispatch>
-            <destination no="1">
-                <handler seq="1" ref="notifyRiskAuditHandler" desc="通知风控审核"/>
-            </destination>
-            <destination no="3">
-                <handler seq="1" ref="notifyAdvertiserConfirmHandler" desc="通知UP主确认"/>
-            </destination>
+            <destination no="1"/>
+            <destination no="3"/>
+            <destination no="4"/>
         </dispatch>
     </init>
 
-    <action id="30401" name="audit_accept" desc="风控审核通过" source="1" destination="3">
-    </action>
+    <action id="30401" name="upper_audit_accept" desc="UP主收益项政审通过" source="1" destination="3"/>
 
-    <action id="30402" name="upper_accept" desc="UP主同意" source="3" destination="4">
-    </action>
+    <action id="30402" name="upper_revise_accept" desc="UP主收益项UP主同意" source="3" destination="4"/>
 
-    <action id="30403" name="upper_revise_reject" desc="UP主收益项改价项拒绝" destination="5">
-    </action>
+    <action id="30403" name="upper_audit_reject" desc="UP主收益项改价项政审拒绝" source="1" destination="5"/>
 
-    <action id="30404" name="upper_revise_cancel" desc="UP主收益项改价项取消" destination="6">
-    </action>
+    <action id="30404" name="upper_up_reject" desc="UP主收益项改价项UP主拒绝" source="3" destination="5"/>
+
+    <action id="30405" name="upper_revise_reject" desc="UP主收益项改价项被拒绝" source="4" destination="5"/>
+
+    <action id="30406" name="upper_revise_cancel" desc="UP主收益项改价项取消" destination="6"/>
 
 </template>

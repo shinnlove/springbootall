@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bilibili.universal.process.chain.ActionChain;
 import com.bilibili.universal.process.interfaces.ActionHandler;
 import com.bilibili.universal.process.model.context.ProcessContext;
+import com.bilibili.universal.util.log.LoggerUtil;
 
 /**
  * @author Tony Zhao
@@ -24,6 +25,9 @@ public class AcceptProcessHandler implements ActionHandler<String, String> {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public String process(ActionChain chain, ProcessContext<String> context) {
+
+        LoggerUtil.warn(logger, "AcceptProcessHandler handler executed");
+
         return null;
     }
 

@@ -12,63 +12,77 @@ package com.shinnlove.springbootall.process.enums;
  */
 public enum ActionType {
 
-    PARENT_AUDIT_ACCEPT(30001, 30000, "审核同意"),
+    AUDIT_ACCEPT_2_AD(30001, 30000, "审核同意到广告主确认"),
 
-    PARENT_ADVERTISER_ACCEPT(30002, 30000, "客户同意"),
+    AUDIT_ACCEPT_2_UP(30002, 30000, "审核同意到UP主确认"),
 
-    PARENT_UPPER_ACCEPT(30003, 30000, "UP主同意"),
+    AUDIT_ACCEPT_2_AC(30003, 30000, "审核同意到已完成"),
 
-    REVISE_REJECT(30004, 30000, "改价全部拒绝"),
+    AD_ACCEPT_2_UP(30004, 30000, "广告主同意到UP主确认"),
 
-    REVISE_CANCEL(30005, 30000, "改价全部取消"),
+    AD_ACCEPT_2_AC(30005, 30000, "广告主同意到已完成"),
 
-    ORDER_PENDING_CONFIRM(30101, 30001, "订单金额改价项风控审核通过待客户确认"),
+    UP_ACCEPT(30006, 30000, "UP主同意到已完成"),
 
-    ORDER_REVISE_ADVERTISER_ACCEPT(30102, 30001, "订单金额改价项客户同意"),
+    REVISE_AUDIT_REJECT(30007, 30000, "改价审核拒绝"),
 
-    ORDER_REVISE_REJECT(30103, 30001, "订单金额改价项拒绝"),
+    REVISE_AD_REJECT(30008, 30000, "改价投放端拒绝"),
 
-    ORDER_REVISE_REJECT_2(30104, 30001, "订单金额改价项拒绝"),
+    REVISE_UP_REJECT(30009, 30000, "改价接单端拒绝"),
 
-    ORDER_REVISE_CANCEL(30105, 30001, "订单金额改价项取消"),
+    REVISE_CANCEL(30010, 30000, "改价已关闭"),
 
-    ORDER_REVISE_CANCEL_2(30106, 30001, "订单金额改价项取消"),
+    ORDER_AUDIT_CONFIRM(30101, 30001, "订单金额改价项风控审核通过"),
 
-    FEE_REVISE_AUDIT(30201, 30002, "信息技术费项触发阈值待风控审核"),
+    ORDER_REVISE_AC(30102, 30001, "订单金额改价项客户同意"),
 
-    FEE_ADVERTISER_ACCEPT(30202, 30002, "信息技术费客户同意"),
+    ORDER_AUDIT_REJECT(30103, 30001, "订单金额改价项拒绝"),
 
-    FEE_REVISE_AC(30203, 30002, "信息技术费改价项完成"),
+    ORDER_AD_REJECT(30104, 30001, "订单金额改价项客户拒绝"),
 
-    FEE_REVISE_REJECT(30204, 30002, "信息技术费改价项拒绝"),
+    ORDER_REVISE_REJECT(30105, 30001, "订单金额改价项被拒绝"),
 
-    FEE_REVISE_CANCEL(30205, 30002, "信息技术费改价项取消"),
+    ORDER_REVISE_CANCEL(30106, 30001, "订单金额改价项取消"),
 
-    EXPENSE_REVISE_AUDIT(30301, 30003, "订单支出项触发阈值待风控审核"),
+    FEE_AUDIT_ACCEPT(30201, 30002, "信息技术费改价项风控审核通过"),
 
-    EXPENSE_REVISE_AC(30302, 30003, "订单支出改价项完成"),
+    FEE_ADVERTISER_ACCEPT(30202, 30002, "信息技术费改价项客户同意"),
 
-    EXPENSE_REVISE_REJECT(30303, 30003, "订单支出改价拒绝"),
+    FEE_AUDIT_REJECT(30203, 30002, "信息技术费改价项拒绝"),
 
-    EXPENSE_REVISE_CANCEL(30304, 30003, "订单支出改价项关闭"),
+    FEE_AD_REJECT(30204, 30002, "信息技术费改价项客户拒绝"),
 
-    UPPER_REVISE_AUDIT(30401, 30004, "UP主收益项触发阈值待风控审核"),
+    FEE_REVISE_REJECT(30205, 30002, "信息技术费改价项被拒绝"),
 
-    UPPER_PROFIT_ACCEPT(30402, 30004, "UP主收益项UP主同意"),
+    FEE_REVISE_CANCEL(30206, 30002, "信息技术费改价项取消"),
 
-    UPPER_REVISE_AC(30403, 30004, "UP主收益项改价项完成"),
+    EXPENSE_AUDIT_ACCEPT(30301, 30003, "订单支出项审核同意"),
 
-    UPPER_REVISE_REJECT(30404, 30004, "UP主收益项改价项拒绝"),
+    EXPENSE_AUDIT_REJECT(30302, 30003, "订单支出项改价政策驳回"),
 
-    UPPER_REVISE_CANCEL(30405, 30004, "UP主收益项改价项取消"),
+    EXPENSE_REVISE_REJECT(30303, 30003, "订单支出项改价被拒绝"),
 
-    VENDOR_PENDING_AUDIT(30501, 30005, "服务商改价项触发阈值待风控审核"),
+    EXPENSE_REVISE_CANCEL(30304, 30003, "订单支出项改价关闭"),
 
-    VENDOR_REVISE_AC(30502, 30005, "服务商改价项已完成"),
+    UPPER_AUDIT_ACCEPT(30401, 30004, "UP主收益项政审通过"),
 
-    VENDOR_REVISE_REJECT(30503, 30005, "服务商改价项已拒绝"),
+    UPPER_REVISE_ACCEPT(30402, 30004, "UP主收益项UP主同意"),
 
-    VENDOR_REVISE_CANCEL(30504, 30005, "服务商改价已取消"),
+    UPPER_AUDIT_REJECT(30403, 30004, "UP主收益项改价项政审拒绝"),
+
+    UPPER_UP_REJECT(30404, 30004, "UP主收益项改价项UP主拒绝"),
+
+    UPPER_REVISE_REJECT(30405, 30004, "UP主收益项改价项被拒绝"),
+
+    UPPER_REVISE_CANCEL(30406, 30004, "UP主收益项改价项取消"),
+
+    VENDOR_AUDIT_ACCEPT(30501, 30005, "服务商改价项审核同意"),
+
+    VENDOR_AUDIT_REJECT(30502, 30005, "服务商改价项政审拒绝"),
+
+    VENDOR_REVISE_REJECT(30503, 30005, "服务商改价项被拒绝"),
+
+    VENDOR_REVISE_CANCEL(30504, 30005, "服务商改价项已取消"),
 
     ;
 
@@ -86,24 +100,12 @@ public enum ActionType {
         return actionId;
     }
 
-    public void setActionId(int actionId) {
-        this.actionId = actionId;
-    }
-
     public int getTemplateId() {
         return templateId;
     }
 
-    public void setTemplateId(int templateId) {
-        this.templateId = templateId;
-    }
-
     public String getDesc() {
         return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
     }
 
     public static ActionType getByActionId(int actionId) {
