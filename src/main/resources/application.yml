@@ -1,0 +1,13 @@
+opentracing:
+  jaeger:
+    udp-sender:
+      host: localhost
+      port: 6831
+    remote-reporter:
+      flush-interval: 1000
+      max-queue-size: 5000
+    log-spans: true
+    probabilistic-sampler:
+      sampling-rate: 1
+    service-name:
+      my-springboot-tony
