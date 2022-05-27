@@ -10,23 +10,42 @@ import java.util.Properties;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.util.StringUtils;
 
+import com.shinnlove.springbootall.conf.RemoteConf;
+
 /**
  * @author Tony Zhao
  * @version $Id: TonyPropertySource.java, v 0.1 2022-05-27 2:49 PM Tony Zhao Exp $$
  */
 public class TonyPropertySource extends EnumerablePropertySource<Object> {
 
+    private static boolean      manually   = true;
+
     private volatile Properties properties = new Properties();
 
-    public TonyPropertySource(String name, Object source) {
+    private RemoteConf          remoteConf;
+
+    public TonyPropertySource(String name, RemoteConf source) {
         super(name, new Object());
+        remoteConf = source;
         load();
     }
 
     private void load() {
-        properties.put("redis.host", "www.tony-awesome.com");
-        properties.put("redis.port", "8888");
-        properties.put("redis.timeout", "99999");
+        String host = "www.tony-awesome.com";
+        String port = "8888";
+        String timeout = "99999";
+
+        if (!manually) {
+            // dynamic load env config
+            host = remoteConf.getNullableString("redis.host");
+            port = remoteConf.getNullableString("redis.port");
+            timeout = remoteConf.getNullableString("redis.timeout");
+        }
+
+        // return config
+        properties.put("redis.host", host);
+        properties.put("redis.port", port);
+        properties.put("redis.timeout", timeout);
     }
 
     @Override
