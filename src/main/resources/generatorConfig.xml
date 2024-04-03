@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <properties resource="mybatis-generator.properties"/>
+
+    <!--注意:本地需要有mysql-connector-java-5.1.45-bin.jar-->
+    <classPathEntry location="${local.base.target.project}/mysql-connector-java-5.1.45.jar"/>
+
+    <context id="default" targetRuntime="MyBatis3">
+
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+        <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--数据源-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="${local.datasource.url}"
+                        userId="${local.datasource.username}"
+                        password="${local.datasource.password}">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--Model & Example文件-->
+        <javaModelGenerator targetPackage="com.shinnlove.springbootall.mybatis.generator.model"
+                            targetProject="${local.base.target.project}/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--Mapper.xml文件-->
+        <sqlMapGenerator targetPackage="com.shinnlove.springbootall.mybatis.generator.mapper"
+                         targetProject="${local.base.target.project}/src/main/resources/mapper">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--Mapper文件-->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.shinnlove.springbootall.mybatis.generator.mapper"
+                             targetProject="${local.base.target.project}/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 表映射 -->
+        <table tableName="qyn_log_activity" domainObjectName="LogActivity">
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
+            <columnOverride column="id" javaType="Long"/>
+        </table>
+
+        <table tableName="qyn_log_reward" domainObjectName="LogReward">
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
+            <columnOverride column="id" javaType="Long"/>
+        </table>
+
+        <table tableName="qyn_log_vote" domainObjectName="LogVote">
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
+            <columnOverride column="id" javaType="Long"/>
+        </table>
+
+        <table tableName="qyn_log_cd_key" domainObjectName="LogCdKey">
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
+            <columnOverride column="id" javaType="Long"/>
+        </table>
+
+        <table tableName="qyn_log_vote_tx" domainObjectName="LogVoteTxEntity">
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
+            <columnOverride column="id" javaType="Long"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
