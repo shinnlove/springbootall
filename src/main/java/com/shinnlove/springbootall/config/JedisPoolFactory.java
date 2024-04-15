@@ -2,7 +2,7 @@
  * Inc.
  * Copyright (c) 2004-2024 All Rights Reserved.
  */
-package com.shinnlove.springbootall.redis;
+package com.shinnlove.springbootall.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
