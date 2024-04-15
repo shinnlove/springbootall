@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserPkRecordRepo">
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into ${tableName} (activity_id, item_type, challenger_guid,
+                              challenger_item_num, defender_guid, defender_item_num,
+                              pk_status, prize_name, prize_desc, prize_img_url)
+    values (
+            #{activity_id,jdbcType=BIGINT},
+            #{item_type,jdbcType=BIGINT},
+            #{challenger_guid,jdbcType=TINYINT},
+            #{challenger_item_num,jdbcType=BIGINT},
+            #{defender_guid,jdbcType=TIMESTAMP},
+            #{defender_item_num,jdbcType=TIMESTAMP},
+            #{pk_status,jdbcType=TIMESTAMP},
+            #{prize_name,jdbcType=TIMESTAMP},
+            #{prize_desc,jdbcType=TIMESTAMP},
+            #{prize_img_url,jdbcType=TIMESTAMP}
+        )
+  </insert>
+
+  <select id="queryRecordByGuidAndTime" resultType="com.shinnlove.springbootall.db.po.UserPkRecordEntity">
+    SELECT activity_id, item_type, challenger_guid,
+      challenger_item_num, defender_guid, defender_item_num,
+      pk_status, prize_name, prize_desc, prize_img_url,
+      create_time, update_time
+    FROM ${tableName}
+    WHERE `guid` = #{guid}
+    <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+        AND create_time &gt;=#{startTime} AND create_time &lt;=#{endTime}
+    </if>
+    ORDER BY `create_time` DESC
+  </select>
+
+</mapper>
