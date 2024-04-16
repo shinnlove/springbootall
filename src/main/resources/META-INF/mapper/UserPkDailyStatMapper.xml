@@ -4,6 +4,19 @@
 
 <mapper namespace="com.shinnlove.springbootall.db.dao.UserPkDailyStatRepo">
 
+    <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserPkDailyStatEntity">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+        <result column="guid" jdbcType="BIGINT" property="guid" />
+        <result column="chance_count" jdbcType="INTEGER" property="chanceCount" />
+        <result column="success_count" jdbcType="INTEGER" property="successCount" />
+        <result column="failure_count" jdbcType="INTEGER" property="failureCount" />
+        <result column="draw_count" jdbcType="INTEGER" property="drawCount" />
+        <result column="stat_date" jdbcType="INTEGER" property="statDate" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
     <insert id="insertUserDailyStat" useGeneratedKeys="true" keyProperty="entity.id">
         insert into ${tableName} (activity_id, guid, chance_count,
                                   success_count, failure_count, stat_date)
@@ -19,7 +32,7 @@
         UPDATE chance_count = #{entity.chanceCount};
     </insert>
 
-    <select id="queryUserDailyPk" resultType="com.shinnlove.springbootall.db.po.UserPkDailyStatEntity">
+    <select id="queryUserDailyPk" resultMap="BaseResultMap">
         SELECT id, activity_id, guid,
                chance_count, success_count, failure_count,
                stat_date, create_time, update_time

@@ -12,6 +12,8 @@ import com.shinnlove.springbootall.db.po.UserPkRecordEntity;
  */
 public interface UserPkRecordService {
 
+    long save();
+
     UserPkRecordEntity queryRecordByGuidAndTime();
 
 }

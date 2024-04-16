@@ -4,6 +4,7 @@
  */
 package com.shinnlove.springbootall.controller;
 
+import com.shinnlove.springbootall.db.po.UserPkDailyStatEntity;
 import com.shinnlove.springbootall.db.po.UserPkRecordEntity;
 import com.shinnlove.springbootall.service.UserPkDailyStatService;
 import com.shinnlove.springbootall.service.UserPkGlobalStatService;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 /**
  * @author Tony Zhao
@@ -49,10 +52,41 @@ public class DaoController {
         return userPkDailyStatService.insertUserDailyStat();
     }
 
+    @RequestMapping(value = "/query_daily", method = RequestMethod.GET)
+    public String queryUserTodayStat() {
+        UserPkDailyStatEntity entity = userPkDailyStatService.queryUserTodayStat();
+        return Objects.nonNull(entity) ? entity.toString() : "没有查询到daily信息";
+    }
+
+    @RequestMapping(value = "/update_daily_success", method = RequestMethod.GET)
+    public int updateDailySuccess() {
+        return userPkDailyStatService.updateDailySuccess();
+    }
+
+    @RequestMapping(value = "/inc_daily_failure", method = RequestMethod.GET)
+    public int incDailyFailure() {
+        return userPkDailyStatService.incDailyFailure();
+    }
+
+    @RequestMapping(value = "/inc_daily_draw", method = RequestMethod.GET)
+    public int incDailyDraw() {
+        return userPkDailyStatService.incDailyDraw();
+    }
+
+    @RequestMapping(value = "/inc_daily_chance", method = RequestMethod.GET)
+    public int incDailyChance() {
+        return userPkDailyStatService.incDailyChance();
+    }
+
+    @RequestMapping(value = "/insert_pk_record", method = RequestMethod.GET)
+    public long insertPkRecord() {
+        return userPkRecordService.save();
+    }
+
     @RequestMapping(value = "/query_record_by_time", method = RequestMethod.GET)
     public String queryRecordByGuidAndTime() {
         UserPkRecordEntity entity = userPkRecordService.queryRecordByGuidAndTime();
-        return entity.toString();
+        return Objects.nonNull(entity) ? entity.toString() : "没有查询到record信息";
     }
 
 }

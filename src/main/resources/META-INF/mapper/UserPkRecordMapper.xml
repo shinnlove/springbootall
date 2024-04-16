@@ -4,25 +4,43 @@
 
 <mapper namespace="com.shinnlove.springbootall.db.dao.UserPkRecordRepo">
 
+    <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserPkRecordEntity">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+        <result column="item_type" jdbcType="INTEGER" property="itemType" />
+        <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+        <result column="item_img_url" jdbcType="VARCHAR" property="itemImgUrl" />
+        <result column="challenger_guid" jdbcType="BIGINT" property="challengerGuid" />
+        <result column="challenger_item_num" jdbcType="INTEGER" property="challengerItemNum" />
+        <result column="defender_guid" jdbcType="BIGINT" property="defenderGuid" />
+        <result column="defender_item_num" jdbcType="INTEGER" property="defenderItemNum" />
+        <result column="pk_status" jdbcType="TINYINT" property="pkStatus" />
+        <result column="prize_name" jdbcType="VARCHAR" property="prizeName" />
+        <result column="prize_desc" jdbcType="VARCHAR" property="prizeDesc" />
+        <result column="prize_img_url" jdbcType="VARCHAR" property="prizeImgUrl" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
     <insert id="save" useGeneratedKeys="true" keyProperty="entity.id">
         insert into ${tableName} (activity_id, item_type, challenger_guid,
                                   challenger_item_num, defender_guid, defender_item_num,
                                   pk_status, prize_name, prize_desc, prize_img_url)
         values (
-                   #{activity_id,jdbcType=BIGINT},
-                   #{item_type,jdbcType=BIGINT},
-                   #{challenger_guid,jdbcType=TINYINT},
-                   #{challenger_item_num,jdbcType=BIGINT},
-                   #{defender_guid,jdbcType=TIMESTAMP},
-                   #{defender_item_num,jdbcType=TIMESTAMP},
-                   #{pk_status,jdbcType=TIMESTAMP},
-                   #{prize_name,jdbcType=TIMESTAMP},
-                   #{prize_desc,jdbcType=TIMESTAMP},
-                   #{prize_img_url,jdbcType=TIMESTAMP}
+                   #{entity.activityId,jdbcType=BIGINT},
+                   #{entity.itemType,jdbcType=BIGINT},
+                   #{entity.challengerGuid,jdbcType=TINYINT},
+                   #{entity.challengerItemNum,jdbcType=BIGINT},
+                   #{entity.defenderGuid,jdbcType=TIMESTAMP},
+                   #{entity.defenderItemNum,jdbcType=TIMESTAMP},
+                   #{entity.pkStatus,jdbcType=TIMESTAMP},
+                   #{entity.prizeName,jdbcType=TIMESTAMP},
+                   #{entity.prizeDesc,jdbcType=TIMESTAMP},
+                   #{entity.prizeImgUrl,jdbcType=TIMESTAMP}
                )
     </insert>
 
-    <select id="queryRecordByGuidAndTime" resultType="com.shinnlove.springbootall.db.po.UserPkRecordEntity">
+    <select id="queryRecordByGuidAndTime" resultMap="BaseResultMap">
         SELECT activity_id, item_type, challenger_guid,
         challenger_item_num, defender_guid, defender_item_num,
         pk_status, prize_name, prize_desc, prize_img_url,
