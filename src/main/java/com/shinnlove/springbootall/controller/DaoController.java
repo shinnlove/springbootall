@@ -5,6 +5,7 @@
 package com.shinnlove.springbootall.controller;
 
 import com.shinnlove.springbootall.db.po.UserPkDailyStatEntity;
+import com.shinnlove.springbootall.db.po.UserPkGlobalStatEntity;
 import com.shinnlove.springbootall.db.po.UserPkRecordEntity;
 import com.shinnlove.springbootall.service.UserPkDailyStatService;
 import com.shinnlove.springbootall.service.UserPkGlobalStatService;
@@ -44,7 +45,33 @@ public class DaoController {
 
     @RequestMapping(value = "/insert_global", method = RequestMethod.GET)
     public long insertUserGlobalStat() {
-        return userPkDailyStatService.insertUserDailyStat();
+        return userPkGlobalStatService.insertUserGlobalStat();
+    }
+
+    @RequestMapping(value = "/query_global", method = RequestMethod.GET)
+    public String queryUserGlobalStat() {
+        UserPkGlobalStatEntity entity = userPkGlobalStatService.queryUserGlobalStat();
+        return Objects.nonNull(entity) ? entity.toString() : "没有查询到global信息";
+    }
+
+    @RequestMapping(value = "/update_global_success", method = RequestMethod.GET)
+    public long updateGlobalSuccess() {
+        return userPkGlobalStatService.updateGlobalSuccess();
+    }
+
+    @RequestMapping(value = "/update_global_success_and_level", method = RequestMethod.GET)
+    public long updateGlobalSuccessWithPromotionLevel() {
+        return userPkGlobalStatService.updateGlobalSuccessWithPromotionLevel();
+    }
+
+    @RequestMapping(value = "/update_global_failure", method = RequestMethod.GET)
+    public long updateGlobalFailure() {
+        return userPkGlobalStatService.updateGlobalFailure();
+    }
+
+    @RequestMapping(value = "/update_global_draw", method = RequestMethod.GET)
+    public long updateGlobalDraw() {
+        return userPkGlobalStatService.updateGlobalDraw();
     }
 
     @RequestMapping(value = "/insert_daily", method = RequestMethod.GET)

@@ -4,6 +4,10 @@
  */
 package com.shinnlove.springbootall.service;
 
+import com.shinnlove.springbootall.db.po.UserPkGlobalStatEntity;
+
+import java.util.List;
+
 /**
  * @author Tony Zhao
  * @version $Id: UserPkGlobalStatService.java, v 0.1 2024-04-16 11:21 Tony Zhao Exp $$
@@ -11,5 +15,15 @@ package com.shinnlove.springbootall.service;
 public interface UserPkGlobalStatService {
 
     long insertUserGlobalStat();
+
+    UserPkGlobalStatEntity queryUserGlobalStat();
+
+    Integer updateGlobalSuccess();
+
+    Integer updateGlobalSuccessWithPromotionLevel();
+
+    Integer updateGlobalFailure();
+
+    Integer updateGlobalDraw();
 
 }

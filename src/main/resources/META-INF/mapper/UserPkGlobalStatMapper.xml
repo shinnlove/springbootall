@@ -50,7 +50,7 @@
     <update id="updateGlobalSuccessWithPromotionLevel">
         UPDATE ${tableName}
         SET `total_success_count` = `total_success_count` + 1,
-            `promotion_level` = `promotion_level` + 1,
+            `promotion_level` = `promotion_level` + 1
             WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
