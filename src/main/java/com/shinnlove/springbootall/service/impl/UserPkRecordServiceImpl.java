@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,23 +64,62 @@ public class UserPkRecordServiceImpl implements UserPkRecordService {
     }
 
     @Override
-    public UserPkRecordEntity queryRecordByGuidAndTime() {
+    public List<UserPkRecordEntity> queryRecordByGuidAndTime() {
 
         Long guid = 123456L;
         String activityId = "test_activity_1";
 
-        Timestamp start = new Timestamp(System.currentTimeMillis());
-        Timestamp end = new Timestamp(System.currentTimeMillis() + 3600000L);
+        Date todayStart = todayStart();
+        Date todayEnd = todayEnd();
+
+        Timestamp start = new Timestamp(todayStart.getTime());
+        Timestamp end = new Timestamp(todayEnd.getTime());
 
         String pkRecordTableName = "user_pk_record";
         List<UserPkRecordEntity> pos = userPkRecordRepo
                 .queryRecordByGuidAndTime(pkRecordTableName, activityId, guid, start, end);
 
         if (CollectionUtils.isEmpty(pos)) {
-            return null;
+            return Collections.emptyList();
         }
 
-        return pos.get(0);
+        return pos;
+    }
+
+    public static Date getTodayDate() {
+        return Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 获取每天的开始时间 00:00:00:00
+     *
+     * @return
+     */
+    public static Date todayStart() {
+        Date today = getTodayDate();
+
+        Calendar dateStart = Calendar.getInstance();
+        dateStart.setTime(today);
+        dateStart.set(Calendar.HOUR_OF_DAY, 0);
+        dateStart.set(Calendar.MINUTE, 0);
+        dateStart.set(Calendar.SECOND, 0);
+        return dateStart.getTime();
+    }
+
+    /**
+     * 获取每天的结束时间 23:59:59:999
+     *
+     * @return
+     */
+    public static Date todayEnd() {
+        Date today = getTodayDate();
+
+        Calendar dateEnd = Calendar.getInstance();
+        dateEnd.setTime(today);
+        dateEnd.set(Calendar.HOUR_OF_DAY, 23);
+        dateEnd.set(Calendar.MINUTE, 59);
+        dateEnd.set(Calendar.SECOND, 59);
+        return dateEnd.getTime();
     }
 
 }
