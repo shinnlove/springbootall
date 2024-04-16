@@ -8,48 +8,49 @@
         insert into ${tableName} (activity_id, guid, chance_count,
                                   success_count, failure_count, stat_date)
         values (
-                   #{activity_id,jdbcType=VARCHAR},
-                   #{guid,jdbcType=BIGINT},
-                   #{chance_count,jdbcType=INT},
-                   #{success_count,jdbcType=INT},
-                   #{failure_count,jdbcType=INT}
+                   #{entity.activityId,jdbcType=VARCHAR},
+                   #{entity.guid,jdbcType=BIGINT},
+                   #{entity.chanceCount,jdbcType=INTEGER},
+                   #{entity.successCount,jdbcType=INTEGER},
+                   #{entity.failureCount,jdbcType=INTEGER},
+                   #{entity.statDate,jdbcType=INTEGER}
                )
-            ON DUPLICATE KEY UPDATE
-            chance_count = #{entity.chanceCount};
+            ON DUPLICATE KEY
+        UPDATE chance_count = #{entity.chanceCount};
     </insert>
 
-  <select id="queryUserDailyPk" resultType="com.shinnlove.springbootall.db.po.UserPkDailyStatEntity">
-    SELECT id, activity_id, guid,
-           chance_count, success_count, failure_count,
-           stat_date, create_time, update_time
-    FROM ${tableName}
-    WHERE `guid` = #{guid}
-    AND `stat_date` = #{statDate}
-    ORDER BY `create_time` DESC
-  </select>
+    <select id="queryUserDailyPk" resultType="com.shinnlove.springbootall.db.po.UserPkDailyStatEntity">
+        SELECT id, activity_id, guid,
+               chance_count, success_count, failure_count,
+               stat_date, create_time, update_time
+        FROM ${tableName}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
+          AND `stat_date` = #{statDate}
+        ORDER BY `create_time` DESC
+    </select>
 
     <update id="updateDailySuccess">
         UPDATE ${tableName}
         SET `success_count` = `success_count` + 1
-        WHERE `guid` = #{guid}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
-    <update id="updateDailyFailure">
+    <update id="incDailyFailure">
         UPDATE ${tableName}
         SET `failure_count` = `failure_count` + 1
-        WHERE `guid` = #{guid}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
-    <update id="updateDailyDraw">
+    <update id="incDailyDraw">
         UPDATE ${tableName}
         SET `draw_count` = `draw_count` + 1
-        WHERE `guid` = #{guid}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
-    <update id="updateDailyChance">
+    <update id="incDailyChance">
         UPDATE ${tableName}
         SET `chance_count` = `chance_count` + 1
-        WHERE `guid` = #{guid}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
 </mapper>

@@ -21,19 +21,24 @@ public interface UserPkDailyStatRepo {
                              @Param("entity") UserPkDailyStatEntity entity);
 
     List<UserPkDailyStatEntity> queryUserDailyPk(@Param("tableName") String tableName,
+                                                 @Param(value = "activityId") String activityId,
                                                  @Param("guid") Long guid,
-                                                 @Param("statDate") String statDate);
+                                                 @Param("statDate") Integer statDate);
 
     Integer updateDailySuccess(@Param("tableName") String tableName,
+                               @Param(value = "activityId") String activityId,
                                @Param("guid") Long guid);
 
-    Integer updateDailyFailure(@Param("tableName") String tableName,
-                               @Param("guid") Long guid);
-
-    Integer updateDailyDraw(@Param("tableName") String tableName,
+    Integer incDailyFailure(@Param("tableName") String tableName,
+                            @Param(value = "activityId") String activityId,
                             @Param("guid") Long guid);
 
-    Integer updateDailyChance(@Param("tableName") String tableName,
-                              @Param("guid") Long guid);
+    Integer incDailyDraw(@Param("tableName") String tableName,
+                         @Param(value = "activityId") String activityId,
+                         @Param("guid") Long guid);
+
+    Integer incDailyChance(@Param("tableName") String tableName,
+                           @Param(value = "activityId") String activityId,
+                           @Param("guid") Long guid);
 
 }

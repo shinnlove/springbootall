@@ -21,7 +21,9 @@ public interface UserPkRecordRepo {
     long save(@Param("tableName") String tableName,
               @Param(value = "entity") UserPkRecordEntity entity);
 
-    List<UserPkRecordEntity> queryRecordByGuidAndTime(@Param("guid") Long guid,
+    List<UserPkRecordEntity> queryRecordByGuidAndTime(@Param("tableName") String tableName,
+                                                      @Param(value = "activityId") String activityId,
+                                                      @Param("guid") Long guid,
                                                       @Param("startTime") Timestamp startTime,
                                                       @Param("endTime") Timestamp endTime);
 

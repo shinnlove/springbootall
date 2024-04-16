@@ -9,15 +9,15 @@
                                   total_failure_count, total_draw_count,
                                   promotion_level)
         values (
-                   #{activity_id,jdbcType=VARCHAR},
-                   #{guid,jdbcType=BIGINT},
-                   #{total_success_count,jdbcType=INT},
-                   #{total_failure_count,jdbcType=INT},
-                   #{total_draw_count,jdbcType=INT},
-                   #{promotion_level,jdbcType=INT}
+                   #{entity.activityId,jdbcType=VARCHAR},
+                   #{entity.guid,jdbcType=BIGINT},
+                   #{entity.totalSuccessCount,jdbcType=INTEGER},
+                   #{entity.totalFailureCount,jdbcType=INTEGER},
+                   #{entity.totalDrawCount,jdbcType=INTEGER},
+                   #{entity.promotionLevel,jdbcType=INTEGER}
                )
-        ON DUPLICATE KEY UPDATE
-        total_success_count = #{entity.totalSuccessCount};
+            ON DUPLICATE KEY
+        UPDATE total_success_count = #{entity.totalSuccessCount};
     </insert>
 
     <select id="queryUserGlobalStat" resultType="com.shinnlove.springbootall.db.po.UserPkGlobalStatEntity">
@@ -25,33 +25,33 @@
                total_failure_count, total_draw_count,
                promotion_level, create_time, update_time
         FROM ${tableName}
-        WHERE `guid` = #{guid}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
         ORDER BY `create_time` DESC
     </select>
 
     <update id="updateGlobalSuccess">
         UPDATE ${tableName}
         SET `total_success_count` = `total_success_count` + 1
-        WHERE `guid` = #{guid}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
     <update id="updateGlobalSuccessWithPromotionLevel">
         UPDATE ${tableName}
         SET `total_success_count` = `total_success_count` + 1,
             `promotion_level` = `promotion_level` + 1,
-        WHERE `guid` = #{guid}
+            WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
     <update id="updateGlobalFailure">
         UPDATE ${tableName}
         SET `total_failure_count` = `total_failure_count` + 1
-        WHERE `guid` = #{guid}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
     <update id="updateGlobalDraw">
         UPDATE ${tableName}
         SET `total_draw_count` = `total_draw_count` + 1
-        WHERE `guid` = #{guid}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
 </mapper>

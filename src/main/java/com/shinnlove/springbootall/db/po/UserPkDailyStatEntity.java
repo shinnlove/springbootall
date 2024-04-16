@@ -4,9 +4,7 @@
  */
 package com.shinnlove.springbootall.db.po;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -33,7 +31,7 @@ public class UserPkDailyStatEntity {
 
     private Integer drawCount;
 
-    private String statDate;
+    private Integer statDate;
 
     private Timestamp createTime;
 
