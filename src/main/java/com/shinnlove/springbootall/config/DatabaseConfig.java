@@ -7,6 +7,7 @@ package com.shinnlove.springbootall.config;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,7 @@ import javax.sql.DataSource;
  * @version $Id: DataSourceConfig.java, v 0.1 2024-03-16 14:05 Tony Zhao Exp $$
  */
 @Configuration
-@MapperScan(basePackages = "com.shinnlove.springbootall.db.dao", sqlSessionFactoryRef = "sqlSessionFactory")
+@MapperScan(basePackages = "com.shinnlove.springbootall.db.dao", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class DatabaseConfig {
 
     @Value("${local.datasource.url}")
@@ -69,6 +70,11 @@ public class DatabaseConfig {
                 .getResources("classpath:META-INF/mapper/*.xml"));
 
         return sessionFactory.getObject();
+    }
+
+    @Bean(name = "sqlSessionTemplate")
+    public SqlSessionTemplate sqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
+        return new SqlSessionTemplate(sqlSessionFactory);
     }
 
 }
