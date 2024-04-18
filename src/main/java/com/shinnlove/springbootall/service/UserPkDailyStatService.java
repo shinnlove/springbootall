@@ -24,4 +24,6 @@ public interface UserPkDailyStatService {
 
     Integer incDailyChance();
 
+    Integer incDailyChanceByCount();
+
 }

@@ -107,6 +107,11 @@ public class DaoController {
         return userPkDailyStatService.incDailyChance();
     }
 
+    @RequestMapping(value = "/inc_daily_chance_by_count", method = RequestMethod.GET)
+    public int incDailyChanceByCount() {
+        return userPkDailyStatService.incDailyChanceByCount();
+    }
+
     @RequestMapping(value = "/insert_pk_record", method = RequestMethod.GET)
     public long insertPkRecord() {
         return userPkRecordService.save();

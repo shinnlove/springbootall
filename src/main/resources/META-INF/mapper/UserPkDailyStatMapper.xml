@@ -66,4 +66,10 @@
         WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
     </update>
 
+    <update id="incDailyChanceByCount">
+        UPDATE ${tableName}
+        SET `chance_count` = `chance_count` + #{count}
+        WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
+    </update>
+
 </mapper>

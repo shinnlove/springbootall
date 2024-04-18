@@ -95,4 +95,11 @@ public class UserPkDailyStatServiceImpl implements UserPkDailyStatService {
         return userPkDailyStatRepo.incDailyChance(pkDailyTableName, activityId, guid);
     }
 
+    @Override
+    public Integer incDailyChanceByCount() {
+        Long guid = 123456L;
+        Integer count = 17;
+        return userPkDailyStatRepo.incDailyChanceByCount(pkDailyTableName, activityId, guid, count);
+    }
+
 }
