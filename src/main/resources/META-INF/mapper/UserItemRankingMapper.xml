@@ -28,13 +28,32 @@
         update item_type_count = item_type_count + 1;
     </insert>
 
-    <select id="selectTopRanking" resultMap="BaseResultMap">
+    <select id="countTopRanking" resultType="Long">
+        select count(*)
+        from ${tableName}
+        where `activity_id` = #{activityId}
+    </select>
+
+    <select id="countCollectAllUser" resultType="Long">
+        select count(*)
+        from ${tableName}
+        where `activity_id` = #{activityId} and `has_collect_all` = 1
+    </select>
+
+    <select id="queryTopRanking" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from ${tableName}
         where `activity_id` = #{activityId}
         order by item_type_count desc, collect_all_timestamp asc, id asc
-        limit 0, 50
+        <if test="limit != null">
+            <if test="offset != null">
+                limit #{offset}, #{limit}
+            </if>
+            <if test="offset == null">
+                limit #{limit}
+            </if>
+        </if>
     </select>
 
     <select id="queryByActivityGuid" resultMap="BaseResultMap">

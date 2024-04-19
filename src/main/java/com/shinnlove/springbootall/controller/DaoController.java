@@ -8,6 +8,7 @@ import com.shinnlove.springbootall.db.po.UserItemRankingEntity;
 import com.shinnlove.springbootall.db.po.UserPkDailyStatEntity;
 import com.shinnlove.springbootall.db.po.UserPkGlobalStatEntity;
 import com.shinnlove.springbootall.db.po.UserPkRecordEntity;
+import com.shinnlove.springbootall.models.PageResult;
 import com.shinnlove.springbootall.service.UserItemRankingService;
 import com.shinnlove.springbootall.service.UserPkDailyStatService;
 import com.shinnlove.springbootall.service.UserPkGlobalStatService;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -133,9 +135,10 @@ public class DaoController {
         return userItemRankingService.insertUserItemRanking();
     }
 
-    @RequestMapping(value = "/select_top_ranking", method = RequestMethod.GET)
-    public List<UserItemRankingEntity> selectTopRanking() {
-        return userItemRankingService.selectTopRanking();
+    @RequestMapping(value = "/page_query_top_ranking", method = RequestMethod.GET)
+    public PageResult<UserItemRankingEntity> selectTopRanking(@RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+                                                              @RequestParam(value = "size", defaultValue = "5", required = false) Integer size) {
+        return userItemRankingService.pageQueryTopRanking(page, size);
     }
 
     @RequestMapping(value = "/query_guid_item", method = RequestMethod.GET)

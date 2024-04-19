@@ -6,6 +6,7 @@ package com.shinnlove.springbootall.service.impl;
 
 import com.shinnlove.springbootall.db.dao.UserItemRankingRepo;
 import com.shinnlove.springbootall.db.po.UserItemRankingEntity;
+import com.shinnlove.springbootall.models.PageResult;
 import com.shinnlove.springbootall.service.UserItemRankingService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -50,14 +51,23 @@ public class UserItemRankingServiceImpl implements UserItemRankingService {
     }
 
     @Override
-    public List<UserItemRankingEntity> selectTopRanking() {
-        List<UserItemRankingEntity> pos = userItemRankingRepo.selectTopRanking(TABLE_NAME, ACTIVITY_ID);
-
-        if (CollectionUtils.isEmpty(pos)) {
-            return Collections.emptyList();
+    public PageResult<UserItemRankingEntity> pageQueryTopRanking(Integer pageIndex, Integer pageSize) {
+        // how many
+        long total = userItemRankingRepo.countTopRanking(TABLE_NAME, ACTIVITY_ID);
+        if (total <= 0) {
+            return PageResult.EMPTY_PAGE_RESULT;
         }
 
-        return pos;
+        // limit query
+        int offset = (pageIndex - 1) * pageSize;
+        int limit = pageSize;
+        List<UserItemRankingEntity> pos = userItemRankingRepo.queryTopRanking(TABLE_NAME, ACTIVITY_ID, offset, limit);
+
+        if (CollectionUtils.isEmpty(pos)) {
+            return PageResult.EMPTY_PAGE_RESULT;
+        }
+
+        return new PageResult<>(total, pos);
     }
 
     @Override

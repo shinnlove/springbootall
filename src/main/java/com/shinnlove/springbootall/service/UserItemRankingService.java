@@ -5,6 +5,7 @@
 package com.shinnlove.springbootall.service;
 
 import com.shinnlove.springbootall.db.po.UserItemRankingEntity;
+import com.shinnlove.springbootall.models.PageResult;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface UserItemRankingService {
 
     long insertUserItemRanking();
 
-    List<UserItemRankingEntity> selectTopRanking();
+    PageResult<UserItemRankingEntity> pageQueryTopRanking(Integer pageIndex, Integer pageSize);
 
     UserItemRankingEntity queryByActivityGuid(Long guid);
 

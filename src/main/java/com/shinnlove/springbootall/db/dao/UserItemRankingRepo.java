@@ -8,7 +8,6 @@ import com.shinnlove.springbootall.db.po.UserItemRankingEntity;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -21,8 +20,16 @@ public interface UserItemRankingRepo {
     long insertUserItemRanking(@Param("tableName") String tableName,
                                @Param("entity") UserItemRankingEntity entity);
 
-    List<UserItemRankingEntity> selectTopRanking(@Param("tableName") String tableName,
-                                                 @Param("activityId") String activityId);
+    long countTopRanking(@Param("tableName") String tableName,
+                         @Param("activityId") String activityId);
+
+    long countCollectAllUser(@Param("tableName") String tableName,
+                             @Param("activityId") String activityId);
+
+    List<UserItemRankingEntity> queryTopRanking(@Param("tableName") String tableName,
+                                                @Param("activityId") String activityId,
+                                                @Param("offset") Integer offset,
+                                                @Param("limit") Integer limit);
 
     UserItemRankingEntity queryByActivityGuid(@Param("tableName") String tableName,
                                               @Param("activityId") String activityId,
