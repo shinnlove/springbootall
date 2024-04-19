@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserItemRankingRepo">
+
+    <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserItemRankingEntity">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+        <result column="guid" jdbcType="BIGINT" property="guid" />
+        <result column="item_type_count" jdbcType="INTEGER" property="itemTypeCount" />
+        <result column="has_collect_all" jdbcType="TINYINT" property="hasCollectAll" />
+        <result column="collect_all_timestamp" jdbcType="BIGINT" property="collectAllTimestamp" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, activity_id, guid, item_type_count, has_collect_all,
+          collect_all_timestamp, create_time, update_time
+    </sql>
+
+    <insert id="insertUserItemRanking" useGeneratedKeys="true" keyProperty="entity.id">
+        insert into user_item_ranking (activity_id, guid, item_type_count)
+        values (
+                   #{entity.activityId,jdbcType=VARCHAR},
+                   #{entity.guid,jdbcType=BIGINT},
+                   #{entity.itemTypeCount,jdbcType=BIGINT}
+               ) on DUPLICATE key
+        update item_type_count = item_type_count + 1;
+    </insert>
+
+    <select id="selectTopRanking" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ${tableName}
+        where `activity_id` = #{activityId}
+        order by item_type_count desc, collect_all_timestamp asc, id asc
+        limit 0, 50
+    </select>
+
+    <select id="queryByActivityGuid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ${tableName}
+        where `activity_id` = #{activityId} AND `guid` = #{guid}
+        limit 1
+    </select>
+
+    <update id="incItemTypeCount">
+        update ${tableName}
+        set item_type_count = item_type_count + 1
+        where `activity_id` = #{activityId} AND `guid` = #{guid};
+    </update>
+
+    <update id="updateAndCollectAllItem">
+        update ${tableName}
+        set item_type_count = #{totalCount},
+            has_collect_all = 1,
+            collect_all_timestamp = #{timestamp}
+        where `activity_id` = #{activityId} AND `guid` = #{guid};
+    </update>
+
+</mapper>

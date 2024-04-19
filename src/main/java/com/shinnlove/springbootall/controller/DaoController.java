@@ -4,9 +4,11 @@
  */
 package com.shinnlove.springbootall.controller;
 
+import com.shinnlove.springbootall.db.po.UserItemRankingEntity;
 import com.shinnlove.springbootall.db.po.UserPkDailyStatEntity;
 import com.shinnlove.springbootall.db.po.UserPkGlobalStatEntity;
 import com.shinnlove.springbootall.db.po.UserPkRecordEntity;
+import com.shinnlove.springbootall.service.UserItemRankingService;
 import com.shinnlove.springbootall.service.UserPkDailyStatService;
 import com.shinnlove.springbootall.service.UserPkGlobalStatService;
 import com.shinnlove.springbootall.service.UserPkRecordService;
@@ -39,6 +41,9 @@ public class DaoController {
 
     @Autowired
     private UserPkRecordService userPkRecordService;
+
+    @Autowired
+    private UserItemRankingService userItemRankingService;
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
@@ -121,6 +126,32 @@ public class DaoController {
     public String queryRecordByGuidAndTime() {
         List<UserPkRecordEntity> pos = userPkRecordService.queryRecordByGuidAndTime();
         return CollectionUtils.isEmpty(pos) ? "没有查询到record信息" : pos.toString();
+    }
+
+    @RequestMapping(value = "/insert_user_item_ranking", method = RequestMethod.GET)
+    public long insertUserItemRanking() {
+        return userItemRankingService.insertUserItemRanking();
+    }
+
+    @RequestMapping(value = "/select_top_ranking", method = RequestMethod.GET)
+    public List<UserItemRankingEntity> selectTopRanking() {
+        return userItemRankingService.selectTopRanking();
+    }
+
+    @RequestMapping(value = "/query_guid_item", method = RequestMethod.GET)
+    public String queryByActivityGuid(Long guid) {
+        UserItemRankingEntity entity = userItemRankingService.queryByActivityGuid(guid);
+        return entity.toString();
+    }
+
+    @RequestMapping(value = "/user_item_count", method = RequestMethod.GET)
+    public Integer incItemTypeCount() {
+        return userItemRankingService.incItemTypeCount();
+    }
+
+    @RequestMapping(value = "/update_collect_all", method = RequestMethod.GET)
+    public Integer updateAndCollectAllItem() {
+        return userItemRankingService.updateAndCollectAllItem();
     }
 
 }
