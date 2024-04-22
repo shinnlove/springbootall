@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserCompoundRecordRepo">
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserCompoundRecordEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="used_ids" jdbcType="VARCHAR" property="usedIds" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="AggResultMap" type="com.shinnlove.springbootall.db.po.UserCompoundRecordAggEntity">
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="compound_num" jdbcType="Integer" property="compoundNum" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into ${tableName} (`activity_id`, `component_id`, `guid`, `used_ids`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.guid,jdbcType=BIGINT},
+             #{entity.usedIds,jdbcType=VARCHAR}
+           );
+  </insert>
+
+  <select id="queryUserCompoundCount" resultMap="AggResultMap">
+    select
+      max(activity_id) as activity_id,
+      max(component_id) as component_id,
+      max(guid) as guid,
+      count(*) as compound_num
+    from ${tableName}
+    where `activity_id` = #{activityId} and `component_id` = #{componentId} and `guid` = #{guid}
+  </select>
+
+</mapper>

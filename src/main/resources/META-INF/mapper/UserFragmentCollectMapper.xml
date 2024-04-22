@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserFragmentCollectRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserFragmentCollectEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="fragment_id" jdbcType="INTEGER" property="fragmentId" />
+    <result column="fragment_used" jdbcType="INTEGER" property="fragmentUsed" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="AggResultMap" type="com.shinnlove.springbootall.db.po.UserFragmentCollectAggEntity">
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="fragment_id" jdbcType="INTEGER" property="fragmentId" />
+    <result column="fragment_num" jdbcType="INTEGER" property="fragmentNum" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into ${tableName} (`activity_id`, `component_id`, `guid`, `fragment_id`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.guid,jdbcType=BIGINT},
+             #{entity.fragmentId,jdbcType=INTEGER}
+           );
+  </insert>
+
+  <select id="queryUnUsedFragments" resultMap="BaseResultMap">
+    select activity_id, guid, fragment_id
+    from ${tableName}
+    where `activity_id` = #{activityId} and `component_id` = #{componentId} and `guid` = #{guid}
+    and `fragment_used` = 0
+  </select>
+
+  <select id="queryUserCanCompoundCount" resultMap="AggResultMap">
+    select max(activity_id) as activity_id,
+           max(component_id) as component_id,
+           max(guid) as guid,
+           max(fragment_id) as fragment_id,
+           count(*) as fragment_num
+    from ${tableName}
+    where `activity_id` = #{activityId} and `guid` = #{guid} and `component_id` = #{componentId}
+    and fragment_used = 0
+    group by fragment_id
+    order by fragment_num asc
+  </select>
+
+  <update id="updateFragmentStatusById" parameterType="java.util.List">
+    update ${tableName}
+    <if test="ids != null and ids.size() > 0">
+      set fragment_used = 1
+      WHERE id IN
+      <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </update>
+
+</mapper>
