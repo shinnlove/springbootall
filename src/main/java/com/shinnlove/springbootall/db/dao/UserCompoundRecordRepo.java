@@ -2,8 +2,6 @@ package com.shinnlove.springbootall.db.dao;
 
 import com.shinnlove.springbootall.db.po.UserCompoundRecordAggEntity;
 import com.shinnlove.springbootall.db.po.UserCompoundRecordEntity;
-import com.shinnlove.springbootall.db.po.UserFragmentCollectAggEntity;
-import com.shinnlove.springbootall.db.po.UserFragmentCollectEntity;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

@@ -45,6 +45,9 @@ public class DaoController {
     @Autowired
     private UserFragmentCollectService userFragmentCollectService;
 
+    @Autowired
+    private UserCompoundRecordService userCompoundRecordService;
+
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
         return "Hello world.";
@@ -182,6 +185,17 @@ public class DaoController {
         }
 
         return userFragmentCollectService.updateFragmentStatusById(idList);
+    }
+
+    @RequestMapping(value = "/insert_user_compound_record", method = RequestMethod.GET)
+    public long insertUserCompoundRecord() {
+        return userCompoundRecordService.insertSelective();
+    }
+
+    @RequestMapping(value = "/query_user_compound", method = RequestMethod.GET)
+    public String queryUserCompoundCount() {
+        List<UserCompoundRecordAggEntity>  entities = userCompoundRecordService.queryUserCompoundCount();
+        return CollectionUtils.isEmpty(entities) ? "没有查询到用户合成记录" : entities.toString();
     }
 
 }
