@@ -25,7 +25,7 @@
              #{entity.componentId,jdbcType=BIGINT},
              #{entity.guid,jdbcType=BIGINT},
              #{entity.usedIds,jdbcType=VARCHAR}
-           );
+           )
   </insert>
 
   <select id="queryUserCompoundCount" resultMap="AggResultMap">
@@ -36,6 +36,7 @@
       count(*) as compound_num
     from ${tableName}
     where `activity_id` = #{activityId} and `component_id` = #{componentId} and `guid` = #{guid}
+    group by `activity_id`, `component_id`, `guid`
   </select>
 
 </mapper>

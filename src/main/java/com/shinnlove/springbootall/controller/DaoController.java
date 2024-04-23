@@ -188,8 +188,15 @@ public class DaoController {
     }
 
     @RequestMapping(value = "/insert_user_compound_record", method = RequestMethod.GET)
-    public long insertUserCompoundRecord() {
-        return userCompoundRecordService.insertSelective();
+    public long insertUserCompoundRecord(String usedIds) {
+
+        List<Long> idList = new ArrayList<>();
+        String[] idStr = usedIds.split(",");
+        for (int i = 0; i < idStr.length; i++) {
+            idList.add(Long.parseLong(idStr[i]));
+        }
+
+        return userCompoundRecordService.insertSelective(idList);
     }
 
     @RequestMapping(value = "/query_user_compound", method = RequestMethod.GET)

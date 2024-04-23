@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Tony Zhao
@@ -22,7 +23,7 @@ import java.util.List;
 @Service
 public class UserCompoundRecordServiceImpl implements UserCompoundRecordService {
 
-    private static final String COLLECT_TABLE_NAME = "user_fragment_collect";
+    private static final String COMPOUND_TABLE_NAME = "user_compound_record";
 
     private static final String ACTIVITY_ID = "3124365647";
 
@@ -34,18 +35,29 @@ public class UserCompoundRecordServiceImpl implements UserCompoundRecordService 
     private UserCompoundRecordRepo userCompoundRecordRepo;
 
     @Override
-    public long insertSelective() {
+    public long insertSelective(List<Long> usedIds) {
+
+        String defaultIds = "1,2,3,4";
+        if (!CollectionUtils.isEmpty(usedIds)) {
+            List<String> ids = usedIds.stream().map(String::valueOf).collect(Collectors.toList());
+            defaultIds = String.join(",", ids);
+        }
+
         // assemble
         UserCompoundRecordEntity entity = new UserCompoundRecordEntity();
+        entity.setActivityId(ACTIVITY_ID);
+        entity.setComponentId(COMPONENT_ID);
+        entity.setGuid(GUID);
+        entity.setUsedIds(defaultIds);
 
-        return userCompoundRecordRepo.insertSelective(COLLECT_TABLE_NAME, entity);
+        return userCompoundRecordRepo.insertSelective(COMPOUND_TABLE_NAME, entity);
     }
 
     @Override
     public List<UserCompoundRecordAggEntity> queryUserCompoundCount() {
 
         List<UserCompoundRecordAggEntity> pos = userCompoundRecordRepo
-                .queryUserCompoundCount(COLLECT_TABLE_NAME, ACTIVITY_ID, COMPONENT_ID, GUID);
+                .queryUserCompoundCount(COMPOUND_TABLE_NAME, ACTIVITY_ID, COMPONENT_ID, GUID);
 
         if (CollectionUtils.isEmpty(pos)) {
             return Collections.emptyList();
