@@ -32,7 +32,7 @@
   </insert>
 
   <select id="queryUnUsedFragments" resultMap="BaseResultMap">
-    select activity_id, guid, fragment_id
+    select id, activity_id, component_id, guid, fragment_id, fragment_used, create_time, update_time
     from ${tableName}
     where `activity_id` = #{activityId} and `component_id` = #{componentId} and `guid` = #{guid}
     and `fragment_used` = 0

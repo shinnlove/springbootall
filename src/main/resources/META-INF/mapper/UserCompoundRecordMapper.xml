@@ -15,7 +15,7 @@
     <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
     <result column="component_id" jdbcType="BIGINT" property="componentId" />
     <result column="guid" jdbcType="BIGINT" property="guid" />
-    <result column="compound_num" jdbcType="Integer" property="compoundNum" />
+    <result column="compound_num" jdbcType="INTEGER" property="compoundNum" />
   </resultMap>
 
   <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">

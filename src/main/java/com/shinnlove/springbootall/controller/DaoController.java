@@ -4,15 +4,9 @@
  */
 package com.shinnlove.springbootall.controller;
 
-import com.shinnlove.springbootall.db.po.UserItemRankingEntity;
-import com.shinnlove.springbootall.db.po.UserPkDailyStatEntity;
-import com.shinnlove.springbootall.db.po.UserPkGlobalStatEntity;
-import com.shinnlove.springbootall.db.po.UserPkRecordEntity;
+import com.shinnlove.springbootall.db.po.*;
 import com.shinnlove.springbootall.models.PageResult;
-import com.shinnlove.springbootall.service.UserItemRankingService;
-import com.shinnlove.springbootall.service.UserPkDailyStatService;
-import com.shinnlove.springbootall.service.UserPkGlobalStatService;
-import com.shinnlove.springbootall.service.UserPkRecordService;
+import com.shinnlove.springbootall.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,6 +41,9 @@ public class DaoController {
 
     @Autowired
     private UserItemRankingService userItemRankingService;
+
+    @Autowired
+    private UserFragmentCollectService userFragmentCollectService;
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
@@ -155,6 +153,35 @@ public class DaoController {
     @RequestMapping(value = "/update_collect_all", method = RequestMethod.GET)
     public Integer updateAndCollectAllItem() {
         return userItemRankingService.updateAndCollectAllItem();
+    }
+
+    @RequestMapping(value = "/insert_user_fragment_collect", method = RequestMethod.GET)
+    public long insertUserFragmentCollect() {
+        return userFragmentCollectService.insertSelective();
+    }
+
+    @RequestMapping(value = "/query_unused_fragments", method = RequestMethod.GET)
+    public String queryUnUsedFragments() {
+        List<UserFragmentCollectEntity> entities = userFragmentCollectService.queryUnUsedFragments();
+        return CollectionUtils.isEmpty(entities) ? "没有查询到未使用碎片信息" : entities.toString();
+    }
+
+    @RequestMapping(value = "/query_can_compound", method = RequestMethod.GET)
+    public String queryUserCanCompoundCount() {
+        List<UserFragmentCollectAggEntity> entities = userFragmentCollectService.queryUserCanCompoundCount();
+        return CollectionUtils.isEmpty(entities) ? "没有查询到用户合成碎片" : entities.toString();
+    }
+
+    @RequestMapping(value = "/update_fragment_status", method = RequestMethod.GET)
+    public Integer updateFragmentStatusById(String ids) {
+
+        List<Long> idList = new ArrayList<>();
+        String[] idStr = ids.split(",");
+        for (int i = 0; i < idStr.length; i++) {
+            idList.add(Long.parseLong(idStr[i]));
+        }
+
+        return userFragmentCollectService.updateFragmentStatusById(idList);
     }
 
 }
