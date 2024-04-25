@@ -12,9 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Tony Zhao
@@ -56,6 +55,12 @@ public class UserFragmentCollectServiceImpl implements UserFragmentCollectServic
         // query
         List<UserFragmentCollectEntity> pos = userFragmentCollectRepo
                 .queryUnUsedFragments(COLLECT_TABLE_NAME, ACTIVITY_ID, COMPONENT_ID, GUID);
+
+        Map<Integer, List<Long>> idMap = pos.stream()
+                .collect(Collectors.groupingBy(UserFragmentCollectEntity::getFragmentId,
+                        Collectors.mapping(UserFragmentCollectEntity::getId, Collectors.toList())));
+
+        System.out.println(idMap);
 
         if (CollectionUtils.isEmpty(pos)) {
             return Collections.emptyList();
