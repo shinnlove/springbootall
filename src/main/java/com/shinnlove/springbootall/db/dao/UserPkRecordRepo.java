@@ -19,12 +19,18 @@ import java.util.List;
 public interface UserPkRecordRepo {
 
     long save(@Param("tableName") String tableName,
-              @Param(value = "entity") UserPkRecordEntity entity);
+              @Param("entity") UserPkRecordEntity entity);
 
     List<UserPkRecordEntity> queryRecordByGuidAndTime(@Param("tableName") String tableName,
-                                                      @Param(value = "activityId") String activityId,
+                                                      @Param("activityId") String activityId,
                                                       @Param("guid") Long guid,
                                                       @Param("startTime") Timestamp startTime,
                                                       @Param("endTime") Timestamp endTime);
+
+    Integer updateAfterDrawPrize(@Param("tableName") String tableName,
+                                 @Param("recordId") Long recordId,
+                                 @Param("prizeName") String prizeName,
+                                 @Param("prizeDesc") String prizeDesc,
+                                 @Param("prizeImgUrl") String prizeImgUrl);
 
 }

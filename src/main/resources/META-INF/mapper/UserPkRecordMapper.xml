@@ -8,13 +8,11 @@
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
         <result column="item_type" jdbcType="INTEGER" property="itemType" />
-        <result column="item_name" jdbcType="VARCHAR" property="itemName" />
-        <result column="item_img_url" jdbcType="VARCHAR" property="itemImgUrl" />
         <result column="challenger_guid" jdbcType="BIGINT" property="challengerGuid" />
         <result column="challenger_item_num" jdbcType="INTEGER" property="challengerItemNum" />
         <result column="defender_guid" jdbcType="BIGINT" property="defenderGuid" />
         <result column="defender_item_num" jdbcType="INTEGER" property="defenderItemNum" />
-        <result column="pk_status" jdbcType="TINYINT" property="pkStatus" />
+        <result column="pk_status" jdbcType="INTEGER" property="pkStatus" />
         <result column="prize_name" jdbcType="VARCHAR" property="prizeName" />
         <result column="prize_desc" jdbcType="VARCHAR" property="prizeDesc" />
         <result column="prize_img_url" jdbcType="VARCHAR" property="prizeImgUrl" />
@@ -25,18 +23,15 @@
     <insert id="save" useGeneratedKeys="true" keyProperty="entity.id">
         insert into ${tableName} (activity_id, item_type, challenger_guid,
                                   challenger_item_num, defender_guid, defender_item_num,
-                                  pk_status, prize_name, prize_desc, prize_img_url)
+                                  pk_status)
         values (
-                   #{entity.activityId,jdbcType=BIGINT},
-                   #{entity.itemType,jdbcType=BIGINT},
-                   #{entity.challengerGuid,jdbcType=TINYINT},
-                   #{entity.challengerItemNum,jdbcType=BIGINT},
-                   #{entity.defenderGuid,jdbcType=TIMESTAMP},
-                   #{entity.defenderItemNum,jdbcType=TIMESTAMP},
-                   #{entity.pkStatus,jdbcType=TIMESTAMP},
-                   #{entity.prizeName,jdbcType=TIMESTAMP},
-                   #{entity.prizeDesc,jdbcType=TIMESTAMP},
-                   #{entity.prizeImgUrl,jdbcType=TIMESTAMP}
+                   #{entity.activityId,jdbcType=VARCHAR},
+                   #{entity.itemType,jdbcType=INTEGER},
+                   #{entity.challengerGuid,jdbcType=BIGINT},
+                   #{entity.challengerItemNum,jdbcType=INTEGER},
+                   #{entity.defenderGuid,jdbcType=BIGINT},
+                   #{entity.defenderItemNum,jdbcType=INTEGER},
+                   #{entity.pkStatus,jdbcType=INTEGER}
                )
     </insert>
 
@@ -52,5 +47,13 @@
         </if>
         ORDER BY `create_time` DESC
     </select>
+
+    <update id="updateAfterDrawPrize">
+        update ${tableName}
+        set `prize_name` = #{prizeName,jdbcType=VARCHAR},
+            `prize_desc` = #{prizeDesc,jdbcType=VARCHAR},
+            `prize_img_url` #{prizeImgUrl,jdbcType=VARCHAR}
+        WHERE `id` = #{recordId,jdbcType=BIGINT}
+    </update>
 
 </mapper>

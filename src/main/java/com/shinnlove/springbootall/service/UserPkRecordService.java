@@ -18,4 +18,6 @@ public interface UserPkRecordService {
 
     List<UserPkRecordEntity> queryRecordByGuidAndTime();
 
+    Integer updateDailyPkRecord();
+
 }

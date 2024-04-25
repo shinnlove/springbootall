@@ -131,6 +131,11 @@ public class DaoController {
         return CollectionUtils.isEmpty(pos) ? "没有查询到record信息" : pos.toString();
     }
 
+    @RequestMapping(value = "/update_daily_record", method = RequestMethod.GET)
+    public Integer updateDailyPkRecord() {
+        return userPkRecordService.updateDailyPkRecord();
+    }
+
     @RequestMapping(value = "/insert_user_item_ranking", method = RequestMethod.GET)
     public long insertUserItemRanking() {
         return userItemRankingService.insertUserItemRanking();

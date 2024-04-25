@@ -35,8 +35,6 @@ public class UserPkRecordServiceImpl implements UserPkRecordService {
         Long guid = 123456L;
         String activityId = "test_activity_1";
         Integer itemType = 1;
-        String itemImgUrl = "http://";
-        String itemName = "pk的东西";
         int pkStatus = 1;
         int myCount = 100;
         long defenderGuid = 7891643L;
@@ -48,8 +46,6 @@ public class UserPkRecordServiceImpl implements UserPkRecordService {
         UserPkRecordEntity record = new UserPkRecordEntity();
         record.setActivityId(activityId);
         record.setItemType(itemType);
-        record.setItemName(itemName);
-        record.setItemImgUrl(itemImgUrl);
         record.setPkStatus(pkStatus);
         record.setChallengerGuid(guid);
         record.setChallengerItemNum(myCount);
@@ -84,6 +80,20 @@ public class UserPkRecordServiceImpl implements UserPkRecordService {
         }
 
         return pos;
+    }
+
+    @Override
+    public Integer updateDailyPkRecord() {
+
+        Long recordId = 1L;
+        String prizeName = "这是测试奖品name字段回写";
+        String prizeDesc = "这是测试奖品desc字段回写";
+        String prizeImgUrl = "http://img.woa.com/yuewen/qidian/prize/image_03.png";
+
+        String pkRecordTableName = "user_pk_record";
+
+        return userPkRecordRepo.updateAfterDrawPrize(pkRecordTableName, recordId,
+                prizeName, prizeDesc, prizeImgUrl);
     }
 
     public static Date getTodayDate() {
