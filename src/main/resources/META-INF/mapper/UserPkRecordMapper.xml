@@ -52,7 +52,7 @@
         update ${tableName}
         set `prize_name` = #{prizeName,jdbcType=VARCHAR},
             `prize_desc` = #{prizeDesc,jdbcType=VARCHAR},
-            `prize_img_url` #{prizeImgUrl,jdbcType=VARCHAR}
+            `prize_img_url` = #{prizeImgUrl,jdbcType=VARCHAR}
         WHERE `id` = #{recordId,jdbcType=BIGINT}
     </update>
 

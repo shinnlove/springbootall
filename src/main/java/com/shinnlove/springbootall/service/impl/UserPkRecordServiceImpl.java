@@ -83,17 +83,15 @@ public class UserPkRecordServiceImpl implements UserPkRecordService {
     }
 
     @Override
-    public Integer updateDailyPkRecord() {
+    public Integer updateDailyPkRecord(Long id) {
 
-        Long recordId = 1L;
         String prizeName = "这是测试奖品name字段回写";
         String prizeDesc = "这是测试奖品desc字段回写";
         String prizeImgUrl = "http://img.woa.com/yuewen/qidian/prize/image_03.png";
 
         String pkRecordTableName = "user_pk_record";
 
-        return userPkRecordRepo.updateAfterDrawPrize(pkRecordTableName, recordId,
-                prizeName, prizeDesc, prizeImgUrl);
+        return userPkRecordRepo.updateAfterDrawPrize(pkRecordTableName, id, prizeName, prizeDesc, prizeImgUrl);
     }
 
     public static Date getTodayDate() {

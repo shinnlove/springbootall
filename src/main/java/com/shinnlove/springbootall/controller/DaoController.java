@@ -132,8 +132,8 @@ public class DaoController {
     }
 
     @RequestMapping(value = "/update_daily_record", method = RequestMethod.GET)
-    public Integer updateDailyPkRecord() {
-        return userPkRecordService.updateDailyPkRecord();
+    public Integer updateDailyPkRecord(Long id) {
+        return userPkRecordService.updateDailyPkRecord(id);
     }
 
     @RequestMapping(value = "/insert_user_item_ranking", method = RequestMethod.GET)
