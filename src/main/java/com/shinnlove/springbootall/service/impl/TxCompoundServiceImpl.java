@@ -40,7 +40,7 @@ public class TxCompoundServiceImpl implements TxCompoundService {
     @Override
     public Integer compound(String activityId, Long componentId, Long guid) {
 
-        int thisTimeCount = 1;
+        int thisTimeCount = 3;
 
         // query unused
         List<UserFragmentCollectEntity> unused = userFragmentCollectService

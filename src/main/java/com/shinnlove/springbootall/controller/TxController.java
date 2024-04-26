@@ -27,9 +27,9 @@ public class TxController {
 
     @RequestMapping(value = "/compound", method = RequestMethod.GET)
     public Integer doCompound() {
-        String activityId = "";
-        Long componentId = 12L;
-        Long guid = 123456L;
+        String activityId = "3124365647";
+        Long componentId = 123456L;
+        Long guid = 888888L;
         return txCompoundService.compound(activityId, componentId, guid);
     }
 
