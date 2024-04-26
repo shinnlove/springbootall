@@ -1,0 +1,36 @@
+/**
+ * Inc.
+ * Copyright (c) 2004-2024 All Rights Reserved.
+ */
+package com.shinnlove.springbootall.controller;
+
+import com.shinnlove.springbootall.service.TxCompoundService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @author Tony Zhao
+ * @version $Id: TxController.java, v 0.1 2024-04-26 10:47 Tony Zhao Exp $$
+ */
+@RestController
+@RequestMapping(value = "/tx")
+public class TxController {
+
+    private static Logger logger = LoggerFactory.getLogger(TxController.class);
+
+    @Autowired
+    private TxCompoundService txCompoundService;
+
+    @RequestMapping(value = "/compound", method = RequestMethod.GET)
+    public Integer doCompound() {
+        String activityId = "";
+        Long componentId = 12L;
+        Long guid = 123456L;
+        return txCompoundService.compound(activityId, componentId, guid);
+    }
+
+}

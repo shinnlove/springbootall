@@ -16,6 +16,8 @@ public interface UserCompoundRecordService {
 
     long insertSelective(List<Long> usedIds);
 
+    long insertUserCompoundRecord(String activityId, Long componentId, Long guid, List<Long> usedIds);
+
     List<UserCompoundRecordAggEntity> queryUserCompoundCount();
 
 }

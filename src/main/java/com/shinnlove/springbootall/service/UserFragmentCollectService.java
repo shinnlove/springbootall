@@ -19,8 +19,10 @@ public interface UserFragmentCollectService {
 
     List<UserFragmentCollectEntity> queryUnUsedFragments();
 
+    List<UserFragmentCollectEntity> queryUnUsedFragments(String activityId, Long componentId, Long guid);
+
     List<UserFragmentCollectAggEntity> queryUserCanCompoundCount();
 
-    Integer updateFragmentStatusById(List<Long> ids);
+    Integer updateFragmentStatusById(List<Long> usedIds);
 
 }

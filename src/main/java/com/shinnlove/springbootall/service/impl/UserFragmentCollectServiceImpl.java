@@ -70,6 +70,23 @@ public class UserFragmentCollectServiceImpl implements UserFragmentCollectServic
     }
 
     @Override
+    public List<UserFragmentCollectEntity> queryUnUsedFragments(String activityId, Long componentId, Long guid) {
+        // query
+        List<UserFragmentCollectEntity> pos = userFragmentCollectRepo
+                .queryUnUsedFragments(COLLECT_TABLE_NAME, activityId, componentId, guid);
+
+        Map<Integer, List<Long>> idMap = pos.stream()
+                .collect(Collectors.groupingBy(UserFragmentCollectEntity::getFragmentId,
+                        Collectors.mapping(UserFragmentCollectEntity::getId, Collectors.toList())));
+
+        if (CollectionUtils.isEmpty(pos)) {
+            return Collections.emptyList();
+        }
+
+        return pos;
+    }
+
+    @Override
     public List<UserFragmentCollectAggEntity> queryUserCanCompoundCount() {
         // group by query
         List<UserFragmentCollectAggEntity> pos = userFragmentCollectRepo
@@ -83,8 +100,19 @@ public class UserFragmentCollectServiceImpl implements UserFragmentCollectServic
     }
 
     @Override
-    public Integer updateFragmentStatusById(List<Long> ids) {
-        return userFragmentCollectRepo.updateFragmentStatusById(COLLECT_TABLE_NAME, ids);
+    public Integer updateFragmentStatusById(List<Long> usedIds) {
+        Integer result = 0;
+        try {
+            result = userFragmentCollectRepo.updateFragmentStatusById(COLLECT_TABLE_NAME, usedIds);
+        } catch (Exception e) {
+
+        }
+
+        if (result <= 0) {
+            throw new RuntimeException("BusinessCode.DB_ACCESS_ERROR");
+        }
+
+        return result;
     }
 
 }

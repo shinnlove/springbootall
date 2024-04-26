@@ -8,9 +8,9 @@ import com.shinnlove.springbootall.db.dao.UserCompoundRecordRepo;
 import com.shinnlove.springbootall.db.po.UserCompoundRecordAggEntity;
 import com.shinnlove.springbootall.db.po.UserCompoundRecordEntity;
 import com.shinnlove.springbootall.service.UserCompoundRecordService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +51,35 @@ public class UserCompoundRecordServiceImpl implements UserCompoundRecordService 
         entity.setUsedIds(defaultIds);
 
         return userCompoundRecordRepo.insertSelective(COMPOUND_TABLE_NAME, entity);
+    }
+
+    @Override
+    public long insertUserCompoundRecord(String activityId, Long componentId, Long guid, List<Long> usedIds) {
+        String defaultUsedIds = "";
+        if (CollectionUtils.isNotEmpty(usedIds)) {
+            List<String> ids = usedIds.stream().map(String::valueOf).collect(Collectors.toList());
+            defaultUsedIds = String.join(",", ids);
+        }
+
+        UserCompoundRecordEntity entity = new UserCompoundRecordEntity();
+        entity.setActivityId(activityId);
+        entity.setComponentId(componentId);
+        entity.setGuid(guid);
+        entity.setUsedIds(defaultUsedIds);
+
+        long result = 0L;
+
+        try {
+            result = userCompoundRecordRepo.insertSelective(COMPOUND_TABLE_NAME, entity);
+        } catch(Exception e) {
+
+        }
+
+        if (result <= 0L) {
+            throw new RuntimeException("insert error");
+        }
+
+        return result;
     }
 
     @Override
