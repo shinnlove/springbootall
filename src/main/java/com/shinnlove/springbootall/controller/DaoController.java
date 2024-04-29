@@ -147,6 +147,11 @@ public class DaoController {
         return userItemRankingService.pageQueryTopRanking(page, size);
     }
 
+    @RequestMapping(value = "/count_collect_all_user", method = RequestMethod.GET)
+    public long countCollectAllUser(Integer types) {
+        return userItemRankingService.countCollectAllUser(types);
+    }
+
     @RequestMapping(value = "/query_guid_item", method = RequestMethod.GET)
     public String queryByActivityGuid(Long guid) {
         UserItemRankingEntity entity = userItemRankingService.queryByActivityGuid(guid);
@@ -156,11 +161,6 @@ public class DaoController {
     @RequestMapping(value = "/user_item_count", method = RequestMethod.GET)
     public Integer incItemTypeCount() {
         return userItemRankingService.incItemTypeCount();
-    }
-
-    @RequestMapping(value = "/update_collect_all", method = RequestMethod.GET)
-    public Integer updateAndCollectAllItem() {
-        return userItemRankingService.updateAndCollectAllItem();
     }
 
     @RequestMapping(value = "/insert_user_fragment_collect", method = RequestMethod.GET)

@@ -24,7 +24,8 @@ public interface UserItemRankingRepo {
                          @Param("activityId") String activityId);
 
     long countCollectAllUser(@Param("tableName") String tableName,
-                             @Param("activityId") String activityId);
+                             @Param("activityId") String activityId,
+                             @Param("totalTypes") Integer totalTypes);
 
     List<UserItemRankingEntity> queryTopRanking(@Param("tableName") String tableName,
                                                 @Param("activityId") String activityId,
@@ -38,11 +39,5 @@ public interface UserItemRankingRepo {
     Integer incItemTypeCount(@Param("tableName") String tableName,
                              @Param("activityId") String activityId,
                              @Param("guid") Long guid);
-
-    Integer updateAndCollectAllItem(@Param("tableName") String tableName,
-                                    @Param("activityId") String activityId,
-                                    @Param("guid") Long guid,
-                                    @Param("totalCount") Integer totalCount,
-                                    @Param("timestamp") Long timestamp);
 
 }

@@ -27,10 +27,6 @@ public class UserItemRankingEntity implements Serializable {
 
     private Integer itemTypeCount;
 
-    private Byte hasCollectAll;
-
-    private Long collectAllTimestamp;
-
     private Date createTime;
 
     private Date updateTime;
@@ -67,22 +63,6 @@ public class UserItemRankingEntity implements Serializable {
 
     public void setItemTypeCount(Integer itemTypeCount) {
         this.itemTypeCount = itemTypeCount;
-    }
-
-    public Byte getHasCollectAll() {
-        return hasCollectAll;
-    }
-
-    public void setHasCollectAll(Byte hasCollectAll) {
-        this.hasCollectAll = hasCollectAll;
-    }
-
-    public Long getCollectAllTimestamp() {
-        return collectAllTimestamp;
-    }
-
-    public void setCollectAllTimestamp(Long collectAllTimestamp) {
-        this.collectAllTimestamp = collectAllTimestamp;
     }
 
     public Date getCreateTime() {

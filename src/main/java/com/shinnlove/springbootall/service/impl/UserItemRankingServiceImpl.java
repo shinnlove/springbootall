@@ -71,6 +71,11 @@ public class UserItemRankingServiceImpl implements UserItemRankingService {
     }
 
     @Override
+    public long countCollectAllUser(Integer totalTypes) {
+        return userItemRankingRepo.countCollectAllUser(TABLE_NAME, ACTIVITY_ID, totalTypes);
+    }
+
+    @Override
     public UserItemRankingEntity queryByActivityGuid(Long guid) {
         UserItemRankingEntity entity = userItemRankingRepo.queryByActivityGuid(TABLE_NAME, ACTIVITY_ID, guid);
         return Objects.nonNull(entity) ? entity : null;
@@ -79,14 +84,6 @@ public class UserItemRankingServiceImpl implements UserItemRankingService {
     @Override
     public Integer incItemTypeCount() {
         return userItemRankingRepo.incItemTypeCount(TABLE_NAME, ACTIVITY_ID, GUID);
-    }
-
-    @Override
-    public Integer updateAndCollectAllItem() {
-        Integer totalItemTypeCount = 15;
-        long timestamp = System.currentTimeMillis();
-
-        return userItemRankingRepo.updateAndCollectAllItem(TABLE_NAME, ACTIVITY_ID, GUID, totalItemTypeCount, timestamp);
     }
 
 }
