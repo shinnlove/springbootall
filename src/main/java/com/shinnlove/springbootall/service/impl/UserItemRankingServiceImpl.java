@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -52,8 +53,14 @@ public class UserItemRankingServiceImpl implements UserItemRankingService {
 
     @Override
     public PageResult<UserItemRankingEntity> pageQueryTopRanking(Integer pageIndex, Integer pageSize) {
+
+        List<Long> blackGuids = new ArrayList<>();
+//        blackGuids.add(647358237L);
+//        blackGuids.add(6654238223L);
+//        blackGuids.add(888888L);
+
         // how many
-        long total = userItemRankingRepo.countTopRanking(TABLE_NAME, ACTIVITY_ID);
+        long total = userItemRankingRepo.countTopRanking(TABLE_NAME, ACTIVITY_ID, blackGuids);
         if (total <= 0) {
             return PageResult.EMPTY_PAGE_RESULT;
         }
@@ -61,7 +68,7 @@ public class UserItemRankingServiceImpl implements UserItemRankingService {
         // limit query
         int offset = (pageIndex - 1) * pageSize;
         int limit = pageSize;
-        List<UserItemRankingEntity> pos = userItemRankingRepo.queryTopRanking(TABLE_NAME, ACTIVITY_ID, offset, limit);
+        List<UserItemRankingEntity> pos = userItemRankingRepo.queryTopRanking(TABLE_NAME, ACTIVITY_ID, blackGuids, offset, limit);
 
         if (CollectionUtils.isEmpty(pos)) {
             return PageResult.EMPTY_PAGE_RESULT;
@@ -72,7 +79,12 @@ public class UserItemRankingServiceImpl implements UserItemRankingService {
 
     @Override
     public long countCollectAllUser(Integer totalTypes) {
-        return userItemRankingRepo.countCollectAllUser(TABLE_NAME, ACTIVITY_ID, totalTypes);
+        List<Long> blackGuids = new ArrayList<>();
+        blackGuids.add(647358237L);
+//        blackGuids.add(6654238223L);
+//        blackGuids.add(888888L);
+
+        return userItemRankingRepo.countCollectAllUser(TABLE_NAME, ACTIVITY_ID, totalTypes, blackGuids);
     }
 
     @Override

@@ -21,14 +21,17 @@ public interface UserItemRankingRepo {
                                @Param("entity") UserItemRankingEntity entity);
 
     long countTopRanking(@Param("tableName") String tableName,
-                         @Param("activityId") String activityId);
+                         @Param("activityId") String activityId,
+                         @Param("blackGuids") List<Long> blackGuids);
 
     long countCollectAllUser(@Param("tableName") String tableName,
                              @Param("activityId") String activityId,
-                             @Param("totalTypes") Integer totalTypes);
+                             @Param("totalTypes") Integer totalTypes,
+                             @Param("blackGuids") List<Long> blackGuids);
 
     List<UserItemRankingEntity> queryTopRanking(@Param("tableName") String tableName,
                                                 @Param("activityId") String activityId,
+                                                @Param("blackGuids") List<Long> blackGuids,
                                                 @Param("offset") Integer offset,
                                                 @Param("limit") Integer limit);
 

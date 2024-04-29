@@ -29,12 +29,24 @@
         select count(*)
         from ${tableName}
         where `activity_id` = #{activityId}
+        <if test="blackGuids != null and blackGuids.size() > 0">
+            and `guid` not in
+            <foreach collection="blackGuids" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
     <select id="countCollectAllUser" resultType="Long">
         select count(*)
         from ${tableName}
-        where `activity_id` = #{activityId} and `item_type_count` = #{totalTypes}
+        where `activity_id` = #{activityId} and `item_type_count` <![CDATA[ >= ]]> #{totalTypes}
+        <if test="blackGuids != null and blackGuids.size() > 0">
+            and `guid` not in
+            <foreach collection="blackGuids" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
     <select id="queryTopRanking" resultMap="BaseResultMap">
@@ -42,6 +54,12 @@
         <include refid="Base_Column_List" />
         from ${tableName}
         where `activity_id` = #{activityId}
+        <if test="blackGuids != null and blackGuids.size() > 0">
+            and `guid` not in
+            <foreach collection="blackGuids" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by item_type_count desc, update_time asc, id asc
         <if test="limit != null">
             <if test="offset != null">
