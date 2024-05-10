@@ -18,6 +18,6 @@ public interface TaskScheduleService {
      */
     Integer startTask(String taskName);
 
-    Integer stopTask(String taskName);
+    Integer cancelTask(String taskName);
 
 }

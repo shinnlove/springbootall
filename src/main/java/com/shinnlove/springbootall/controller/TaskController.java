@@ -4,6 +4,8 @@
  */
 package com.shinnlove.springbootall.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.shinnlove.springbootall.models.TaskParams;
 import com.shinnlove.springbootall.service.TaskScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +27,15 @@ public class TaskController {
         return taskScheduleService.startTask(name);
     }
 
-    @RequestMapping(value = "/task_stop", method = RequestMethod.GET)
-    public Integer stopTask(String name) {
-        return taskScheduleService.stopTask(name);
+    @RequestMapping(value = "/task_cancel", method = RequestMethod.GET)
+    public Integer cancelTask(String name) {
+        return taskScheduleService.cancelTask(name);
+    }
+
+    public static void main(String[] args) {
+        String json = "{\"priority\":3,\"reload_balance_weight\":20}";
+        TaskParams params = JSON.parseObject(json, TaskParams.class);
+        System.out.println(params.getPriority() + ":" + params.getReloadBalanceWeight());
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class TaskScheduleServiceImpl implements TaskScheduleService {
 
-    public static final String PREEMPT_TASK_CRON = "0/2 * * * * ?";
+    public static final String PREEMPT_TASK_CRON = "0/15 * * * * ?";
 
     private final Map<String, ScheduledFuture<?>> taskFutures = new ConcurrentHashMap<>();
 
@@ -35,21 +36,41 @@ public class TaskScheduleServiceImpl implements TaskScheduleService {
     public Integer startTask(String taskName) {
 
         ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(
-                () -> System.out.println("【" + taskName + "】 task executed " + taskCounter.incrementAndGet() + " time..."),
+                () -> {
+
+                    System.out.println("【" + taskName + "】 before task executed " + taskCounter.incrementAndGet() + " time...");
+                    try {
+                        TimeUnit.SECONDS.sleep(5000L);
+                    } catch (InterruptedException e) {
+                        System.out.println("【" + taskName + "】 sleep error, ex=" + e.getMessage());
+//                        throw new RuntimeException("sleep error, ex=" + e.getMessage(), e);
+                    }
+                    System.out.println("【" + taskName + "】 after task executed " + taskCounter.incrementAndGet() + " time...");
+                    System.out.println("【" + taskName + "】 after task executed " + taskCounter.incrementAndGet() + " time...");
+                    System.out.println("【" + taskName + "】 after task executed " + taskCounter.incrementAndGet() + " time...");
+                    System.out.println("【" + taskName + "】 after task executed " + taskCounter.incrementAndGet() + " time...");
+                    System.out.println("【" + taskName + "】 after task executed " + taskCounter.incrementAndGet() + " time...");
+                    System.out.println("【" + taskName + "】 after task executed " + taskCounter.incrementAndGet() + " time...");
+                    System.out.println("【" + taskName + "】 after task executed " + taskCounter.incrementAndGet() + " time...");
+
+//                    throw new RuntimeException("hahaha");
+                },
                 triggerContext -> new CronTrigger(PREEMPT_TASK_CRON).nextExecutionTime(triggerContext));
 
         taskFutures.put(taskName, future);
+
+        System.out.println("【" + taskName + "】 scheduled completed...");
 
         return 1;
     }
 
     @Override
-    public Integer stopTask(String taskName) {
+    public Integer cancelTask(String taskName) {
         if (taskFutures.containsKey(taskName)) {
             ScheduledFuture<?> future = taskFutures.get(taskName);
             future.cancel(true);
             taskFutures.remove(taskName);
-            System.out.println("【" + taskName + "】 task stopped...");
+            System.out.println("【" + taskName + "】 task manually canceled...");
             return 1;
         }
 
