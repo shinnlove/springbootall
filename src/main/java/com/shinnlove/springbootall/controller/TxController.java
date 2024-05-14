@@ -5,6 +5,7 @@
 package com.shinnlove.springbootall.controller;
 
 import com.shinnlove.springbootall.service.TxCompoundService;
+import com.shinnlove.springbootall.service.TxUserLimitItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,10 @@ public class TxController {
     private static Logger logger = LoggerFactory.getLogger(TxController.class);
 
     @Autowired
-    private TxCompoundService txCompoundService;
+    private TxCompoundService       txCompoundService;
+
+    @Autowired
+    private TxUserLimitItemService  txUserLimitItemService;
 
     @RequestMapping(value = "/compound", method = RequestMethod.GET)
     public Integer doCompound() {
@@ -31,6 +35,11 @@ public class TxController {
         Long componentId = 123456L;
         Long guid = 888888L;
         return txCompoundService.compound(activityId, componentId, guid);
+    }
+
+    @RequestMapping(value = "/use_limited_item", method = RequestMethod.GET)
+    public Integer useLimitedItem(int type) {
+        return txUserLimitItemService.useLimitedItem(type);
     }
 
 }
