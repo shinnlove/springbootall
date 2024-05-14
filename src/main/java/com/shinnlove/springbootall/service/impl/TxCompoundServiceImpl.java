@@ -12,6 +12,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
@@ -29,13 +30,13 @@ import java.util.stream.Collectors;
 public class TxCompoundServiceImpl implements TxCompoundService {
 
     @Autowired
-    private UserFragmentCollectService userFragmentCollectService;
+    private UserFragmentCollectService  userFragmentCollectService;
 
     @Autowired
-    private UserCompoundRecordService userCompoundRecordService;
+    private UserCompoundRecordService   userCompoundRecordService;
 
     @Autowired
-    private TransactionTemplate transactionTemplate;
+    private TransactionTemplate         transactionTemplate;
 
     @Override
     public Integer compound(String activityId, Long componentId, Long guid) {
@@ -68,7 +69,7 @@ public class TxCompoundServiceImpl implements TxCompoundService {
         List<Long> flatIds = usedIds.stream().flatMap(Collection::stream).collect(Collectors.toList());
 
         // 先合成（插记录、标记状态）
-        tx(s -> {
+        txn(s -> {
             // loop insert
             for (final List<Long> ids : usedIds) {
                 userCompoundRecordService.insertUserCompoundRecord(activityId, componentId, guid, ids);
@@ -81,7 +82,11 @@ public class TxCompoundServiceImpl implements TxCompoundService {
         return 1;
     }
 
-    private void tx(Consumer<TransactionStatus> f) {
+    private <T> T tx(TransactionCallback<T> callback) {
+        return transactionTemplate.execute(callback);
+    }
+
+    private void txn(Consumer<TransactionStatus> f) {
         transactionTemplate.executeWithoutResult(f);
     }
 

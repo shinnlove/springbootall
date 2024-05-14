@@ -34,19 +34,25 @@ public class DaoController {
     private UserPkGlobalStatService userPkGlobalStatService;
 
     @Autowired
-    private UserPkDailyStatService userPkDailyStatService;
+    private UserPkDailyStatService          userPkDailyStatService;
 
     @Autowired
-    private UserPkRecordService userPkRecordService;
+    private UserPkRecordService             userPkRecordService;
 
     @Autowired
-    private UserItemRankingService userItemRankingService;
+    private UserItemRankingService          userItemRankingService;
 
     @Autowired
-    private UserFragmentCollectService userFragmentCollectService;
+    private UserFragmentCollectService      userFragmentCollectService;
 
     @Autowired
-    private UserCompoundRecordService userCompoundRecordService;
+    private UserCompoundRecordService       userCompoundRecordService;
+
+    @Autowired
+    private UserLimitedItemStatService      userLimitedItemStatService;
+
+    @Autowired
+    private UserLimitedItemExchangeService  userLimitedItemExchangeService;
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
@@ -208,6 +214,32 @@ public class DaoController {
     public String queryUserCompoundCount() {
         List<UserCompoundRecordAggEntity>  entities = userCompoundRecordService.queryUserCompoundCount();
         return CollectionUtils.isEmpty(entities) ? "没有查询到用户合成记录" : entities.toString();
+    }
+
+    @RequestMapping(value = "/query_limit_stat", method = RequestMethod.GET)
+    public String queryUserLimitedItemStat(int type) {
+        UserLimitedItemStatEntity entity = userLimitedItemStatService.queryByGuidAndLimitedType(type);
+        return Objects.isNull(entity) ? "N/A" : entity.toString();
+    }
+
+    @RequestMapping(value = "/insert_limited_stat", method = RequestMethod.GET)
+    public long insertUserLimitedItemStat(int type) {
+        return userLimitedItemStatService.insertSelective(type);
+    }
+
+    @RequestMapping(value = "/update_limit_total", method = RequestMethod.GET)
+    public long updateStatTotal(int type, int count) {
+        return userLimitedItemStatService.updateStatTotalCount(type, count);
+    }
+
+    @RequestMapping(value = "/update_limit_used", method = RequestMethod.GET)
+    public long updateStatUsed(int type, int count) {
+        return userLimitedItemStatService.updateStatUsedCount(type, count);
+    }
+
+    @RequestMapping(value = "/insert_limited_exchange", method = RequestMethod.GET)
+    public long insertUserLimitedItemExchange(int type) {
+        return userLimitedItemExchangeService.insertSelective(type);
     }
 
 }
