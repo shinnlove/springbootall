@@ -54,6 +54,9 @@ public class DaoController {
     @Autowired
     private UserLimitedItemExchangeService  userLimitedItemExchangeService;
 
+    @Autowired
+    private ItemRecordService               itemRecordService;
+
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
         return "Hello world.";
@@ -240,6 +243,16 @@ public class DaoController {
     @RequestMapping(value = "/insert_limited_exchange", method = RequestMethod.GET)
     public long insertUserLimitedItemExchange(int type) {
         return userLimitedItemExchangeService.insertSelective(type);
+    }
+
+    @RequestMapping(value = "/query_item_record", method = RequestMethod.GET)
+    public List<ItemRecordEntity> queryItemRecord(int version) {
+        return itemRecordService.cursorQueryItemRecord(version);
+    }
+
+    @RequestMapping(value = "/update_msg_version", method = RequestMethod.GET)
+    public int updateMsgVersion(long id, int version) {
+        return itemRecordService.updateItemRecordMsgVersion(id, version);
     }
 
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserItemRecordExtRepo">
+
+    <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.ItemRecordEntity">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+        <result column="guid" jdbcType="BIGINT" property="guid" />
+        <result column="other_guid" jdbcType="BIGINT" property="otherGuid" />
+        <result column="item_type" jdbcType="INTEGER" property="itemType" />
+        <result column="operate_type" jdbcType="INTEGER" property="operateType" />
+        <result column="source_id" jdbcType="VARCHAR" property="sourceId" />
+        <result column="count" jdbcType="INTEGER" property="count" />
+        <result column="message_sent_version" jdbcType="INTEGER" property="messageSentVersion" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <sql id="baseSql">
+        `id`, `activity_id`, `guid`, `other_guid`, `item_type`, `operate_type`, `count`, `source_id`, `message_sent_version`, `create_time`
+    </sql>
+
+    <select id="cursorQueryItemRecord" resultMap="BaseResultMap">
+        select
+        <include refid="baseSql"/>
+        from ${tableName}
+        where `activity_id` = #{activityId}
+        and `message_sent_version` <![CDATA[ < ]]> #{messageSentVersion}
+        and `id` > #{lastRecordId}
+        order by `id` asc
+        limit #{pageSize}
+    </select>
+
+    <update id="updateItemRecordMsgVersion">
+        UPDATE ${tableName}
+        SET `message_sent_version` = #{messageSentVersion}
+        WHERE `id` = #{id}
+    </update>
+
+</mapper>
