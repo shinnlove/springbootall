@@ -245,9 +245,14 @@ public class DaoController {
         return userLimitedItemExchangeService.insertSelective(type);
     }
 
+    @RequestMapping(value = "/cursor_query_item_record", method = RequestMethod.GET)
+    public long cursorQueryItemRecord(int version, int pageSize) {
+        return itemRecordService.cursorQueryItemRecord(version, pageSize);
+    }
+
     @RequestMapping(value = "/query_item_record", method = RequestMethod.GET)
     public List<ItemRecordEntity> queryItemRecord(int version) {
-        return itemRecordService.cursorQueryItemRecord(version);
+        return itemRecordService.simpleQueryItemRecord(version);
     }
 
     @RequestMapping(value = "/update_msg_version", method = RequestMethod.GET)
