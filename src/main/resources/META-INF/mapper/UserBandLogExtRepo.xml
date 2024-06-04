@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserBandLogExtRepo">
+
+    <resultMap id="bandAggMap" type="com.shinnlove.springbootall.db.po.UserBandLogExtEntity">
+        <result column="m_activity_id" jdbcType="VARCHAR" property="activityId" />
+        <result column="m_guid" jdbcType="BIGINT" property="guid" />
+        <result column="m_promotion_level" jdbcType="INTEGER" property="promotionLevel" />
+        <result column="m_latest_promotion_time" jdbcType="TIMESTAMP" property="latestPromotionTime" />
+    </resultMap>
+
+    <select id="queryUserMaxBandsWithTime" resultMap="bandAggMap">
+        select
+            max(activity_id) as m_activity_id,
+            max(guid) as m_guid,
+            max(band) as m_promotion_level,
+            max(created_at) as m_latest_promotion_time
+        from ${tableName}
+        where activity_id = #{activityId}
+        <if test="guids != null and guids.size() > 0">
+            and `guid` in
+            <foreach collection="guids" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        group by guid
+        order by m_promotion_level desc, m_latest_promotion_time asc
+        limit 100;
+    </select>
+
+</mapper>

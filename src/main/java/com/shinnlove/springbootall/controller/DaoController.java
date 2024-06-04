@@ -31,7 +31,7 @@ public class DaoController {
     private static Logger logger = LoggerFactory.getLogger(DaoController.class);
 
     @Autowired
-    private UserPkGlobalStatService userPkGlobalStatService;
+    private UserPkGlobalStatService         userPkGlobalStatService;
 
     @Autowired
     private UserPkDailyStatService          userPkDailyStatService;
@@ -56,6 +56,9 @@ public class DaoController {
 
     @Autowired
     private ItemRecordService               itemRecordService;
+
+    @Autowired
+    private UserBandLogService              userBandLogService;
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
@@ -258,6 +261,11 @@ public class DaoController {
     @RequestMapping(value = "/update_msg_version", method = RequestMethod.GET)
     public int updateMsgVersion(long id, int version) {
         return itemRecordService.updateItemRecordMsgVersion(id, version);
+    }
+
+    @RequestMapping(value = "/query_max_band", method = RequestMethod.GET)
+    public List<UserBandLogExtEntity> queryUserMaxBandsWithTime() {
+        return userBandLogService.queryUserMaxBandsWithTime();
     }
 
 }
