@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.AssistDeductDetailRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.AssistDeductDetailEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="select_id" jdbcType="BIGINT" property="selectId" />
+    <result column="help_type" jdbcType="INTEGER" property="helpType" />
+    <result column="gather_guid" jdbcType="BIGINT" property="gatherGuid" />
+    <result column="help_guid" jdbcType="BIGINT" property="helpGuid" />
+    <result column="random_help_price" jdbcType="INTEGER" property="randomHelpPrice" />
+    <result column="real_help_price" jdbcType="INTEGER" property="realHelpPrice" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="AggResultMap" type="com.shinnlove.springbootall.db.po.AggSelectionAssistEntity">
+    <result column="agg_activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="agg_component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="agg_select_id" jdbcType="BIGINT" property="selectId" />
+    <result column="agg_gather_guid" jdbcType="BIGINT" property="gatherGuid" />
+    <result column="agg_total_random_price" jdbcType="INTEGER" property="totalRandomPrice" />
+    <result column="agg_total_deduct_price" jdbcType="INTEGER" property="totalDeductPrice" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into assist_deduct_detail (`activity_id`, `component_id`, `select_id`, `help_type`,
+                                                         `gather_guid`, `help_guid`, `random_help_price`, `real_help_price`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.selectId,jdbcType=BIGINT},
+             #{entity.helpType,jdbcType=INTEGER},
+             #{entity.gatherGuid,jdbcType=BIGINT},
+             #{entity.helpGuid,jdbcType=BIGINT},
+             #{entity.randomHelpPrice,jdbcType=INTEGER},
+             #{entity.realHelpPrice,jdbcType=INTEGER}
+           )
+  </insert>
+
+  <select id="querySelectionDeductDetailIndex" resultMap="BaseResultMap">
+    select * from assist_deduct_detail
+    where `activity_id` = #{activityId} and `select_id` = #{selectId}
+      and help_type = #{helpType}
+    order by `real_help_price` desc, `create_time` asc
+  </select>
+
+  <select id="querySelectionDeductDetailHelp" resultMap="BaseResultMap">
+    select * from assist_deduct_detail
+    where `activity_id` = #{activityId} and `select_id` = #{selectId}
+      and help_type = #{helpType}
+    order by `create_time` desc
+  </select>
+
+  <select id="queryAssistByGuid" resultMap="BaseResultMap">
+    select * from assist_deduct_detail
+    where `activity_id` = #{activityId} and `help_guid` = #{helpGuid}
+    order by `create_time` asc
+  </select>
+
+  <select id="aggSelectionAssistDeductPrice" resultMap="AggResultMap">
+    select
+      max(`activity_id`) as agg_activity_id,
+      max(`component_id`) as agg_component_id,
+      max(`select_id`) as agg_select_id,
+      max(`gather_guid`) as agg_gather_guid,
+      sum(`random_help_price`) as agg_total_random_price,
+      sum(`real_help_price`) as agg_total_deduct_price
+    from assist_deduct_detail
+    where `activity_id` = #{activityId} and `select_id` = #{selectId}
+    group by `select_id`, `gather_guid`
+      limit 1
+  </select>
+
+</mapper>

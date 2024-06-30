@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.SkuSelectionRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.SkuSelectionEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="item_id" jdbcType="BIGINT" property="itemId" />
+    <result column="item_name_snapshot" jdbcType="VARCHAR" property="itemNameSnapshot" />
+    <result column="item_desc_snapshot" jdbcType="VARCHAR" property="itemDescSnapshot" />
+    <result column="item_img_url_snapshot" jdbcType="VARCHAR" property="itemImgUrlSnapshot" />
+    <result column="price_snapshot" jdbcType="INTEGER" property="priceSnapshot" />
+    <result column="lowest_price_snapshot" jdbcType="INTEGER" property="lowestPriceSnapshot" />
+    <result column="ddl_1st_time" jdbcType="BIGINT" property="ddl1stTime" />
+    <result column="start_2nd_time" jdbcType="BIGINT" property="start2ndTime" />
+    <result column="ddl_2nd_time" jdbcType="BIGINT" property="ddl2ndTime" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+    <result column="stage1_send_status" jdbcType="INTEGER" property="stage1SendStatus" />
+    <result column="stage4_send_status" jdbcType="INTEGER" property="stage4SendStatus" />
+    <result column="valid_status" jdbcType="INTEGER" property="validStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `component_id`, `guid`, `item_id`, `item_name_snapshot`, `item_desc_snapshot`,
+        `item_img_url_snapshot`, `price_snapshot`, `lowest_price_snapshot`, `ddl_1st_time`, `start_2nd_time`,
+        `ddl_2nd_time`,`pay_status`,`stage1_send_status`,`stage4_send_status`,`valid_status`,`create_time`,`update_time`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into sku_selection (`activity_id`, `component_id`, `guid`, `item_id`,
+                                                  `item_name_snapshot`, `item_desc_snapshot`, `item_img_url_snapshot`,
+                                                  `price_snapshot`,`lowest_price_snapshot`, `ddl_1st_time`,
+                                                  `start_2nd_time`, `ddl_2nd_time`, `pay_status`, `valid_status`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.guid,jdbcType=BIGINT},
+             #{entity.itemId,jdbcType=BIGINT},
+             #{entity.itemNameSnapshot,jdbcType=VARCHAR},
+             #{entity.itemDescSnapshot,jdbcType=VARCHAR},
+             #{entity.itemImgUrlSnapshot,jdbcType=VARCHAR},
+             #{entity.priceSnapshot,jdbcType=INTEGER},
+             #{entity.lowestPriceSnapshot,jdbcType=INTEGER},
+             #{entity.ddl1stTime,jdbcType=BIGINT},
+             #{entity.start2ndTime,jdbcType=BIGINT},
+             #{entity.ddl2ndTime,jdbcType=BIGINT},
+             #{entity.payStatus,jdbcType=INTEGER},
+             #{entity.validStatus,jdbcType=INTEGER}
+           )
+  </insert>
+
+  <select id="querySelectById" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from sku_selection
+    WHERE `activity_id` = #{activityId} AND `id` = #{id} AND `valid_status` = 1
+    ORDER BY `create_time` DESC
+    limit 1;
+  </select>
+
+  <select id="querySelectByIdForUpdate" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from sku_selection
+    WHERE `activity_id` = #{activityId} AND `id` = #{id} AND `valid_status` = 1
+    ORDER BY `create_time` DESC
+    limit 1
+    for update;
+  </select>
+
+  <select id="queryCurrentSelection" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from sku_selection
+    WHERE `activity_id` = #{activityId} AND `guid` = #{guid} AND `valid_status` = 1
+    ORDER BY `create_time` DESC
+    limit 1;
+  </select>
+
+  <update id="updateSelectionPayStatus">
+    UPDATE sku_selection
+    SET `pay_status` = #{payStatus}
+    WHERE `activity_id` = #{activityId} AND `id` = #{selectId} AND `valid_status` = 1;
+  </update>
+
+  <update id="updateSelectionValidStatus">
+    UPDATE sku_selection
+    SET `valid_status` = #{validStatus}
+    WHERE `activity_id` = #{activityId} AND `id` = #{selectId}
+  </update>
+
+  <update id="updateSelection2ndStartEndTime">
+    UPDATE sku_selection
+    SET `start_2nd_time` = #{start2ndTime},
+        `ddl_2nd_time` = #{ddl2ndTime}
+    WHERE `activity_id` = #{activityId} AND `id` = #{selectId}
+  </update>
+
+  <select id="cursorQueryPayingSelection" resultMap="BaseResultMap">
+    select
+    <include refid="baseSql"/>
+    from ${tableName}
+    where `pay_status` = 2 and `valid_status` = 1
+    and `id` > #{lastRecordId}
+    order by `id` asc
+    limit #{pageSize}
+  </select>
+
+  <select id="cursorQueryValidSelection" resultMap="BaseResultMap">
+    select
+    <include refid="baseSql"/>
+    from ${tableName}
+    where `valid_status` = 1
+    and `id` > #{lastRecordId}
+    order by `id` asc
+    limit #{pageSize}
+  </select>
+
+  <update id="updateSelectionStage1SendStatus">
+    UPDATE sku_selection
+    SET `stage1_send_status` = #{sendStatus}
+    WHERE `activity_id` = #{activityId} AND `id` = #{selectId}
+  </update>
+
+  <update id="updateSelectionStage4SendStatus">
+    UPDATE sku_selection
+    SET `stage4_send_status` = #{sendStatus}
+    WHERE `activity_id` = #{activityId} AND `id` = #{selectId}
+  </update>
+
+</mapper>

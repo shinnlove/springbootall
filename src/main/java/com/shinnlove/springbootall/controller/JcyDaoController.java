@@ -25,10 +25,10 @@ import java.util.Objects;
  * @version $Id: DaoController.java, v 0.1 2024-04-16 11:02 Tony Zhao Exp $$
  */
 @RestController
-@RequestMapping(value = "/dao")
-public class DaoController {
+@RequestMapping(value = "/jcy_dao")
+public class JcyDaoController {
 
-    private static Logger logger = LoggerFactory.getLogger(DaoController.class);
+    private static Logger logger = LoggerFactory.getLogger(JcyDaoController.class);
 
     @Autowired
     private UserPkGlobalStatService         userPkGlobalStatService;

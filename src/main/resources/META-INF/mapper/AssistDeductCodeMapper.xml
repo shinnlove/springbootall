@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.AssistDeductCodeRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.AssistDeductCodeEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="gather_guid" jdbcType="BIGINT" property="gatherGuid" />
+    <result column="select_id" jdbcType="BIGINT" property="selectId" />
+    <result column="item_id" jdbcType="BIGINT" property="itemId" />
+    <result column="assist_code" jdbcType="VARCHAR" property="assistCode" />
+    <result column="valid_status" jdbcType="INTEGER" property="validStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into assist_deduct_code (`activity_id`, `component_id`, `gather_guid`,
+                                      `select_id`, `item_id`, `assist_code`, `valid_status`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.gatherGuid,jdbcType=BIGINT},
+             #{entity.selectId,jdbcType=BIGINT},
+             #{entity.itemId,jdbcType=BIGINT},
+             #{entity.assistCode,jdbcType=VARCHAR},
+             #{entity.validStatus,jdbcType=INTEGER}
+           )
+  </insert>
+
+  <select id="queryByAssistCode" resultMap="BaseResultMap">
+    select * from assist_deduct_code
+    WHERE `activity_id` = #{activityId} AND `assist_code` = #{assistCode}
+      AND `valid_status` = 1
+    ORDER BY `create_time` DESC
+      limit 1;
+  </select>
+
+  <select id="queryBySelectId" resultMap="BaseResultMap">
+    select * from assist_deduct_code
+    WHERE `activity_id` = #{activityId} AND `select_id` = #{selectId}
+      AND `valid_status` = 1
+    ORDER BY `create_time` DESC
+      limit 1;
+  </select>
+
+</mapper>

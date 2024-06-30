@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.SkuStorageRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.SkuStorageEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="item_id" jdbcType="BIGINT" property="itemId" />
+    <result column="lock_num" jdbcType="INTEGER" property="lockNum" />
+    <result column="sell_num" jdbcType="INTEGER" property="sellNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `component_id`, `item_id`, `lock_num`, `sell_num`, `create_time`, `update_time`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into sku_storage (`activity_id`, `component_id`, `item_id`, `lock_num`, `sell_num`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.itemId,jdbcType=BIGINT},
+             #{entity.lockNum,jdbcType=INTEGER},
+             #{entity.sellNum,jdbcType=INTEGER}
+           ) on DUPLICATE key
+    update lock_num = 0, sell_num = 0
+  </insert>
+
+  <select id="queryStorageByItemId" resultMap="BaseResultMap">
+    select
+    <include refid="baseSql"/>
+    from sku_storage
+    where `activity_id` = #{activityId} and `item_id` = #{itemId}
+    limit 1
+  </select>
+
+  <update id="updateLockNum">
+    UPDATE sku_storage
+    SET `lock_num` = `lock_num` + #{lockNum}
+    WHERE `activity_id` = #{activityId} AND `item_id` = #{itemId}
+  </update>
+
+  <update id="updateSellNum">
+    UPDATE sku_storage
+    SET `sell_num` = `sell_num` + #{sellNum}
+    WHERE `activity_id` = #{activityId} AND `item_id` = #{itemId}
+  </update>
+
+</mapper>
