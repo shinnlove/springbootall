@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface ItemRecordService {
 
+    long createUserItemRecord();
+
     long cursorQueryItemRecord(int messageSentVersion, int pageSize);
 
     List<ItemRecordEntity> simpleQueryItemRecord(int messageSentVersion);

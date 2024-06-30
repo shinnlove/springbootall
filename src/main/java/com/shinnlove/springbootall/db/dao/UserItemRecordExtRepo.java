@@ -17,6 +17,9 @@ import java.util.List;
 @Repository
 public interface UserItemRecordExtRepo {
 
+    long createUserItemRecord(@Param("tableName") String tableName,
+                              @Param("entity") ItemRecordEntity entity);
+
     /**
      * 按消息的游标方式来查询用户的物品记录决定是否勾兑消息。
      *

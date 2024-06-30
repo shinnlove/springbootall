@@ -19,6 +19,21 @@
         `id`, `activity_id`, `guid`, `other_guid`, `item_type`, `operate_type`, `count`, `source_id`, `message_sent_version`, `create_time`
     </sql>
 
+    <insert id="createUserItemRecord" useGeneratedKeys="true" keyProperty="entity.id">
+        insert into ${tableName}
+        (`activity_id`, `guid`, `other_guid`, `item_type`, `operate_type`, `count`, `source_id`, `message_sent_version`)
+        values (
+                #{entity.activityId,jdbcType=VARCHAR},
+                #{entity.guid,jdbcType=BIGINT},
+                #{entity.otherGuid,jdbcType=BIGINT},
+                #{entity.itemType,jdbcType=INTEGER},
+                #{entity.operateType,jdbcType=INTEGER},
+                #{entity.count,jdbcType=INTEGER},
+                #{entity.sourceId,jdbcType=VARCHAR},
+                #{entity.messageSentVersion,jdbcType=INTEGER}
+               )
+    </insert>
+
     <select id="cursorQueryItemRecord" resultMap="BaseResultMap">
         select
         <include refid="baseSql"/>

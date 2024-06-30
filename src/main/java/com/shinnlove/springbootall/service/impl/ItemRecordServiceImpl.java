@@ -38,6 +38,29 @@ public class ItemRecordServiceImpl implements ItemRecordService {
     private UserItemRecordExtRepo userItemRecordExtRepo;
 
     @Override
+    public long createUserItemRecord() {
+
+        // 注意原来有的所有字段都要塞!!
+        ItemRecordEntity entity = new ItemRecordEntity();
+        entity.setActivityId(ACTIVITY_ID);
+        entity.setGuid(GUID);
+        entity.setOtherGuid(566568L);
+        entity.setItemType(1);
+        entity.setOperateType(106);
+        entity.setCount(2);
+        entity.setSourceId("sourceId6");
+        entity.setMessageSentVersion(5);
+
+        long result = userItemRecordExtRepo.createUserItemRecord(RECORD_TABLE_NAME, entity);
+
+        if (result > 0) {
+            return entity.getId();
+        }
+
+        return result;
+    }
+
+    @Override
     public long cursorQueryItemRecord(int messageSentVersion, int pageSize) {
         long totalScan = 0L;
         long lastId = 0L;
