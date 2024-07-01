@@ -46,7 +46,7 @@
   <update id="updateSellNumDeductLockNum">
     UPDATE sku_storage
     SET `sell_num` = `sell_num` + #{sellNum},
-    SET `lock_num` = `lock_num` - #{sellNum}
+        `lock_num` = `lock_num` - #{sellNum}
     WHERE `activity_id` = #{activityId} AND `item_id` = #{itemId}
   </update>
 
