@@ -122,7 +122,7 @@ public class TxSelectionStorageServiceImpl implements TxSelectionStorageService 
             skuSelectionService.updateSelectionPayStatus(activityId, componentId, selectId, selectPayStatus);
 
             // update item storage sell num
-            skuStorageService.updateSellNum(activityId, componentId, itemId, changeNum);
+            skuStorageService.updateSellNumDeductLockNum(activityId, componentId, itemId, changeNum);
 
             // update lock status
             skuStorageDeDupLockService.updateSelectionStorageLockStatus(activityId, componentId, selectId, changeType);

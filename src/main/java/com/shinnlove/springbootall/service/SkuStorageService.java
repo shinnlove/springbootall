@@ -20,6 +20,6 @@ public interface SkuStorageService {
 
     int updateLockNum(String activityId, long componentId, long itemId, int lockNum);
 
-    int updateSellNum(String activityId, long componentId, long itemId, int sellNum);
+    int updateSellNumDeductLockNum(String activityId, long componentId, long itemId, int sellNum);
 
 }

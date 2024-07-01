@@ -34,9 +34,9 @@ public interface SkuStorageRepo {
                       @Param(value = "itemId") long itemId,
                       @Param(value = "lockNum") long lockNum);
 
-    int updateSellNum(@Param(value = "activityId") String activityId,
-                      @Param(value = "componentId") long componentId,
-                      @Param(value = "itemId") long itemId,
-                      @Param(value = "sellNum") long sellNum);
+    int updateSellNumDeductLockNum(@Param(value = "activityId") String activityId,
+                                   @Param(value = "componentId") long componentId,
+                                   @Param(value = "itemId") long itemId,
+                                   @Param(value = "sellNum") long sellNum);
 
 }

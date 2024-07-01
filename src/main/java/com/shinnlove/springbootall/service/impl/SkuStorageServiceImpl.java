@@ -76,12 +76,12 @@ public class SkuStorageServiceImpl implements SkuStorageService {
         return result;
     }
 
-    public int updateSellNum(String activityId, long componentId, long itemId, int sellNum) {
+    public int updateSellNumDeductLockNum(String activityId, long componentId, long itemId, int sellNum) {
 
         int result = 0;
 
         try {
-            result = skuStorageRepo.updateSellNum(activityId, componentId, itemId, sellNum);
+            result = skuStorageRepo.updateSellNumDeductLockNum(activityId, componentId, itemId, sellNum);
         } catch (Exception e) {
             logger.error("SkuStorageService updateSellNum, ex: {}", e.getMessage());
             throw new DBAccessThrowException(BusinessCode.DB_ACCESS_THROW_ERROR, e);
