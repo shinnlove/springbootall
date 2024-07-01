@@ -49,9 +49,6 @@ public class ShoppingDaoController {
     @Autowired
     private TestTxSelectionInitCancelService testTxSelectionInitCancelService;
 
-    @Autowired
-    private TxSelectionStorageService txSelectionStorageService;
-
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
         return "Hello world.";
@@ -75,6 +72,11 @@ public class ShoppingDaoController {
     @RequestMapping(value = "/tx_paid_and_sold", method = RequestMethod.GET)
     public long txPaidAndSold() {
         return testTxPaySelectionService.txUpdatePaidStatusAndSellNum();
+    }
+
+    @RequestMapping(value = "/cancel_and_return", method = RequestMethod.GET)
+    public long txCancelAndReturn() {
+        return testTxSelectionInitCancelService.txCancelSelectionAndReturnStorage();
     }
 
 }
