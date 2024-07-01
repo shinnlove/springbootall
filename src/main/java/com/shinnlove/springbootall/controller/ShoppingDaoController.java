@@ -54,29 +54,29 @@ public class ShoppingDaoController {
         return "Hello world.";
     }
 
-    @RequestMapping(value = "/add_item_selection", method = RequestMethod.GET)
-    public long addItemSelection() {
-        return testSkuSelectionService.addItemSelection();
-    }
-
     @RequestMapping(value = "/init_item_storage", method = RequestMethod.GET)
     public long initItemStorage() {
         return testSkuStorageService.initItemStorage();
     }
 
+    @RequestMapping(value = "/add_item_selection", method = RequestMethod.GET)
+    public long addItemSelection() {
+        return testSkuSelectionService.addItemSelection();
+    }
+
     @RequestMapping(value = "/tx_pay_and_lock", method = RequestMethod.GET)
-    public long txPayAndLock() {
-        return testTxPaySelectionService.txPaySelectionAndLockStorageOnce();
+    public long txPayAndLock(long selectId) {
+        return testTxPaySelectionService.txPaySelectionAndLockStorageOnce(selectId);
     }
 
     @RequestMapping(value = "/tx_paid_and_sold", method = RequestMethod.GET)
-    public long txPaidAndSold() {
-        return testTxPaySelectionService.txUpdatePaidStatusAndSellNum();
+    public long txPaidAndSold(long selectId) {
+        return testTxPaySelectionService.txUpdatePaidStatusAndSellNum(selectId);
     }
 
     @RequestMapping(value = "/cancel_and_return", method = RequestMethod.GET)
-    public long txCancelAndReturn() {
-        return testTxSelectionInitCancelService.txCancelSelectionAndReturnStorage();
+    public long txCancelAndReturn(long selectId) {
+        return testTxSelectionInitCancelService.txCancelSelectionAndReturnStorage(selectId);
     }
 
 }

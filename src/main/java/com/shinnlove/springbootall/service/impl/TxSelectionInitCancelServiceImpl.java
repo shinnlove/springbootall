@@ -113,14 +113,14 @@ public class TxSelectionInitCancelServiceImpl implements TxSelectionInitCancelSe
             if (Objects.nonNull(deDupLock)) {
 
                 // has lock, should update lock status and release lock storage num...
-                int returnNum = -deDupLock.getChangeNum();
+                int returnNum = deDupLock.getChangeNum();
 
                 // 4th. update lock record status
                 skuStorageDeDupLockService
                         .updateSelectionStorageLockStatus(activityId, componentId, selectId, returnChangeType);
 
                 // 5th. return total storage number
-                skuStorageService.updateLockNum(activityId, componentId, itemId, returnNum);
+                skuStorageService.updateLockNum(activityId, componentId, itemId, -returnNum);
 
                 // 6th. add storage change log
                 skuStorageChangeLogService

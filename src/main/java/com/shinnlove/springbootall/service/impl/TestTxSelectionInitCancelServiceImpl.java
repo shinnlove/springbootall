@@ -45,8 +45,7 @@ public class TestTxSelectionInitCancelServiceImpl implements TestTxSelectionInit
     }
 
     @Override
-    public int txCancelSelectionAndReturnStorage() throws DBAccessThrowException, DBExecuteReturnException {
-        long selectId = 1L;
+    public int txCancelSelectionAndReturnStorage(long selectId) throws DBAccessThrowException, DBExecuteReturnException {
         return txSelectionInitCancelService
                 .txCancelSelectionAndReturnStorage(activityId, guid, componentId, selectId, itemId);
     }

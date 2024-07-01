@@ -47,6 +47,6 @@ public interface TestTxSelectionInitCancelService {
      * @throws DBAccessThrowException
      * @throws DBExecuteReturnException
      */
-    int txCancelSelectionAndReturnStorage() throws DBAccessThrowException, DBExecuteReturnException;
+    int txCancelSelectionAndReturnStorage(long selectId) throws DBAccessThrowException, DBExecuteReturnException;
 
 }

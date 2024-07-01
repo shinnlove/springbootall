@@ -40,14 +40,12 @@ public class TestTxPaySelectionServiceImpl implements TestTxPaySelectionService 
     private TxPaySelectionService txPaySelectionService;
 
     @Override
-    public int txPaySelectionAndLockStorageOnce() throws DBAccessThrowException, DBExecuteReturnException {
-        long selectId = 1L;
+    public int txPaySelectionAndLockStorageOnce(long selectId) throws DBAccessThrowException, DBExecuteReturnException {
         return txPaySelectionService.txPaySelectionAndLockStorageOnce(activityId, null, componentId, selectId);
     }
 
     @Override
-    public int txUpdatePaidStatusAndSellNum() throws DBAccessThrowException, DBExecuteReturnException {
-        long selectId = 1L;
+    public int txUpdatePaidStatusAndSellNum(long selectId) throws DBAccessThrowException, DBExecuteReturnException {
         return txPaySelectionService.txUpdatePaidStatusAndSellNum(activityId, null, componentId, selectId);
     }
 
