@@ -41,6 +41,7 @@ public enum BusinessCode implements ErrorCodeProvider {
     // 下单支付时商品与库存错误码
     SELECT_LOCK_ITEM_STORAGE_FAILED(13001, "库存锁定失败，请稍后再试"),
     SELECT_HAS_PAID(13002, "选择商品已支付"),
+    TX_INVALID_SELECTION_STATUS(13003, "事务中无效的商品选择状态"),
 
     // 订单
     ORDER_INFO_CREATE_FAILED(10201, "订单创建失败"),

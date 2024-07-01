@@ -8,7 +8,9 @@ import com.shinnlove.springbootall.db.po.SkuSelectionEntity;
 import com.shinnlove.springbootall.db.po.SkuStorageDeDupLockEntity;
 import com.shinnlove.springbootall.enums.SelectionPayStatusEnum;
 import com.shinnlove.springbootall.enums.StorageChangeTypeEnum;
+import com.shinnlove.springbootall.enums.ValidStatusEnum;
 import com.shinnlove.springbootall.exceptions.BusinessCode;
+import com.shinnlove.springbootall.exceptions.DBAccessThrowException;
 import com.shinnlove.springbootall.exceptions.DBExecuteReturnException;
 import com.shinnlove.springbootall.exceptions.TxExecuteException;
 import com.shinnlove.springbootall.service.*;
@@ -105,7 +107,7 @@ public class TxSelectionStorageServiceImpl implements TxSelectionStorageService 
      */
     @Override
     public int txPaidSelectStorage(String activityId, Long componentId, Long itemId, Long selectId, Long guid,
-                                   Integer changeNum) throws TxExecuteException {
+                                   Integer changeNum) throws DBAccessThrowException, DBExecuteReturnException, TxExecuteException {
 
         final int selectPayStatus = SelectionPayStatusEnum.PAID.getCode();
         final int changeType = StorageChangeTypeEnum.STORAGE_SOLD.getCode();
@@ -114,6 +116,11 @@ public class TxSelectionStorageServiceImpl implements TxSelectionStorageService 
 
             // query for update
             SkuSelectionEntity selection = skuSelectionService.querySelectByIdForUpdate(activityId, componentId, selectId);
+
+            if (ValidStatusEnum.INVALID.getCode() == selection.getValidStatus()) {
+                throw new TxExecuteException(BusinessCode.TX_INVALID_SELECTION_STATUS);
+            }
+
             if (SelectionPayStatusEnum.PAID.getCode() == selection.getPayStatus()) {
                 throw new TxExecuteException(BusinessCode.SELECT_HAS_PAID);
             }

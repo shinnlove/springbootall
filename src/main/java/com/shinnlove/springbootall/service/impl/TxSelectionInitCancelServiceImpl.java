@@ -4,13 +4,16 @@
  */
 package com.shinnlove.springbootall.service.impl;
 
+import com.shinnlove.springbootall.db.po.SkuSelectionEntity;
 import com.shinnlove.springbootall.db.po.SkuStorageDeDupLockEntity;
 import com.shinnlove.springbootall.enums.DeductHelpTypeEnum;
 import com.shinnlove.springbootall.enums.SelectionPayStatusEnum;
 import com.shinnlove.springbootall.enums.StorageChangeTypeEnum;
 import com.shinnlove.springbootall.enums.ValidStatusEnum;
+import com.shinnlove.springbootall.exceptions.BusinessCode;
 import com.shinnlove.springbootall.exceptions.DBAccessThrowException;
 import com.shinnlove.springbootall.exceptions.DBExecuteReturnException;
+import com.shinnlove.springbootall.exceptions.TxExecuteException;
 import com.shinnlove.springbootall.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +93,7 @@ public class TxSelectionInitCancelServiceImpl implements TxSelectionInitCancelSe
      */
     @Override
     public int txCancelSelectionAndReturnStorage(String activityId, long guid, long componentId,
-                                                 long selectId, long itemId) throws DBAccessThrowException, DBExecuteReturnException {
+                                                 long selectId, long itemId) throws DBAccessThrowException, DBExecuteReturnException, TxExecuteException {
 
         final int validStatus = ValidStatusEnum.INVALID.getCode();
         // 锁定的状态
@@ -101,7 +104,11 @@ public class TxSelectionInitCancelServiceImpl implements TxSelectionInitCancelSe
         return tx(status -> {
 
             // 1st. lock this selection
-            skuSelectionService.querySelectByIdForUpdate(activityId, componentId, selectId);
+            SkuSelectionEntity selection = skuSelectionService.querySelectByIdForUpdate(activityId, componentId, selectId);
+
+            if (ValidStatusEnum.INVALID.getCode() == selection.getValidStatus()) {
+                throw new TxExecuteException(BusinessCode.TX_INVALID_SELECTION_STATUS);
+            }
 
             // 2nd. update selection's invalid status
             skuSelectionService.updateSelectionValidStatus(activityId, componentId, selectId, validStatus);

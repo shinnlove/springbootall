@@ -5,6 +5,8 @@
 package com.shinnlove.springbootall.service;
 
 
+import com.shinnlove.springbootall.exceptions.DBAccessThrowException;
+import com.shinnlove.springbootall.exceptions.DBExecuteReturnException;
 import com.shinnlove.springbootall.exceptions.TxExecuteException;
 
 /**
@@ -46,8 +48,10 @@ public interface TxSelectionStorageService {
      * @param changeNum
      * @return
      * @throws TxExecuteException
+     * @throws DBAccessThrowException
+     * @throws DBExecuteReturnException
      */
     int txPaidSelectStorage(String activityId, Long componentId, Long itemId, Long selectId, Long guid,
-                            Integer changeNum) throws TxExecuteException;
+                            Integer changeNum) throws DBAccessThrowException, DBExecuteReturnException, TxExecuteException;
 
 }

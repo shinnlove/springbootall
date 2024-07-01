@@ -7,6 +7,7 @@ package com.shinnlove.springbootall.service;
 
 import com.shinnlove.springbootall.exceptions.DBAccessThrowException;
 import com.shinnlove.springbootall.exceptions.DBExecuteReturnException;
+import com.shinnlove.springbootall.exceptions.TxExecuteException;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
 /**
@@ -54,6 +55,6 @@ public interface TxSelectionInitCancelService {
      * @throws DBExecuteReturnException
      */
     int txCancelSelectionAndReturnStorage(String activityId, long guid, long componentId, long selectId,
-                                          long itemId) throws DBAccessThrowException, DBExecuteReturnException;
+                                          long itemId) throws DBAccessThrowException, DBExecuteReturnException, TxExecuteException;
 
 }
