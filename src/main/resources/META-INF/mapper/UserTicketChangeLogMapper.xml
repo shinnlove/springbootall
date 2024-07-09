@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserTicketChangeLogRepo">
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserTicketChangeLogEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="change_type" jdbcType="INTEGER" property="changeType" />
+    <result column="change_number" jdbcType="INTEGER" property="changeNumber" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into user_ticket_change_log (`activity_id`, `component_id`, `guid`, `change_type`, `change_number`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.guid,jdbcType=BIGINT},
+             #{entity.changeType,jdbcType=INTEGER},
+             #{entity.changeNumber,jdbcType=INTEGER}
+           )
+  </insert>
+
+</mapper>
