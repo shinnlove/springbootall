@@ -6,6 +6,8 @@ package com.shinnlove.springbootall.service.impl;
 
 import com.shinnlove.springbootall.db.po.UserBetTicketEntity;
 import com.shinnlove.springbootall.enums.BetTicketChangeEnum;
+import com.shinnlove.springbootall.exceptions.BusinessCode;
+import com.shinnlove.springbootall.exceptions.TxExecuteException;
 import com.shinnlove.springbootall.service.TxHandleBetTicketService;
 import com.shinnlove.springbootall.service.UserBetTicketService;
 import com.shinnlove.springbootall.service.UserTicketChangeLogService;
@@ -74,8 +76,13 @@ public class TxHandleBetTicketServiceImpl implements TxHandleBetTicketService {
     public Integer txReduceBetTicket(long guid, int ticketNumber) {
         try {
             UserBetTicketEntity betTicket = userBetTicketService.queryUserBetTicket(guid);
+
             if (Objects.isNull(betTicket)) {
-                userBetTicketService.initUserBetTicket(guid);
+                throw new TxExecuteException(BusinessCode.NO_BET_MULTIPLIER_EXISTS);
+            }
+
+            if (betTicket.getTicketNumber() < ticketNumber) {
+                throw new TxExecuteException(BusinessCode.BET_TICKET_NOT_ENOUGH);
             }
 
             final int changeType = BetTicketChangeEnum.REDUCE_BET_TICKET.getCode();

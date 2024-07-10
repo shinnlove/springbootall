@@ -20,6 +20,25 @@ public enum BusinessCode implements ErrorCodeProvider {
     DB_EXECUTE_RETURN_ERROR(6002, "数据库sql返回执行结果失败"),
     DB_LOCK_STATUS_ERROR(6003, "已售卖商品不能再被锁定"),
 
+    // 竞猜接口错误码
+    ACTIVITY_NOT_FOUND(11001, "活动未找到"),
+    CONTEXT_MISSING_GUID(11002, "缺少用户guid"),
+    MISSING_COMPONENT_ID(11003, "缺少组件id"),
+    NOT_IN_GUESS_TIME(11004, "不在竞猜时间内"),
+    MISSING_BOOK_CBID(11005, "缺少书的cbid"),
+    NO_BET_MULTIPLIER_EXISTS(11006, "没有竞猜券，请购买竞猜券"),
+    MISSING_BET_MULTIPLIER(11007, "竞猜必须使用至少一张竞猜券"),
+    INVALID_GUESS_STATE(11008, "无效的竞猜标记"),
+    GUESS_REVEAL_MISSING_AUTHOR(11009, "竞猜会揭面必须指定作者"),
+    GUESS_SUBMIT_INVALID_AUTHOR(11010, "竞猜了无效的作者"),
+    AUTHOR_HAS_REVEALED(11011, "作者已揭面，无法竞猜"),
+    GUESS_SYSTEM_ERROR(11012, "竞猜发生错误，请稍后再试"),
+    GUESS_BET_EXCEED_MIN_MULTIPLIER(11013, "竞猜不能小于最小备注"),
+    GUESS_BET_EXCEED_MAX_MULTIPLIER(11014, "竞猜不能大于最大备注"),
+    BOOK_ALREADY_GUESSED(11015, "已经竞猜过这本书，无法重复竞猜"),
+    BET_TICKET_NOT_ENOUGH(11016, "竞猜券数量不足，无法竞猜"),
+    BET_TICKET_ERROR(11017, "竞猜券不足或扣减出错，请确认后再试"),
+
     // 好友助力
     ASSIST_MISSING_HELP_GUID(12001, "好友助力缺少助力人"),
     ASSIST_CANNOT_HELP_SELF(12002, "不能给自己助力"),
