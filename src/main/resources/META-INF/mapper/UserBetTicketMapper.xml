@@ -16,12 +16,11 @@
   </sql>
 
   <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
-    insert into user_bet_ticket (`activity_id`, `component_id`, `guid`, `ticket_number`)
+    insert into user_bet_ticket (`activity_id`, `component_id`, `guid`)
     values (
              #{entity.activityId,jdbcType=VARCHAR},
              #{entity.componentId,jdbcType=BIGINT},
-             #{entity.guid,jdbcType=BIGINT},
-             #{entity.ticketNumber,jdbcType=INTEGER}
+             #{entity.guid,jdbcType=BIGINT}
            ) on duplicate key update `ticket_number` = 0
   </insert>
 
@@ -42,7 +41,7 @@
 
   <update id="decrUserTicketNumber">
     UPDATE user_bet_ticket
-    SET `ticket_number` = `ticket_number` - #{incNum}
+    SET `ticket_number` = `ticket_number` - #{decrNum}
     WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
   </update>
 

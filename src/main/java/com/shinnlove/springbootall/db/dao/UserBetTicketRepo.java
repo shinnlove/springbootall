@@ -10,10 +10,10 @@ public interface UserBetTicketRepo {
     /**
      * 插入用户券记录信息。
      *
-     * @param record
+     * @param entity
      * @return
      */
-    int insertSelective(@Param("record") UserBetTicketEntity record);
+    int insertSelective(@Param("entity") UserBetTicketEntity entity);
 
     /**
      * 查询用户券信息。
