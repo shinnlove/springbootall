@@ -6,6 +6,7 @@ package com.shinnlove.springbootall.service.impl;
 
 import com.shinnlove.springbootall.db.dao.UserTicketChangeLogRepo;
 import com.shinnlove.springbootall.db.po.UserTicketChangeLogEntity;
+import com.shinnlove.springbootall.exceptions.BusinessCode;
 import com.shinnlove.springbootall.exceptions.DBAccessThrowException;
 import com.shinnlove.springbootall.exceptions.DBExecuteReturnException;
 import com.shinnlove.springbootall.service.UserTicketChangeLogService;
@@ -54,7 +55,11 @@ public class UserTicketChangeLogServiceImpl implements UserTicketChangeLogServic
             result = userTicketChangeLogRepo.insertSelective(changeLog);
         } catch (Exception e) {
             logger.error("UserTicketChangeLogService addTicketChangeLog has error, ex=" + e.getMessage(), e);
-            return 0L;
+            throw new DBAccessThrowException(BusinessCode.FAIL, e);
+        }
+
+        if (result <= 0) {
+            throw new DBExecuteReturnException(BusinessCode.FAIL);
         }
 
         return result;
