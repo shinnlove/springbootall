@@ -36,33 +36,33 @@ public class IncognitoController {
     }
 
     @RequestMapping(value = "/query_guesses_by_guid", method = RequestMethod.GET)
-    public List<UserGuessAuthorEntity> queryGuessesByGuid() {
-        return userGuessAuthorService.queryGuessesByGuid();
+    public List<UserGuessAuthorEntity> queryGuessesByGuid(long guid) {
+        return userGuessAuthorService.queryGuessesByGuid(guid);
     }
 
     @RequestMapping(value = "/query_guesses_by_cbid_guid", method = RequestMethod.GET)
-    public UserGuessAuthorEntity queryGuessByCbidAndGuid() {
-        return userGuessAuthorService.queryGuessByCbidAndGuid();
+    public UserGuessAuthorEntity queryGuessByCbidAndGuid(long cbid, long guid) {
+        return userGuessAuthorService.queryGuessByCbidAndGuid(cbid, guid);
     }
 
     @RequestMapping(value = "/count_global_guesses", method = RequestMethod.GET)
-    public List<UserGuessAggEntity> countGlobalGuessByCbid() {
-        return userGuessAuthorService.countGlobalGuessByCbid();
+    public List<UserGuessAggEntity> countGlobalGuessByCbid(long cbid) {
+        return userGuessAuthorService.countGlobalGuessByCbid(cbid);
     }
 
     @RequestMapping(value = "/count_global_hot_guesses", method = RequestMethod.GET)
-    public List<GlobalGuessAggEntity> countGlobalHotGuessAuthors() {
-        return userGuessAuthorService.countGlobalHotGuessAuthors();
+    public List<GlobalGuessAggEntity> countGlobalHotGuessAuthors(long cbid) {
+        return userGuessAuthorService.countGlobalHotGuessAuthors(cbid);
     }
 
     @RequestMapping(value = "/top10_correct_guesses", method = RequestMethod.GET)
-    public List<UserGuessAuthorEntity> top10GuessCorrectNameUsers() {
-        return userGuessAuthorService.top10GuessCorrectNameUsers();
+    public List<UserGuessAuthorEntity> top10GuessCorrectNameUsers(long cbid, long authorId) {
+        return userGuessAuthorService.top10GuessCorrectNameUsers(cbid, authorId);
     }
 
     @RequestMapping(value = "/update_reward_taken", method = RequestMethod.GET)
-    public int updateRewardTakenStatus(int rewardTaken) {
-        return userGuessAuthorService.updateRewardTakenStatus(rewardTaken);
+    public int updateRewardTakenStatus(long cbid, long guid, int rewardTaken) {
+        return userGuessAuthorService.updateRewardTakenStatus(cbid, guid, rewardTaken);
     }
 
 }

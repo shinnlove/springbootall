@@ -29,15 +29,15 @@ import java.util.Objects;
 @Service
 public class UserGuessAuthorServiceImpl implements UserGuessAuthorService {
 
-    private static final String activityId = "activityId";
+    private static final String activityId = "123456";
 
     private static final long componentId = 123L;
 
     private static final long guid = 123456L;
 
-    private static final long cbid = 666888999;
+    private static final long cbid = 666888L;
 
-    private static final long authorId = 666888L;
+    private static final long authorId = 668822L;
 
     private static final String authorName = "小逍遥";
 
@@ -82,7 +82,7 @@ public class UserGuessAuthorServiceImpl implements UserGuessAuthorService {
         return guessId;
     }
 
-    public List<UserGuessAuthorEntity> queryGuessesByGuid() {
+    public List<UserGuessAuthorEntity> queryGuessesByGuid(long guid) {
         List<UserGuessAuthorEntity> guesses = userGuessAuthorRepo.queryGuessesByGuid(activityId, componentId, guid);
         if (CollectionUtils.isEmpty(guesses)) {
             return Collections.emptyList();
@@ -91,12 +91,12 @@ public class UserGuessAuthorServiceImpl implements UserGuessAuthorService {
         return guesses;
     }
 
-    public UserGuessAuthorEntity queryGuessByCbidAndGuid() {
+    public UserGuessAuthorEntity queryGuessByCbidAndGuid(long cbid, long guid) {
         UserGuessAuthorEntity guess = userGuessAuthorRepo.queryGuessByCbidAndGuid(activityId, componentId, cbid, guid);
         return Objects.isNull(guess) ? null : guess;
     }
 
-    public List<UserGuessAggEntity> countGlobalGuessByCbid() {
+    public List<UserGuessAggEntity> countGlobalGuessByCbid(long cbid) {
         List<UserGuessAggEntity> globalGuesses = userGuessAuthorRepo.countGlobalGuessByCbid(activityId, componentId, cbid);
         if (CollectionUtils.isEmpty(globalGuesses)) {
             return Collections.emptyList();
@@ -105,7 +105,7 @@ public class UserGuessAuthorServiceImpl implements UserGuessAuthorService {
         return globalGuesses;
     }
 
-    public List<GlobalGuessAggEntity> countGlobalHotGuessAuthors() {
+    public List<GlobalGuessAggEntity> countGlobalHotGuessAuthors(long cbid) {
         List<GlobalGuessAggEntity> globalGuessAuthors = userGuessAuthorRepo.countGlobalHotGuessAuthors(activityId, componentId, cbid);
         if (CollectionUtils.isEmpty(globalGuessAuthors)) {
             return Collections.emptyList();
@@ -119,7 +119,7 @@ public class UserGuessAuthorServiceImpl implements UserGuessAuthorService {
      *
      * @return
      */
-    public List<UserGuessAuthorEntity> top10GuessCorrectNameUsers() {
+    public List<UserGuessAuthorEntity> top10GuessCorrectNameUsers(long cbid, long authorId) {
         List<UserGuessAuthorEntity> guesses = userGuessAuthorRepo.top10GuessCorrectNameUsers(activityId, componentId, cbid, authorId, limit);
         if (CollectionUtils.isEmpty(guesses)) {
             return Collections.emptyList();
@@ -134,7 +134,7 @@ public class UserGuessAuthorServiceImpl implements UserGuessAuthorService {
      * @param rewardTaken
      * @return
      */
-    public int updateRewardTakenStatus(Integer rewardTaken) {
+    public int updateRewardTakenStatus(Long cbid, Long guid, Integer rewardTaken) {
         int result = 0;
 
         try {

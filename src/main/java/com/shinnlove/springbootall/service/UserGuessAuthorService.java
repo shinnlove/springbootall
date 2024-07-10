@@ -20,20 +20,22 @@ public interface UserGuessAuthorService {
 
     long saveGuessInfo() throws DBAccessThrowException, DBExecuteReturnException;
 
-    List<UserGuessAuthorEntity> queryGuessesByGuid();
+    List<UserGuessAuthorEntity> queryGuessesByGuid(long guid);
 
-    UserGuessAuthorEntity queryGuessByCbidAndGuid();
+    UserGuessAuthorEntity queryGuessByCbidAndGuid(long cbid, long guid);
 
-    List<UserGuessAggEntity> countGlobalGuessByCbid();
+    List<UserGuessAggEntity> countGlobalGuessByCbid(long cbid);
 
-    List<GlobalGuessAggEntity> countGlobalHotGuessAuthors();
+    List<GlobalGuessAggEntity> countGlobalHotGuessAuthors(long cbid);
 
     /**
      * 统计方法：查询最先猜对作者的前10个用户。
      *
+     * @param cbid
+     * @param authorId
      * @return
      */
-    List<UserGuessAuthorEntity> top10GuessCorrectNameUsers();
+    List<UserGuessAuthorEntity> top10GuessCorrectNameUsers(long cbid, long authorId);
 
     /**
      * 发完奖后调用，更新用户领奖状态。
@@ -41,6 +43,6 @@ public interface UserGuessAuthorService {
      * @param rewardTaken
      * @return
      */
-    int updateRewardTakenStatus(Integer rewardTaken);
+    int updateRewardTakenStatus(Long cbid, Long guid, Integer rewardTaken);
 
 }
