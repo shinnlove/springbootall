@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserLimitedItemStatRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserLimitedItemStatEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="limited_type" jdbcType="INTEGER" property="limitedType" />
+    <result column="total_count" jdbcType="INTEGER" property="totalCount" />
+    <result column="used_count" jdbcType="INTEGER" property="usedCount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into ${tableName} (activity_id, component_id, guid, limited_type)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.guid,jdbcType=BIGINT},
+             #{entity.limitedType,jdbcType=INTEGER}
+           )
+      ON DUPLICATE KEY
+    UPDATE total_count = #{entity.totalCount}, used_count = #{entity.usedCount};
+  </insert>
+
+  <select id="queryByGuidAndLimitedType" resultMap="BaseResultMap">
+    SELECT id, activity_id, component_id, guid, limited_type,
+           total_count, used_count, create_time, update_time
+    FROM ${tableName}
+    WHERE `activity_id` = #{activityId} AND `component_id` = #{componentId}
+    AND `guid` = #{guid} AND `limited_type` = #{limitedType}
+    limit 1
+  </select>
+
+  <update id="updateStatTotalCount">
+    UPDATE ${tableName}
+    SET `total_count` = `total_count` + #{addTotalCount}
+    WHERE `activity_id` = #{activityId} AND `component_id` = #{componentId}
+    AND `guid` = #{guid} AND `limited_type` = #{limitedType}
+  </update>
+
+  <update id="updateStatUsedCount">
+    UPDATE ${tableName}
+    SET `used_count` = `used_count` + #{addUsedCount}
+    WHERE `activity_id` = #{activityId} AND `component_id` = #{componentId}
+    AND `guid` = #{guid} AND `limited_type` = #{limitedType}
+  </update>
+
+</mapper>

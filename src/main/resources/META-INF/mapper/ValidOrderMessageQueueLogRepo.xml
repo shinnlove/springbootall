@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.ValidOrderMessageQueueLogRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.ValidOrderMessageQueueLogEntity">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+      <result column="component_id" jdbcType="BIGINT" property="componentId" />
+      <result column="queue_name" jdbcType="VARCHAR" property="queueName" />
+      <result column="message_body" jdbcType="VARCHAR" property="messageBody" />
+      <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+      <result column="guid" jdbcType="BIGINT" property="guid" />
+      <result column="reconcile_status" jdbcType="INTEGER" property="reconcileStatus" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `component_id`, `queue_name`, `message_body`, `order_id`, `guid`,
+        `reconcile_status`, `create_time`, `update_time`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into valid_order_message_queue_log (`activity_id`, `component_id`, `queue_name`, `message_body`,
+                                               `order_id`, `guid`, `reconcile_status`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.queueName,jdbcType=VARCHAR},
+             #{entity.messageBody,jdbcType=VARCHAR},
+             #{entity.orderId,jdbcType=VARCHAR},
+             #{entity.guid,jdbcType=BIGINT},
+             #{entity.reconcileStatus,jdbcType=INTEGER}
+           )
+  </insert>
+
+  <select id="queryMessageByGuid" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from valid_order_message_queue_log
+    WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
+    ORDER BY `create_time` DESC
+  </select>
+
+  <select id="queryMessageByOrderId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from valid_order_message_queue_log
+    WHERE `activity_id` = #{activityId} AND `order_id` = #{orderId}
+    ORDER BY `create_time` DESC
+    limit 1
+  </select>
+
+  <update id="updateReconcileStatusByOrderId">
+    UPDATE valid_order_message_queue_log
+    SET `reconcile_status` = #{reconcileStatus}
+    WHERE `activity_id` = #{activityId} AND `order_id` = #{orderId}
+  </update>
+
+</mapper>

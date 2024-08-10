@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserGuessAuthorRepo">
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserGuessAuthorEntity">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+      <result column="component_id" jdbcType="BIGINT" property="componentId" />
+      <result column="guid" jdbcType="BIGINT" property="guid" />
+      <result column="cbid" jdbcType="BIGINT" property="cbid" />
+      <result column="guess_reveal_identity" jdbcType="INTEGER" property="guessRevealIdentity" />
+      <result column="guess_author_id" jdbcType="BIGINT" property="guessAuthorId" />
+      <result column="guess_author_name" jdbcType="VARCHAR" property="guessAuthorName" />
+      <result column="bet_multiplier" jdbcType="INTEGER" property="betMultiplier" />
+      <result column="reward_taken" jdbcType="INTEGER" property="rewardTaken" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="SingleAggResultMap" type="com.shinnlove.springbootall.db.po.UserGuessAggEntity">
+      <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+      <result column="cbid" jdbcType="BIGINT" property="cbid" />
+      <result column="guess_reveal_identity" jdbcType="INTEGER" property="guessRevealIdentity" />
+      <result column="guess_num" jdbcType="INTEGER" property="guessNum" />
+  </resultMap>
+
+  <resultMap id="GlobalAggResultMap" type="com.shinnlove.springbootall.db.po.GlobalGuessAggEntity">
+      <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+      <result column="cbid" jdbcType="BIGINT" property="cbid" />
+      <result column="guess_reveal_identity" jdbcType="INTEGER" property="guessRevealIdentity" />
+      <result column="guess_author_id" jdbcType="BIGINT" property="guessAuthorId" />
+      <result column="guess_author_name" jdbcType="VARCHAR" property="guessAuthorName" />
+      <result column="guess_num" jdbcType="INTEGER" property="guessNum" />
+      <result column="min_create_time" jdbcType="TIMESTAMP" property="minCreateTime" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `component_id`, `guid`, `cbid`, `guess_reveal_identity`, `guess_author_id`,
+        `guess_author_name`, `bet_multiplier`, `reward_taken`, `create_time`, `update_time`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+      insert into user_guess_author (`activity_id`, `component_id`, `guid`, `cbid`, `guess_reveal_identity`,
+                                     `guess_author_id`, `guess_author_name`, `bet_multiplier`, `reward_taken`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.guid,jdbcType=BIGINT},
+             #{entity.cbid,jdbcType=BIGINT},
+             #{entity.guessRevealIdentity,jdbcType=INTEGER},
+             #{entity.guessAuthorId,jdbcType=BIGINT},
+             #{entity.guessAuthorName,jdbcType=VARCHAR},
+             #{entity.betMultiplier,jdbcType=INTEGER},
+             #{entity.rewardTaken,jdbcType=INTEGER}
+           )
+  </insert>
+
+  <select id="queryGuessesByGuid" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from user_guess_author
+    WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
+    ORDER BY `create_time` DESC
+  </select>
+
+  <select id="queryGuessByCbidAndGuid" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from user_guess_author
+    WHERE `activity_id` = #{activityId} AND `cbid` = #{cbid} AND `guid` = #{guid}
+    ORDER BY `create_time` DESC
+    limit 1
+  </select>
+
+  <select id="countGlobalGuessByCbid" resultMap="SingleAggResultMap">
+    SELECT `activity_id`, `cbid`, `guess_reveal_identity`, count(*) as `guess_num`
+    FROM user_guess_author
+    WHERE `activity_id` = #{activityId} AND `cbid` = #{cbid}
+    GROUP BY `activity_id`, `cbid`, `guess_reveal_identity`
+  </select>
+
+  <select id="countGlobalHotGuessAuthors" resultMap="GlobalAggResultMap">
+    select `activity_id`, `cbid`, `guess_reveal_identity`, `guess_author_id`, `guess_author_name`,
+           count(*) as `guess_num`,
+           min(create_time) as `min_create_time`
+    from user_guess_author
+    WHERE `activity_id` = #{activityId} AND `cbid` = #{cbid}
+      and `guess_reveal_identity` = 1
+      and `guess_author_id` > 0
+    group by `activity_id`, `cbid`, `guess_reveal_identity`, `guess_author_id`, `guess_author_name`
+    order by `guess_num` desc, `min_create_time` asc
+  </select>
+
+  <select id="top10GuessCorrectNameUsers" resultMap="BaseResultMap">
+    select
+    <include refid="baseSql"/>
+    from user_guess_author
+    where `activity_id` = #{activityId} and `cbid` = #{cbid}
+    and `guess_reveal_identity` = 1
+    and `guess_author_id` = #{authorId}
+    order by create_time asc, id asc
+    limit 0, 10;
+  </select>
+
+  <update id="updateRewardTakenStatus">
+    UPDATE user_guess_author
+    SET `reward_taken` = #{rewardTaken}
+    WHERE `activity_id` = #{activityId} AND `cbid` = #{cbid}
+    AND `guid` = #{guid} AND `reward_taken` = 0
+  </update>
+
+</mapper>

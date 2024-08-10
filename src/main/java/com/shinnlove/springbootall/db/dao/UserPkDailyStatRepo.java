@@ -41,4 +41,9 @@ public interface UserPkDailyStatRepo {
                            @Param(value = "activityId") String activityId,
                            @Param("guid") Long guid);
 
+    Integer incDailyChanceByCount(@Param("tableName") String tableName,
+                                  @Param(value = "activityId") String activityId,
+                                  @Param("guid") Long guid,
+                                  @Param("count") Integer count);
+
 }

@@ -25,10 +25,6 @@ public class UserPkRecordEntity {
 
     private Integer itemType;
 
-    private String itemName;
-
-    private String itemImgUrl;
-
     private Long challengerGuid;
 
     private Integer challengerItemNum;

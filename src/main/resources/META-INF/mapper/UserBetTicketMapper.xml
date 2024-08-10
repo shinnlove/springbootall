@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserBetTicketRepo">
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserBetTicketEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="ticket_number" jdbcType="INTEGER" property="ticketNumber" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `component_id`, `guid`, `ticket_number`, `create_time`, `update_time`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into user_bet_ticket (`activity_id`, `component_id`, `guid`)
+    values (
+             #{entity.activityId,jdbcType=VARCHAR},
+             #{entity.componentId,jdbcType=BIGINT},
+             #{entity.guid,jdbcType=BIGINT}
+           ) on duplicate key update `ticket_number` = 0
+  </insert>
+
+  <select id="queryUserBetTicket" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from user_bet_ticket
+    WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
+    ORDER BY `create_time` DESC
+    limit 1
+  </select>
+
+  <update id="incUserTicketNumber">
+    UPDATE user_bet_ticket
+    SET `ticket_number` = `ticket_number` + #{incNum}
+    WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
+  </update>
+
+  <update id="decrUserTicketNumber">
+    UPDATE user_bet_ticket
+    SET `ticket_number` = `ticket_number` - #{decrNum}
+    WHERE `activity_id` = #{activityId} AND `guid` = #{guid}
+  </update>
+
+</mapper>

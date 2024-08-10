@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.SkuStorageChangeLogRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.SkuStorageChangeLogEntity">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+      <result column="component_id" jdbcType="BIGINT" property="componentId" />
+      <result column="item_id" jdbcType="BIGINT" property="itemId" />
+      <result column="select_id" jdbcType="BIGINT" property="selectId" />
+      <result column="guid" jdbcType="BIGINT" property="guid" />
+      <result column="change_type" jdbcType="INTEGER" property="changeType" />
+      <result column="change_num" jdbcType="INTEGER" property="changeNum" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `component_id`, `item_id`, `select_id`, `guid`, `change_type`, `change_num`, `create_time`, `update_time`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into sku_storage_change_log (`activity_id`, `component_id`, `item_id`, `select_id`,
+                                        `guid`, `change_type`, `change_num`)
+    values (
+            #{entity.activityId,jdbcType=VARCHAR},
+            #{entity.componentId,jdbcType=BIGINT},
+            #{entity.itemId,jdbcType=BIGINT},
+            #{entity.selectId,jdbcType=BIGINT},
+            #{entity.guid,jdbcType=BIGINT},
+            #{entity.changeType,jdbcType=INTEGER},
+            #{entity.changeNum,jdbcType=INTEGER}
+           )
+  </insert>
+
+  <select id="queryStorageChangeLogByItemId" resultMap="BaseResultMap">
+    select
+    <include refid="baseSql"/>
+    from sku_storage_change_log
+    where `activity_id` = #{activityId} and `item_id` = #{itemId}
+    order by `create_time` desc
+  </select>
+
+  <select id="queryStorageChangeLogBySelectId" resultMap="BaseResultMap">
+    select
+    <include refid="baseSql"/>
+    from sku_storage_change_log
+    where `activity_id` = #{activityId} and `select_id` = #{selectId}
+    order by `create_time` desc
+  </select>
+
+</mapper>
