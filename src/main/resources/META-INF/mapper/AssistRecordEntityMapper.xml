@@ -104,6 +104,7 @@
       id,
       inviter_guid,
       assistant_guid,
+      book_id,
       date_mark,
       point_count,
       assist_timestamp,
