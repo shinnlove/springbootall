@@ -22,7 +22,7 @@ public class AssistStatisticsServiceImpl implements AssistStatisticsService {
     @Autowired
     private AssistStatisticsRepo assistStatisticsRepo;
 
-    public AssistStatisticsEntity getStatisticsByInviteGuid() {
+    public AssistStatisticsEntity getStatisticsByInviteGuid(long guid) {
         return assistStatisticsRepo.getStatisticsByInviteGuid(guid);
     }
 

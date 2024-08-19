@@ -12,7 +12,7 @@ import com.shinnlove.springbootall.db.po.AssistStatisticsEntity;
  */
 public interface AssistStatisticsService {
 
-    AssistStatisticsEntity getStatisticsByInviteGuid();
+    AssistStatisticsEntity getStatisticsByInviteGuid(long guid);
 
     @Deprecated
     long createStatisticsEntity();

@@ -60,8 +60,8 @@ public class ShareController {
     }
 
     @RequestMapping(value = "/guid_statistics", method = RequestMethod.GET)
-    public AssistStatisticsEntity getStatisticsByInviteGuid() {
-        return assistStatisticsService.getStatisticsByInviteGuid();
+    public AssistStatisticsEntity getStatisticsByInviteGuid(long guid) {
+        return assistStatisticsService.getStatisticsByInviteGuid(guid);
     }
 
     @RequestMapping(value = "/update_invite", method = RequestMethod.GET)

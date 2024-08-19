@@ -11,8 +11,13 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
-  <select id="getStatisticsByInviteGuid" resultType="com.shinnlove.springbootall.db.po.AssistStatisticsEntity">
-    SELECT `guid`, `receive_point_count`, `invite_count`, `create_time`, `update_time`
+  <select id="getStatisticsByInviteGuid" resultMap="BaseResultMap">
+    SELECT `id`,
+           `guid`,
+           `receive_point_count`,
+           `invite_count`,
+           `create_time`,
+           `update_time`
     FROM assist_statistics
     WHERE `guid` = #{guid}
   </select>
