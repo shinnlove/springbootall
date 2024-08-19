@@ -52,7 +52,7 @@
       AND `expired_timestamp` > #{currentTimeMillis}
   </select>
 
-  <select id="sumEffectiveAssistRecordByGuid" resultType="com.shinnlove.springbootall.db.po.SumAssistRecord">
+  <select id="sumEffectiveAssistRecordByGuid" resultMap="SumAssistRecord">
     SELECT
       sum(`point_count`) as total_unreceived_points,
       count(*) as total_unreceived_assists
@@ -82,6 +82,7 @@
   <!-- 4.2 分页select语句 -->
   <select id="pageQueryInviteRecords" resultMap="AssistRecordResultMap">
     SELECT
+      id,
       inviter_guid,
       assistant_guid,
       book_id,

@@ -72,6 +72,8 @@ public class AssistRecordServiceImpl implements AssistRecordService {
     @Override
     public int updateReceivedBatch() {
         List<Long> recordIds = new ArrayList<>();
+        recordIds.add(1L);
+        recordIds.add(2L);
         return assistRecordRepo.updateReceivedBatch(recordIds);
     }
 
