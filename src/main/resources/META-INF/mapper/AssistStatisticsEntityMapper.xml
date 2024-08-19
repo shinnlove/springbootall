@@ -13,22 +13,22 @@
 
   <select id="getStatisticsByInviteGuid" resultType="com.shinnlove.springbootall.db.po.AssistStatisticsEntity">
     SELECT `guid`, `receive_point_count`, `invite_count`, `create_time`, `update_time`
-    FROM ${tableName}
+    FROM assist_statistics
     WHERE `guid` = #{guid}
   </select>
 
   <insert id="createStatisticsEntity">
-    INSERT INTO ${tableName} (`guid`)  VALUES (#{guid})
+    INSERT INTO assist_statistics (`guid`)  VALUES (#{guid})
   </insert>
 
   <update id="updateInviteCount">
-    UPDATE ${tableName}
+    UPDATE assist_statistics
     SET `invite_count` = `invite_count` + 1
     WHERE `guid` = #{guid}
   </update>
 
   <update id="updatePointCount">
-    UPDATE ${tableName}
+    UPDATE assist_statistics
     SET `receive_point_count` = `receive_point_count` + #{pointCount}
     WHERE `guid` = #{guid}
   </update>

@@ -23,7 +23,7 @@
   </resultMap>
 
   <insert id="createAssistRecord">
-    INSERT INTO ${tableName}
+    INSERT INTO assist_record
     ( `inviter_guid`, `assistant_guid`, `book_id`, `point_count`, `assist_timestamp`
     , `expired_timestamp`, `assistant_type`, `date_mark`)
     VALUES (#{entity.inviterGuid}, #{entity.assistantGuid}, #{entity.bookId}, #{entity.pointCount}, #{entity.assistTimestamp},
@@ -31,7 +31,7 @@
   </insert>
 
   <update id="updateReceivedBatch" >
-    update ${tableName}
+    update assist_record
     set `received` = 1
     where `id` in
     <foreach collection="recordIds" item="id" open="(" separator="," close=")">
@@ -45,7 +45,7 @@
     SELECT
       `id`, `inviter_guid`, `assistant_guid`, `book_id`, `point_count`, `assistant_type`
     FROM
-      ${tableName}
+      assist_record
     WHERE
       `inviter_guid` = #{inviterGuid}
       AND `received` = 0
@@ -57,7 +57,7 @@
       sum(`point_count`) as total_unreceived_points,
       count(*) as total_unreceived_assists
     FROM
-      ${tableName}
+      assist_record
     WHERE
       `inviter_guid` = #{inviterGuid}
       AND `received` = 0
@@ -67,7 +67,7 @@
   <!-- 2. 主页小卡上方今日邀请用户数 -->
   <select id="countTodayInviteRecords" resultType="long">
     SELECT COUNT(*)
-    FROM ${tableName}
+    FROM assist_record
     WHERE inviter_guid = #{inviterGuid}
       AND date_mark = #{dateMark}
   </select>
@@ -75,7 +75,7 @@
   <!-- 4.1 count语句 -->
   <select id="countInviteRecords" resultType="long">
     SELECT COUNT(*)
-    FROM ${tableName}
+    FROM assist_record
     WHERE inviter_guid = #{inviterGuid}
   </select>
 
@@ -92,7 +92,7 @@
       expired_timestamp,
       assistant_type,
       received
-    FROM ${tableName}
+    FROM assist_record
     WHERE inviter_guid = #{inviterGuid}
     ORDER BY id DESC
       LIMIT #{offset}, #{limit}
@@ -109,7 +109,7 @@
       expired_timestamp,
       assistant_type,
       received
-    FROM ${tableName}
+    FROM assist_record
     WHERE inviter_guid = #{inviterGuid}
     ORDER BY id DESC
       LIMIT 1
