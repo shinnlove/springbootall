@@ -9,35 +9,25 @@ import java.util.List;
 
 public interface AssistRecordRepo {
 
-    int createAssistRecord(
-            @Param(value = "tableName") String tableName,
-            @Param(value = "entity") AssistRecordEntity assistRecordEntity);
+    int createAssistRecord(@Param(value = "entity") AssistRecordEntity assistRecordEntity);
 
-    List<AssistRecordEntity> queryEffectiveAssistRecordByGuid(
-            @Param(value = "tableName") String tableName,
-            @Param(value = "inviterGuid") long inviterGuid,
-            @Param(value = "currentTimeMillis") long currentTimeMillis);
+    List<AssistRecordEntity> queryEffectiveAssistRecordByGuid(@Param(value = "inviterGuid") long inviterGuid,
+                                                              @Param(value = "currentTimeMillis") long currentTimeMillis);
 
-    SumAssistRecord sumEffectiveAssistRecordByGuid(@Param(value = "tableName") String tableName,
-                                                   @Param(value = "inviterGuid") long inviterGuid,
+    SumAssistRecord sumEffectiveAssistRecordByGuid(@Param(value = "inviterGuid") long inviterGuid,
                                                    @Param(value = "currentTimeMillis") long currentTimeMillis);
 
-    int updateReceivedBatch(@Param(value = "tableName") String tableName,
-                            @Param(value = "recordIds") List<Long> recordIds);
+    int updateReceivedBatch(@Param(value = "recordIds") List<Long> recordIds);
 
-    long countTodayInviteRecords(@Param(value = "tableName") String tableName,
-                                 @Param(value = "inviterGuid") long inviterGuid,
+    long countTodayInviteRecords(@Param(value = "inviterGuid") long inviterGuid,
                                  @Param(value = "dateMark") int dateMark);
 
-    long countInviteRecords(@Param(value = "tableName") String tableName,
-                            @Param(value = "inviterGuid") long inviterGuid);
+    long countInviteRecords(@Param(value = "inviterGuid") long inviterGuid);
 
-    List<AssistRecordEntity> pageQueryInviteRecords(@Param(value = "tableName") String tableName,
-                                                    @Param(value = "inviterGuid") long inviterGuid,
+    List<AssistRecordEntity> pageQueryInviteRecords(@Param(value = "inviterGuid") long inviterGuid,
                                                     @Param(value = "offset") int offset,
                                                     @Param(value = "limit") int limit);
 
-    AssistRecordEntity latestAssistRecord(@Param(value = "tableName") String tableName,
-                                          @Param(value = "inviterGuid") long inviterGuid);
+    AssistRecordEntity latestAssistRecord(@Param(value = "inviterGuid") long inviterGuid);
 
 }
