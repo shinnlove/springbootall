@@ -101,6 +101,7 @@
 
   <select id="latestAssistRecord" resultMap="AssistRecordResultMap">
     SELECT
+      id,
       inviter_guid,
       assistant_guid,
       date_mark,
