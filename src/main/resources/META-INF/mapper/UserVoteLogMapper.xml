@@ -14,7 +14,7 @@
 
   <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
     insert into user_vote_log
-      (activity_id, component_id, guid, work_id, date_mark)
+      (`activity_id`, `component_id`, `guid`, `work_id`, `date_mark`)
     values
       (
         #{entity.activityId,jdbcType=VARCHAR},

@@ -3,7 +3,6 @@ package com.shinnlove.springbootall.db.dao;
 import com.shinnlove.springbootall.db.po.UserDailyStatEntity;
 import com.shinnlove.springbootall.db.po.UserVoteLogEntity;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
