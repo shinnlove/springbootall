@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User
+participant "ActivityBoot" as User
+
+autonumber
+
+User -> ActivityBoot: user enter index page
+activate ActivityBoot
+
+'Step1: global year end books'
+ActivityBoot->ActivityBoot: fetch year end books from data config
+
+'Step2: unite ranking'
+ActivityBoot->UniteRanking: page query most nominated booksIds by scores
+activate UniteRanking
+UniteRanking-->ActivityBoot: return top N ranking books nominated with score
+deactivate UniteRanking
+
+'Step3: local sort and merge'
+ActivityBoot->ActivityBoot: sort by ranking and fill with scores
+
+'Step4: book details'
+ActivityBoot->BookInfo: batch fetch book detail, series info
+activate BookInfo
+BookInfo--> ActivityBoot: return book list info
+deactivate BookInfo
+
+'Step5: query first nominated user'
+ActivityBoot->ActivityBoot: query db first nominated user group by each book
+
+'Step6: fetch book circle'
+ActivityBoot->CircleService: fetch top1 post with the largest likes
+activate CircleService
+CircleService-->ActivityBoot: return the post with the largest num of likes
+deactivate CircleService
+
+'step7: check user has login'
+alt user has login: context guid > 0
+    ActivityBoot->ActivityBoot: query user's nominate history
+    ActivityBoot->ActivityBoot: mark button flags in book list
+else
+    ActivityBoot->ActivityBoot: all list display nominate button
+end
+
+'step8: return page info'
+ActivityBoot-->User: return Tab2 with sub-tab1 page data
+deactivate ActivityBoot
+
+@enduml

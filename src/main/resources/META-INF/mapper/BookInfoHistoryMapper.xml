@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.BookInfoHistoryEntityMapper">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.BookInfoHistoryEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cbid" jdbcType="BIGINT" property="cbid" />
+    <result column="msg_id" jdbcType="VARCHAR" property="msgId" />
+    <result column="book_name" jdbcType="VARCHAR" property="bookName" />
+    <result column="check_level" jdbcType="INTEGER" property="checkLevel" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="allow_free" jdbcType="INTEGER" property="allowFree" />
+    <result column="monthly_allow" jdbcType="INTEGER" property="monthlyAllow" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+</mapper>

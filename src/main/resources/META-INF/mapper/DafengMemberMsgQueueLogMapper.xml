@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.DafengMemberMsgQueueLogRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.DafengMemberMsgQueueLogEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="queue_name" jdbcType="VARCHAR" property="queueName" />
+    <result column="message_body" jdbcType="LONGVARCHAR" property="messageBody" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into dafeng_member_msg_queue_log (queue_name, message_body)
+    values
+      (
+        #{entity.queueName,jdbcType=VARCHAR},
+        #{entity.messageBody,jdbcType=LONGVARCHAR}
+      );
+  </insert>
+
+</mapper>

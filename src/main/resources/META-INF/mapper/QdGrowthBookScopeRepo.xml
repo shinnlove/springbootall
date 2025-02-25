@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.QdGrowthBookScopeRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.QdGrowthBookScopeEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cxid" jdbcType="BIGINT" property="cxid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="library_user_count" jdbcType="BIGINT" property="libraryUserCount" />
+    <result column="7_day_read_user_count" jdbcType="INTEGER" property="sevenDayReadUserCount" />
+    <result column="7day_sub_user_count" jdbcType="INTEGER" property="sevenDaySubUserCount" />
+    <result column="7day_sub_income" jdbcType="DECIMAL" property="sevenDaySubIncome" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="statis_day" jdbcType="BIGINT" property="statisDay" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `cxid`, `name`, `library_user_count`, `7_day_read_user_count`, `7day_sub_user_count`, `7day_sub_income`,
+        `type`, `create_time`,`statis_day`
+  </sql>
+
+  <select id="queryGrowthByCbid" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from qd_growth_book_scope
+    WHERE `cxid` = #{cbid}
+    ORDER BY `id` DESC
+    LIMIT 1;
+  </select>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.DailySilverCheckInLogRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.DailySilverCheckInLogEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="date_mark" jdbcType="INTEGER" property="dateMark" />
+    <result column="day_number" jdbcType="INTEGER" property="dayNumber" />
+    <result column="action_queries" jdbcType="VARCHAR" property="actionQueries" />
+    <result column="prize_id_list" jdbcType="VARCHAR" property="prizeIdList" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into daily_silver_check_in_log (activity_id, component_id, guid, date_mark,
+                                           day_number, action_queries, prize_id_list, create_time)
+    values
+      (
+        #{entity.activityId,jdbcType=VARCHAR},
+        #{entity.componentId,jdbcType=BIGINT},
+        #{entity.guid,jdbcType=BIGINT},
+        #{entity.dateMark,jdbcType=INTEGER},
+        #{entity.dayNumber,jdbcType=INTEGER},
+        #{entity.actionQueries,jdbcType=VARCHAR},
+        #{entity.prizeIdList,jdbcType=VARCHAR},
+        #{entity.createTime,jdbcType=TIMESTAMP}
+      ) on duplicate key
+    update update_time = #{entity.createTime,jdbcType=TIMESTAMP};
+  </insert>
+
+  <update id="updateCheckInPrizeIdsById">
+    update daily_silver_check_in_log
+    set action_queries = #{actionQueries},
+        prize_id_list = #{prizeIdList}
+    where `id` = #{id};
+  </update>
+
+</mapper>
