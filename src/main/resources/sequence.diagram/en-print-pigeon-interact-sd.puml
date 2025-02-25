@@ -51,7 +51,7 @@ YinGeBackend -> YinGeBackend: place YinGe system's order and generate customizeN
 YinGeBackend --> YinGeH5Page: return place order 200 ok with customizeNo
 deactivate YinGeBackend
 
-YinGeH5Page -> YueWenH5Page: redirect url back to [callback] <font color=blue><b>[YueWenPrepayH5Page]</b></font> with 3 parameters
+YinGeH5Page -> YueWenH5Page: redirect url back to [callback] <font color=blue><b>[YueWenH5Page]</b></font> with 3 parameters
 deactivate YinGeH5Page
 activate YueWenH5Page
 
