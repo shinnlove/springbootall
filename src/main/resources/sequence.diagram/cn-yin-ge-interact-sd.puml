@@ -27,7 +27,7 @@ YueWenActBackend -> YueWenActBackend: 生成outTradeNo和outProductId
 YueWenActBackend --> YueWenH5Page: 组装url参数和进行url encode
 deactivate YueWenActBackend
 
-YueWenH5Page -> YinGeH5Page: 页面重定向到<font color=blue><b>[YinGeH5Page]</b></font>
+YueWenH5Page -> YinGeH5Page: 页面重定向到<font color=blue><b>[印鸽H5页面]</b></font>
 activate YinGeH5Page
 deactivate YueWenH5Page
 
@@ -59,7 +59,7 @@ YueWenH5Page -> YueWenActBackend: 请求存储customizeNo, thumbUrl, outSkuId et
 activate YueWenActBackend
 
 YueWenActBackend -> YueWenActBackend: 更新订单上的customizeNo, thumbUrl, outSkuId等字段.
-YueWenActBackend -> YinGeBackend: 调用<font color=red><b>[YinGe]-[a4.印鸽 预制单查询]</b></font> 接口 | customizeNo
+YueWenActBackend -> YinGeBackend: 调用<font color=red><b>[印鸽]-[a4.预制单查询]</b></font> 接口 | customizeNo
 activate YinGeBackend
 
 YinGeBackend --> YueWenActBackend: 返回印鸽预订单信息、包含必要校对字段
