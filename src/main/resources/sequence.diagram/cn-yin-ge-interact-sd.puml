@@ -3,15 +3,15 @@
 
 skinparam sequenceMessageAlign left
 
-actor "User" as User
-participant "ThirdPayPage" as ThirdPayPage
-participant "YueWenH5Page" as YueWenH5Page
-queue "PayMQNotify" as PayMQNotify
-participant "YueWenActBackend" as YueWenActBackend
-participant "YinGeH5Page" as YinGeH5Page
-participant "YinGeBackend" as YinGeBackend
-control     "YinGeControlJob"  as YinGeControlJob
-queue "LogisticsMQ" as LogisticsMQ
+actor "用户" as User
+participant "三方支付" as ThirdPayPage
+participant "阅文H5页面" as YueWenH5Page
+queue "支付MQ消息" as PayMQNotify
+participant "阅文后端服务" as YueWenActBackend
+participant "印鸽H5页面" as YinGeH5Page
+participant "印鸽后端服务" as YinGeBackend
+control     "印鸽总控"  as YinGeControlJob
+queue "物流MQ消息" as LogisticsMQ
 
 'Step1: YueWen: select and redirect'
 
