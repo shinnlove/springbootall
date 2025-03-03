@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.MonthTicketSkuBindingRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.MonthTicketSkuBindingEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="month_ticket_id" jdbcType="VARCHAR" property="monthTicketId" />
+    <result column="month_ticket_card_no" jdbcType="VARCHAR" property="monthTicketCardNo" />
+    <result column="stub_id" jdbcType="VARCHAR" property="stubId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `component_id`, `guid`, `month_ticket_id`, `month_ticket_card_no`, `stub_id`, `create_time`, `update_time`, `remark`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into month_ticket_sku_binding (activity_id, component_id, guid, month_ticket_id,
+                                          month_ticket_card_no, stub_id)
+    values
+      (
+        #{entity.activityId,jdbcType=VARCHAR},
+        #{entity.componentId,jdbcType=BIGINT},
+        #{entity.guid,jdbcType=BIGINT},
+        #{entity.monthTicketId,jdbcType=VARCHAR},
+        #{entity.monthTicketCardNo,jdbcType=VARCHAR},
+        #{entity.stubId,jdbcType=VARCHAR}
+      ) on duplicate key
+    update update_time = NOW();
+  </insert>
+
+  <select id="queryTicketBindingByStubId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from month_ticket_sku_binding
+    WHERE `activity_id` = #{activityId} AND `stub_id` = #{stubId}
+    ORDER BY `id` DESC
+    LIMIT 1;
+  </select>
+
+</mapper>

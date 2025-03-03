@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.MonthTicketCardSellOrderInfoRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.MonthTicketCardSellOrderInfoEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="stub_id" jdbcType="VARCHAR" property="stubId" />
+    <result column="customize_no" jdbcType="VARCHAR" property="customizeNo" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="pay_order_no" jdbcType="VARCHAR" property="payOrderNo" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="material_type" jdbcType="INTEGER" property="materialType" />
+    <result column="thumb_url" jdbcType="VARCHAR" property="thumbUrl" />
+    <result column="app_type" jdbcType="VARCHAR" property="appType" />
+    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+    <result column="product_type" jdbcType="INTEGER" property="productType" />
+    <result column="qimei" jdbcType="VARCHAR" property="qimei" />
+    <result column="qimei36" jdbcType="VARCHAR" property="qimei36" />
+    <result column="user_context_json" jdbcType="LONGVARCHAR" property="userContextJson" />
+    <result column="device_context_json" jdbcType="LONGVARCHAR" property="deviceContextJson" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="user_address_log_id" jdbcType="BIGINT" property="userAddressLogId" />
+    <result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
+    <result column="consignee_mobile" jdbcType="VARCHAR" property="consigneeMobile" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="district" jdbcType="VARCHAR" property="district" />
+    <result column="address_line1" jdbcType="VARCHAR" property="addressLine1" />
+    <result column="address_line2" jdbcType="VARCHAR" property="addressLine2" />
+    <result column="fill_address_time" jdbcType="TIMESTAMP" property="fillAddressTime" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
+    <result column="redo_order" jdbcType="VARCHAR" property="redoOrder" />
+    <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+    <result column="paid_time" jdbcType="TIMESTAMP" property="paidTime" />
+    <result column="noticed_paid_time" jdbcType="TIMESTAMP" property="noticedPaidTime" />
+    <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `component_id`, `guid`, `stub_id`, `customize_no`, `order_no`, `pay_order_no`, `status`,
+        `material_type`, `thumb_url`, `app_type`, `item_id`, `product_type`, `qimei`, `qimei36`,
+        `user_context_json`, `device_context_json`, `amount`, `user_address_log_id`, `consignee_name`, `consignee_mobile`,
+        `province`, `city`, `district`, `address_line1`, `address_line2`, `fill_address_time`, `company_code`,
+        `express_no`, `redo_order`, `expire_time`, `noticed_paid_time`, `refund_time`, `create_time`, `update_time`, `remark`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into month_ticket_card_sell_order_info (activity_id, component_id, guid, stub_id, customize_no, order_no, pay_order_no, status,
+                                                   material_type, thumb_url, app_type, item_id, product_type, qimei, qimei36,
+                                                   user_context_json, device_context_json, amount, user_address_log_id,
+                                                   consignee_name, consignee_mobile, province, city, district, address_line1,
+                                                   address_line2, fill_address_time, company_code, express_no, redo_order,
+                                                    expire_time, noticed_paid_time, refund_time, create_time, update_time, remark)
+    values
+      (
+        #{entity.activityId,jdbcType=VARCHAR},
+        #{entity.componentId,jdbcType=BIGINT},
+        #{entity.guid,jdbcType=BIGINT},
+        #{entity.stubId,jdbcType=VARCHAR},
+        #{entity.customizeNo,jdbcType=VARCHAR},
+        #{entity.orderNo,jdbcType=VARCHAR},
+        #{entity.payOrderNo,jdbcType=VARCHAR},
+        #{entity.status,jdbcType=INTEGER},
+        #{entity.materialType,jdbcType=INTEGER},
+        #{entity.thumbUrl,jdbcType=VARCHAR},
+        #{entity.appType,jdbcType=VARCHAR},
+        #{entity.itemId,jdbcType=VARCHAR},
+        #{entity.productType,jdbcType=INTEGER},
+        #{entity.qimei,jdbcType=VARCHAR},
+        #{entity.qimei36,jdbcType=VARCHAR},
+        #{entity.userContextJson,jdbcType=LONGVARCHAR},
+        #{entity.deviceContextJson,jdbcType=LONGVARCHAR},
+        #{entity.amount,jdbcType=INTEGER},
+        #{entity.userAddressLogId,jdbcType=BIGINT},
+        #{entity.consigneeName,jdbcType=VARCHAR},
+        #{entity.consigneeMobile,jdbcType=VARCHAR},
+        #{entity.province,jdbcType=VARCHAR},
+        #{entity.city,jdbcType=VARCHAR},
+        #{entity.district,jdbcType=VARCHAR},
+        #{entity.addressLine1,jdbcType=VARCHAR},
+        #{entity.addressLine2,jdbcType=VARCHAR},
+        #{entity.fillAddressTime,jdbcType=TIMESTAMP},
+        #{entity.companyCode,jdbcType=VARCHAR},
+        #{entity.expressNo,jdbcType=VARCHAR},
+        #{entity.redoOrder,jdbcType=VARCHAR},
+        #{entity.expireTime,jdbcType=TIMESTAMP},
+        #{entity.noticedPaidTime,jdbcType=TIMESTAMP},
+        #{entity.refundTime,jdbcType=TIMESTAMP},
+        #{entity.createTime,jdbcType=TIMESTAMP},
+        #{entity.updateTime,jdbcType=TIMESTAMP},
+        #{entity.remark,jdbcType=VARCHAR}
+      ) on duplicate key
+    update update_time = now();
+  </insert>
+
+  <select id="queryOrderByOrderNo" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from month_ticket_card_sell_order_info
+    WHERE `activity_id` = #{activityId} AND `order_no` = #{orderNo}
+    ORDER BY `id` DESC LIMIT 1;
+  </select>
+
+  <select id="queryOrderByCustomizeNo" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from month_ticket_card_sell_order_info
+    WHERE `activity_id` = #{activityId} AND `customize_no` = #{customizeNo}
+    ORDER BY `id` DESC LIMIT 1;
+  </select>
+  
+  <select id="queryOrderByStubId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from month_ticket_card_sell_order_info
+    WHERE `activity_id` = #{activityId} AND `stub_id` = #{stubId}
+    ORDER BY `id` DESC LIMIT 1;
+  </select>
+
+  <update id="updateConsigneeAddressByOrderNo">
+    update month_ticket_card_sell_order_info
+    set consignee_name = #{consigneeName},
+        consignee_mobile = #{consigneeMobile},
+        province = #{consigneeAddress.province},
+        city = #{consigneeAddress.city},
+        district = #{consigneeAddress.district},
+        address_line1 = #{consigneeAddress.addressLine1},
+        address_line2 = #{consigneeAddress.addressLine2},
+        fill_address_time = NOW()
+    where `order_no` = #{orderNo};
+  </update>
+
+  <update id="updateExpressNoByCustomizeNo">
+    update month_ticket_card_sell_order_info
+    set express_no = #{expressNo},
+        company_code = #{companyCode}
+    where `customize_no` = #{customizeNo};
+  </update>
+
+</mapper>
