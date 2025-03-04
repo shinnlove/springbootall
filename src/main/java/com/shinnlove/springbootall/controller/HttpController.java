@@ -4,7 +4,7 @@
  */
 package com.shinnlove.springbootall.controller;
 
-import com.shinnlove.springbootall.util.http.HttpClient;
+import com.shinnlove.springbootall.util.http.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class HttpController {
     private static Logger logger = LoggerFactory.getLogger(HttpController.class);
 
     @Autowired
-    private HttpClient httpClient;
+    private HttpClientUtil httpClientUtil;
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
@@ -34,7 +34,7 @@ public class HttpController {
     public String initHttpGet() {
 
         String url = "https://www.baidu.com";
-        HttpClient.HttpResult result = httpClient.sendGet(url);
+        HttpClientUtil.HttpResult result = httpClientUtil.sendGet(url);
 
         logger.info("请求百度首页返回的状态码: {}, 响应体: {}", result.code, result.body);
 

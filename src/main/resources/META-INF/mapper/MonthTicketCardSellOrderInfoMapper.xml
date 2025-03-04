@@ -9,11 +9,12 @@
     <result column="guid" jdbcType="BIGINT" property="guid" />
     <result column="stub_id" jdbcType="VARCHAR" property="stubId" />
     <result column="customize_no" jdbcType="VARCHAR" property="customizeNo" />
-    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="order_no" jdbcType="BIGINT" property="orderNo" />
     <result column="pay_order_no" jdbcType="VARCHAR" property="payOrderNo" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="material_type" jdbcType="INTEGER" property="materialType" />
     <result column="thumb_url" jdbcType="VARCHAR" property="thumbUrl" />
+    <result column="material_type" jdbcType="INTEGER" property="materialType" />
+    <result column="biz_ext" jdbcType="VARCHAR" property="bizExt" />
     <result column="app_type" jdbcType="VARCHAR" property="appType" />
     <result column="item_id" jdbcType="VARCHAR" property="itemId" />
     <result column="product_type" jdbcType="INTEGER" property="productType" />

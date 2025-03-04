@@ -4,7 +4,7 @@
  */
 package com.shinnlove.springbootall.config;
 
-import com.shinnlove.springbootall.util.http.HttpClient;
+import com.shinnlove.springbootall.util.http.HttpClientUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
 public class HttpClientConfiguration {
 
     @Bean
-    public HttpClient getHttpClient() {
-        return new HttpClient(1000, 3000, 2000);
+    public HttpClientUtil getHttpClientUtil() {
+        return new HttpClientUtil(1000, 3000, 2000);
     }
 
 }

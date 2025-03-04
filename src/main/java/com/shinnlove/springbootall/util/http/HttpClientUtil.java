@@ -20,11 +20,11 @@ import java.util.concurrent.TimeUnit;
  * @author Tony Zhao
  * @version $Id: HttpClient.java, v 0.1 2025-03-03 15:00 Tony Zhao Exp $$
  */
-public class HttpClient {
+public class HttpClientUtil {
 
     private OkHttpClient client;
 
-    public HttpClient(int connectTimeout, int readTimeout, int writeTimeout) {
+    public HttpClientUtil(int connectTimeout, int readTimeout, int writeTimeout) {
         // 构建参数
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(connectTimeout, TimeUnit.SECONDS)

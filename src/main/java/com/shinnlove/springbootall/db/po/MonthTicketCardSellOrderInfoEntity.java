@@ -25,15 +25,17 @@ public class MonthTicketCardSellOrderInfoEntity implements Serializable {
 
     private String customizeNo;
 
-    private String orderNo;
+    private Long orderNo;
 
     private String payOrderNo;
 
     private Integer status;
 
+    private String thumbUrl;
+
     private Integer materialType;
 
-    private String thumbUrl;
+    private String bizExt;
 
     private String appType;
 
