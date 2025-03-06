@@ -5,7 +5,6 @@
 package com.shinnlove.springbootall.controller;
 
 import com.alibaba.fastjson.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shinnlove.springbootall.service.third.party.OuttaHttpRequestService;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
@@ -23,17 +22,16 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @author Tony Zhao
- * @version $Id: HttpController.java, v 0.1 2025-03-03 15:06 Tony Zhao Exp $$
+ * @version $Id: MockRequestYinGeController.java, v 0.1 2025-03-03 15:06 Tony Zhao Exp $$
  */
 @RestController
 @RequestMapping(value = "/http")
-public class HttpController {
+public class MockRequestYinGeController {
 
-    private static Logger logger = LoggerFactory.getLogger(HttpController.class);
+    private static Logger logger = LoggerFactory.getLogger(MockRequestYinGeController.class);
 
     @Autowired
     private OuttaHttpRequestService outtaHttpRequestService;

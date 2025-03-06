@@ -35,6 +35,7 @@ public enum BusinessCode implements ErrorCodeProvider {
     LOCK_TOO_FAST_FAILED(999, "太快了！"),
 
     ENCRYPT_MD5_FAILED(1001, "MD5加密失败"),
+    SIGNATURE_VALIDATE_FAILED(1002, "签名验签失败"),
 
     // 一些通用服务层错误
     DB_ACCESS_THROW_ERROR(6001, "数据库访问直接抛错"),

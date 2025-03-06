@@ -4,7 +4,10 @@
  */
 package com.shinnlove.springbootall.util.third.party;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -14,7 +17,10 @@ import java.io.Serializable;
  * @author Tony Zhao
  * @version $Id: YinGeSignature.java, v 0.1 2025-03-04 17:24 Tony Zhao Exp $$
  */
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class YinGeSignature implements Serializable {
 
     public int timestamp;
