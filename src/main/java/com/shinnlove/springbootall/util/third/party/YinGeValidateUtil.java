@@ -113,12 +113,11 @@ public class YinGeValidateUtil {
      *
      * @param formData                      表单数据
      * @param yinGeSignature                印鸽签名对象
-     * @param <T>
      * @throws SignatureException           签名异常
      * @throws IllegalArgumentException     参数异常
      */
-    public static <T> void validateYinGeSignature(MultiValueMap<String, Object> formData,
-                                                  YinGeSignature yinGeSignature) throws SignatureException, IllegalArgumentException {
+    public static void validateYinGeSignature(MultiValueMap<String, Object> formData,
+                                              YinGeSignature yinGeSignature) throws SignatureException, IllegalArgumentException {
         // 字典序升序
         Map<String, Object> reCalculateSignMap = new TreeMap<>();
 
