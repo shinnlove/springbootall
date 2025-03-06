@@ -14,6 +14,7 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="thumb_url" jdbcType="VARCHAR" property="thumbUrl" />
     <result column="material_type" jdbcType="INTEGER" property="materialType" />
+    <result column="gild_selected" jdbcType="INTEGER" property="gildSelected" />
     <result column="biz_ext" jdbcType="VARCHAR" property="bizExt" />
     <result column="app_type" jdbcType="VARCHAR" property="appType" />
     <result column="item_id" jdbcType="VARCHAR" property="itemId" />
@@ -46,7 +47,7 @@
 
   <sql id="baseSql">
     `id`, `activity_id`, `component_id`, `guid`, `stub_id`, `customize_no`, `order_no`, `pay_order_no`, `status`,
-        `material_type`, `thumb_url`, `app_type`, `item_id`, `product_type`, `qimei`, `qimei36`,
+        `material_type`, `gild_selected`, `thumb_url`, `app_type`, `item_id`, `product_type`, `qimei`, `qimei36`,
         `user_context_json`, `device_context_json`, `amount`, `user_address_log_id`, `consignee_name`, `consignee_mobile`,
         `province`, `city`, `district`, `address_line1`, `address_line2`, `fill_address_time`, `company_code`,
         `express_no`, `redo_order`, `expire_time`, `noticed_paid_time`, `refund_time`, `create_time`, `update_time`, `remark`
@@ -54,7 +55,7 @@
 
   <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
     insert into month_ticket_card_sell_order_info (activity_id, component_id, guid, stub_id, customize_no, order_no, pay_order_no, status,
-                                                   material_type, thumb_url, app_type, item_id, product_type, qimei, qimei36,
+                                                   material_type, gild_selected, thumb_url, app_type, item_id, product_type, qimei, qimei36,
                                                    user_context_json, device_context_json, amount, user_address_log_id,
                                                    consignee_name, consignee_mobile, province, city, district, address_line1,
                                                    address_line2, fill_address_time, company_code, express_no, redo_order,
@@ -70,6 +71,7 @@
         #{entity.payOrderNo,jdbcType=VARCHAR},
         #{entity.status,jdbcType=INTEGER},
         #{entity.materialType,jdbcType=INTEGER},
+        #{entity.gildSelected,jdbcType=INTEGER},
         #{entity.thumbUrl,jdbcType=VARCHAR},
         #{entity.appType,jdbcType=VARCHAR},
         #{entity.itemId,jdbcType=VARCHAR},

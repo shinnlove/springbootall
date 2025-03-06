@@ -35,6 +35,8 @@ public class MonthTicketCardSellOrderInfoEntity implements Serializable {
 
     private Integer materialType;
 
+    private Integer gildSelected;
+
     private String bizExt;
 
     private String appType;

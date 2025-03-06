@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,12 +55,13 @@ public class HttpClientUtil {
         return sendPost(url, null);
     }
 
-    public HttpResult sendPost(String url, Map<String, ?> params) {
+    public HttpResult sendPost(String url, Map<String, ?> params2) {
         // 表单类型提交
         FormBody.Builder formBuilder = new FormBody.Builder();
 
-        if (params != null) {
-            for (Map.Entry<String, ?> entry : params.entrySet()) {
+        if (params2 != null) {
+            Map<String, ?> sortedMap = new TreeMap<>(params2);
+            for (Map.Entry<String, ?> entry : sortedMap.entrySet()) {
                 if (entry.getKey() == null || entry.getValue() == null) {
                     continue;
                 }
