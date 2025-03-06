@@ -34,29 +34,26 @@ public class HandleYinGeRequestController {
     public YinGeResponse<YinGeOrderInfo> testHandleYinGeRequest(@RequestBody MultiValueMap<String, Object> formData) {
         logger.info("请求参数：formData={}", formData);
 
-        // 签名参数字段存在性校验
-        YinGeSignature yinGeSignature = null;
         try {
-            yinGeSignature = YinGeValidateUtil.validateSignatureRequiredFields(formData);
+            // 签名参数字段存在性校验
+            YinGeSignature yinGeSignature = YinGeValidateUtil.validateSignatureRequiredFields(formData);
+
+            // 签名验签校验
+            YinGeValidateUtil.validateYinGeSignature(formData, yinGeSignature);
+
+            // 必要业务字段
+            String outTradeNo = YinGeValidateUtil.validateAndExtract(formData, Biz3rdPartyConstant.OUT_TRADE_NO, String.class);
+
+            logger.info("Received outTradeNo: " + outTradeNo);
+
+            // 处理逻辑
+
+
+            return YinGeResponseFactory.success(new YinGeOrderInfo());
+
         } catch (Exception e) {
             return YinGeResponseFactory.fail(-1, e.getMessage());
         }
-
-        // 签名验签校验
-        try {
-            YinGeValidateUtil.validateSignature(yinGeSignature, yinGeSignature.getSign());
-        } catch (Exception e) {
-            return YinGeResponseFactory.fail(-1, e.getMessage());
-        }
-
-        // 必要业务字段
-        String outTradeNo = YinGeValidateUtil.validateAndExtract(formData, Biz3rdPartyConstant.OUT_TRADE_NO, String.class);
-
-        logger.info("Received outTradeNo: " + outTradeNo);
-
-        // 处理逻辑
-
-        return YinGeResponseFactory.success(new YinGeOrderInfo());
     }
 
 //    @Deprecated

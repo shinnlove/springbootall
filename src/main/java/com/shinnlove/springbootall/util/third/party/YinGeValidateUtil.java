@@ -14,8 +14,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.MultiValueMap;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -90,7 +88,8 @@ public class YinGeValidateUtil {
      * @param fieldType 字段类型
      * @throws IllegalArgumentException 如果校验失败
      */
-    private static void validateField(MultiValueMap<String, Object> formData, String fieldName, Class<?> fieldType) throws IllegalArgumentException {
+    private static void validateField(MultiValueMap<String, Object> formData, String fieldName,
+                                      Class<?> fieldType) throws IllegalArgumentException {
         if (!formData.containsKey(fieldName)) {
             throw new IllegalArgumentException("Field " + fieldName + " cannot be null");
         }
@@ -112,30 +111,53 @@ public class YinGeValidateUtil {
     /**
      * 校验印鸽签名是否正确，不正确则拒绝。
      *
-     * @param signature
-     * @param theirSign
+     * @param formData                      表单数据
+     * @param yinGeSignature                印鸽签名对象
      * @param <T>
-     * @throws SignatureException
-     * @throws IllegalArgumentException
+     * @throws SignatureException           签名异常
+     * @throws IllegalArgumentException     参数异常
      */
-    public static <T> void validateSignature(YinGeSignature signature, String theirSign) throws SignatureException, IllegalArgumentException {
+    public static <T> void validateYinGeSignature(MultiValueMap<String, Object> formData,
+                                                  YinGeSignature yinGeSignature) throws SignatureException, IllegalArgumentException {
         // 字典序升序
-        Map<String, Object> inputParams = new TreeMap<>();
+        Map<String, Object> reCalculateSignMap = new TreeMap<>();
 
-        // 提取必要签名字段
-        inputParams.put(Biz3rdPartyConstant.TIMESTAMP, signature.getTimestamp());
-        inputParams.put(Biz3rdPartyConstant.RESELLER_FLAG, signature.getResellerFlag());
-        inputParams.put(Biz3rdPartyConstant.VERSION, signature.getVersion());
-        inputParams.put(Biz3rdPartyConstant.SIGN_TYPE, signature.getSignType());
+        // Step1: 遍历 MultiValueMap 中的每个键值对，只提取业务字段
+        for (Map.Entry<String, List<Object>> entry : formData.entrySet()) {
+            String key = entry.getKey();
+            List<Object> values = entry.getValue();
 
-        // 增加secret
+            if (SIGNATURE_REQUIRED_FIELDS_MAP.containsKey(key)) {
+                // 如果是签名字段，直接跳过，只提取业务字段
+                continue;
+            }
+
+            // 只取MultiValueMap的第一个值
+            if (!values.isEmpty()) {
+                reCalculateSignMap.put(key, values.get(0));
+            }
+        }
+
+        // Step2: add common signature fields
+        reCalculateSignMap.put(Biz3rdPartyConstant.TIMESTAMP, yinGeSignature.getTimestamp());
+        reCalculateSignMap.put(Biz3rdPartyConstant.RESELLER_FLAG, yinGeSignature.getResellerFlag());
+        reCalculateSignMap.put(Biz3rdPartyConstant.VERSION, yinGeSignature.getVersion());
+        reCalculateSignMap.put(Biz3rdPartyConstant.SIGN_TYPE, yinGeSignature.getSignType());
+
+        // Step3: add secret field from config
         MonthTicketBizConfig config = new MonthTicketBizConfig();
-        inputParams.put(Biz3rdPartyConstant.SECRET, config.getSecret());
+        reCalculateSignMap.put(Biz3rdPartyConstant.SECRET, config.getSecret());
 
-        // 计算出来的sign
-        String calculateSign = SignatureUtil.getSignature(inputParams);
+        // 生成用于调试的json
+        System.out.println("签名前请求三方接口json参数:" + SignatureUtil.mapToJsonString(reCalculateSignMap));
 
-        if (!calculateSign.equalsIgnoreCase(theirSign)) {
+        // Step4: calculate signature
+        String calculateSign = SignatureUtil.getSignature(reCalculateSignMap);
+
+        // 打印用于调试的签名
+        System.out.println("计算出来的签名:" + calculateSign + ", 印鸽的签名:" + yinGeSignature.getSign());
+
+        if (!calculateSign.equalsIgnoreCase(yinGeSignature.getSign())) {
             throw new SignatureException(BusinessCode.SIGNATURE_VALIDATE_FAILED, "signature is not correct");
         }
     }
@@ -149,7 +171,8 @@ public class YinGeValidateUtil {
      * @return 提取并转换后的字段值
      * @throws IllegalArgumentException 如果字段不存在或转换失败
      */
-    public static <T> T validateAndExtract(MultiValueMap<String, Object> formData, String fieldName, Class<T> clazz) throws IllegalArgumentException {
+    public static <T> T validateAndExtract(MultiValueMap<String, Object> formData, String fieldName,
+                                           Class<T> clazz) throws IllegalArgumentException {
         // 校验输入参数
         if (MapUtils.isEmpty(formData)) {
             throw new IllegalArgumentException("Input parameters cannot be null");
@@ -191,6 +214,13 @@ public class YinGeValidateUtil {
         }
     }
 
-
+    public static <T> T validateAndExtract(MultiValueMap<String, Object> formData, String fieldName, Class<T> clazz,
+                                           T defaultValue) throws IllegalArgumentException {
+        try {
+            return validateAndExtract(formData, fieldName, clazz);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
 
 }

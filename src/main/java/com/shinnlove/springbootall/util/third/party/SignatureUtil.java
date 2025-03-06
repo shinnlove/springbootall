@@ -201,6 +201,23 @@ public class SignatureUtil {
         }
     }
 
+    public static String mapToJsonString(Map<String, Object> map) {
+        // 创建一个 TreeMap，保证键的字典序
+        Map<String, Object> treeMap = new TreeMap<>(map);
+
+        String json = "";
+        // 使用 Jackson 将 Map 转换为 JSON 字符串
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(treeMap);
+            System.out.println(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return json;
+    }
+
     public static void main(String[] args) throws Exception {
         // 原始JSON数据
         String json = "{\"customizeNo\":\"EGBVCXZ\",\"expressTrace\":[{\"time\":\"2022-04-10 18:41:19\",\"context\":\"重庆市大渡口区公司 已发出,下一站 重庆转运中心\"},{\"time\":\"2022-04-10 18:41:09\",\"context\":\"重庆市大渡口区公司 已揽收, 陈艳玲(15223428587)\"}],\"outTradeNo\":\"244326324342543266\",\"resellerFlag\":\"qddsipqddsipqddsip\",\"secret\":\"secret29472103dfe\",\"signType\":2,\"timestamp\":1741159164,\"version\":1}";

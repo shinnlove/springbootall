@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Tony Zhao
@@ -46,8 +47,8 @@ public class MockRequestYinGeController {
 
         MonthTicketBizConfig bizConfig = new MonthTicketBizConfig();
 
-//        String domain = bizConfig.getLocalhostDebugDomain();
-        String domain = bizConfig.getThirdPartyDomain();
+        String domain = bizConfig.getLocalhostDebugDomain();
+//        String domain = bizConfig.getThirdPartyDomain();
         String endpoint = bizConfig.getThirdPartyOrderPaidNotifyEndpoint();
         String url = domain + endpoint;
 
@@ -60,7 +61,7 @@ public class MockRequestYinGeController {
 //        Map<String, Object> printMap = new TreeMap<>(paramsMap);
 //        printMap.remove(Biz3rdPartyConstant.SIGN);
 //
-//        logger.warn("控制器：请求三方接口json参数：{}", mapToJsonString(printMap));
+//        logger.warn("控制器：请求三方接口json参数：{}", SignatureUtil.mapToJsonString(printMap));
 
         // 构建具体的返回类型
         Type type = new TypeReference<YinGeResponse<List<Object>>>() {}.getType();
@@ -76,22 +77,5 @@ public class MockRequestYinGeController {
 
         return result.isSuccess() ? 1 : 0;
     }
-
-//    public static String mapToJsonString(Map<String, Object> map) {
-//        // 创建一个 TreeMap，保证键的字典序
-//        Map<String, Object> treeMap = new TreeMap<>(map);
-//
-//        String json = "";
-//        // 使用 Jackson 将 Map 转换为 JSON 字符串
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        try {
-//            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(treeMap);
-//            System.out.println(json);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return json;
-//    }
 
 }
