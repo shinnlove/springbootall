@@ -4,6 +4,7 @@
  */
 package com.shinnlove.springbootall.service.third.party.impl;
 
+import com.alibaba.fastjson.TypeReference;
 import com.shinnlove.springbootall.service.third.party.OuttaHttpRequestService;
 import com.shinnlove.springbootall.service.third.party.TicketInfoService;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
@@ -11,10 +12,13 @@ import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
 import com.shinnlove.springbootall.util.dto.ServiceResult;
 import com.shinnlove.springbootall.util.third.party.SignatureUtil;
 import com.shinnlove.springbootall.util.third.party.dto.CustomizeInfo;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeResponse;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,8 +53,9 @@ public class TicketInfoServiceImpl implements TicketInfoService {
         // 填充公共签名参数
         SignatureUtil.fillCommonSignature(paramsMap);
 
-        // 请求印鸽接口
-        return outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, CustomizeInfo.class);
+        // 定义返回类型、并请求印鸽接口
+        Type type = new TypeReference<YinGeResponse<CustomizeInfo>>() {}.getType();
+        return outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);
     }
 
 }

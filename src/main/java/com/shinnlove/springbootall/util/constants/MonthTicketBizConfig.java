@@ -19,7 +19,7 @@ public class MonthTicketBizConfig {
     private String resellerFlag = "qddsipqddsipqddsip";
 
     /** 印鸽给阅文的secret token */
-    private String secret = "8edbc55c3b6583a41844453bca521c38";
+    private String secret = "e8428181ea320d7cc5ddc4ec241ef8a2";
 
     /** 月票实体卡定制印鸽商品流水线编号 */
     private String productId = "202503066688001";

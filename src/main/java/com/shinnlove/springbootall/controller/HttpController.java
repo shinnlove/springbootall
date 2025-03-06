@@ -4,12 +4,14 @@
  */
 package com.shinnlove.springbootall.controller;
 
+import com.alibaba.fastjson.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shinnlove.springbootall.service.third.party.OuttaHttpRequestService;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
 import com.shinnlove.springbootall.util.dto.ServiceResult;
 import com.shinnlove.springbootall.util.third.party.SignatureUtil;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,17 +54,21 @@ public class HttpController {
         String url = domain + endpoint;
 
         Map<String, Object> paramsMap = new HashMap<>();
-        paramsMap.put(Biz3rdPartyConstant.CUSTOMIZE_NO, "EGznO7vX");
-        paramsMap.put(Biz3rdPartyConstant.OUT_TRADE_NO, "202503071236688");
+        paramsMap.put(Biz3rdPartyConstant.CUSTOMIZE_NO, "EGznO2yl");
+        paramsMap.put(Biz3rdPartyConstant.OUT_TRADE_NO, "202503071236689");
 
         SignatureUtil.fillCommonSignature(paramsMap);
 
-        Map<String, Object> printMap = new TreeMap<>(paramsMap);
-        printMap.remove(Biz3rdPartyConstant.SECRET);
+//        Map<String, Object> printMap = new TreeMap<>(paramsMap);
+//        printMap.remove(Biz3rdPartyConstant.SIGN);
+//
+//        logger.warn("控制器：请求三方接口json参数：{}", mapToJsonString(printMap));
 
-        logger.warn("控制器：请求三方接口json参数：{}", mapToJsonString(printMap));
+        // 构建具体的返回类型
+        Type type = new TypeReference<YinGeResponse<List<Object>>>() {}.getType();
 
-        ServiceResult<Object> result = outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, Object.class);
+        // do request
+        ServiceResult<List<Object>> result = outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);
 
         if (result.isSuccess()) {
             logger.warn("控制器：请求三方接口返回结果：{}", result.getData());
@@ -71,21 +79,21 @@ public class HttpController {
         return result.isSuccess() ? 1 : 0;
     }
 
-    public static String mapToJsonString(Map<String, Object> map) {
-        // 创建一个 TreeMap，保证键的字典序
-        Map<String, Object> treeMap = new TreeMap<>(map);
-
-        String json = "";
-        // 使用 Jackson 将 Map 转换为 JSON 字符串
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(treeMap);
-            System.out.println(json);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return json;
-    }
+//    public static String mapToJsonString(Map<String, Object> map) {
+//        // 创建一个 TreeMap，保证键的字典序
+//        Map<String, Object> treeMap = new TreeMap<>(map);
+//
+//        String json = "";
+//        // 使用 Jackson 将 Map 转换为 JSON 字符串
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(treeMap);
+//            System.out.println(json);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return json;
+//    }
 
 }

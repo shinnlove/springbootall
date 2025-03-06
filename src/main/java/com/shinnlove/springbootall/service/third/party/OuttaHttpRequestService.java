@@ -8,6 +8,7 @@ package com.shinnlove.springbootall.service.third.party;
 import com.shinnlove.springbootall.exceptions.HttpRequestException;
 import com.shinnlove.springbootall.util.dto.ServiceResult;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -24,10 +25,11 @@ public interface OuttaHttpRequestService {
      * @param url
      * @param method
      * @param bizParams
-     * @param clazz
+     * @param type
      * @param <T>
      * @return
+     * @throws HttpRequestException
      */
-    <T> ServiceResult<T> requestOnce(String url, String method, Map<String, Object> bizParams, Class<T> clazz) throws HttpRequestException;
+    <T> ServiceResult<T> requestOnce(String url, String method, Map<String, Object> bizParams, Type type) throws HttpRequestException;
 
 }

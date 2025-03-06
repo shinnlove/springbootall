@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CustomizeInfo {
 
-    /** 印鸽侧叫outSkuId；阅文侧叫stub_id、由month_ticket_id + month_ticket_card_no 唯一生成 */
-    private String outSkuId;
+    /** 阅文侧stub_id、由month_ticket_id + month_ticket_card_no 唯一生成 */
+    private String stubId;
 
     /** 书封 */
     private String bookCoverUrl;

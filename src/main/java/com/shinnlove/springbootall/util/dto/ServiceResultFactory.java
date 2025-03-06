@@ -13,11 +13,15 @@ package com.shinnlove.springbootall.util.dto;
 public class ServiceResultFactory {
 
     public static <T> ServiceResult<T> success(T data) {
-        return new ServiceResult<>(true, null, data);
+        return new ServiceResult<>(true, "", data);
     }
 
     public static <T> ServiceResult<T> fail(String message) {
         return new ServiceResult<>(false, message, null);
+    }
+
+    public static <T> ServiceResult<T> fail(int code, String message) {
+        return new ServiceResult<>(false, code, message, null);
     }
 
 }
