@@ -47,8 +47,8 @@ public class MockRequestYinGeController {
 
         MonthTicketBizConfig bizConfig = new MonthTicketBizConfig();
 
-        String domain = bizConfig.getLocalhostDebugDomain();
-//        String domain = bizConfig.getThirdPartyDomain();
+//        String domain = bizConfig.getLocalhostDebugDomain();
+        String domain = bizConfig.getThirdPartyDomain();
         String endpoint = bizConfig.getThirdPartyOrderPaidNotifyEndpoint();
         String url = domain + endpoint;
 
