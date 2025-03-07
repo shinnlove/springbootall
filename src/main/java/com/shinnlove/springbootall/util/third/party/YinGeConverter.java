@@ -50,9 +50,9 @@ public class YinGeConverter {
                 .outTradeNo(String.valueOf(entity.getOrderNo()))
                 .outUserId(String.valueOf(entity.getGuid()))
                 // todo: use order enum
-//                .orderStatus(entity.getOrderStatus())
-                .createdAt((int) entity.getCreateTime().getTime() / 1000)
-                .paidAt((int) entity.getPaidTime().getTime() / 1000)
+//                .orderStatus(ordersta(entity.getOrderStatus()))
+                .createdAt((int) entity.getCreateTime().getTime())
+                .paidAt((int) entity.getPaidTime().getTime())
                 // todo: google guava
 //                .orderProducts(ImmutableList.of(productInfo))
                 .consignee(consignee)

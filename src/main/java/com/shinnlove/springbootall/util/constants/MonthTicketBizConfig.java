@@ -36,11 +36,14 @@ public class MonthTicketBizConfig {
     /** 三方接入接口域名 */
     private String thirdPartyDomain = "https://open.yinge.tech";
 
+    /** 三方mock接口沙箱域名 */
+    private String thirdPartySandBoxDomain = "https://preapi.songzhaopian.com";
+
     /** 1st. 订单付款通知 */
     private String thirdPartyOrderPaidNotifyEndpoint = "/resellers/thirdparty/order/paid";
 
-    /** 2nd. 自定义信息校验三方url地址, todo: 需要印鸽给地址 */
-    private String customizeInfoValidateUrl = "/resellers/thirdparty/order/customize/validate";
+    /** 2nd. 印鸽给的自定义信息校验三方url地址 */
+    private String customizeInfoValidateUrl = "/resellers/thirdparty/qddsip/customize/info";
 
     /** 3rd. 发货地址修改 */
     private String thirdPartyModifyUserAddressEndpoint = "/resellers/thirdparty/order/address/change";
