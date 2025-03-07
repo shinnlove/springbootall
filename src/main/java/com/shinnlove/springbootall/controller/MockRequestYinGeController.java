@@ -10,7 +10,7 @@ import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
 import com.shinnlove.springbootall.util.dto.ServiceResult;
 import com.shinnlove.springbootall.util.third.party.SignatureUtil;
-import com.shinnlove.springbootall.util.third.party.dto.YinGeResponse;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class MockRequestYinGeController {
 //        logger.warn("控制器：请求三方接口json参数：{}", SignatureUtil.mapToJsonString(printMap));
 
         // 构建具体的返回类型
-        Type type = new TypeReference<YinGeResponse<List<Object>>>() {}.getType();
+        Type type = new TypeReference<YinGeResult<List<Object>>>() {}.getType();
 
         // do request
         ServiceResult<List<Object>> result = outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);

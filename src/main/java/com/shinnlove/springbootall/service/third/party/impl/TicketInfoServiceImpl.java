@@ -12,7 +12,7 @@ import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
 import com.shinnlove.springbootall.util.dto.ServiceResult;
 import com.shinnlove.springbootall.util.third.party.SignatureUtil;
 import com.shinnlove.springbootall.util.third.party.dto.CustomizeInfo;
-import com.shinnlove.springbootall.util.third.party.dto.YinGeResponse;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -54,7 +54,7 @@ public class TicketInfoServiceImpl implements TicketInfoService {
         SignatureUtil.fillCommonSignature(paramsMap);
 
         // 定义返回类型、并请求印鸽接口
-        Type type = new TypeReference<YinGeResponse<CustomizeInfo>>() {}.getType();
+        Type type = new TypeReference<YinGeResult<CustomizeInfo>>() {}.getType();
         return outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);
     }
 

@@ -5,11 +5,11 @@
 package com.shinnlove.springbootall.controller;
 
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
-import com.shinnlove.springbootall.util.third.party.YinGeResponseFactory;
+import com.shinnlove.springbootall.util.third.party.YinGeResultFactory;
 import com.shinnlove.springbootall.util.third.party.YinGeSignature;
 import com.shinnlove.springbootall.util.third.party.YinGeValidateUtil;
 import com.shinnlove.springbootall.util.third.party.dto.YinGeOrderInfo;
-import com.shinnlove.springbootall.util.third.party.dto.YinGeResponse;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.MultiValueMap;
@@ -31,7 +31,7 @@ public class HandleYinGeRequestController {
     }
 
     @RequestMapping(value = "/test_soft_handle", method = RequestMethod.POST)
-    public YinGeResponse<YinGeOrderInfo> testHandleYinGeRequest(@RequestBody MultiValueMap<String, Object> formData) {
+    public YinGeResult<YinGeOrderInfo> testHandleYinGeRequest(@RequestBody MultiValueMap<String, Object> formData) {
         logger.info("请求参数：formData={}", formData);
 
         try {
@@ -49,10 +49,10 @@ public class HandleYinGeRequestController {
             // 处理逻辑
 
 
-            return YinGeResponseFactory.success(new YinGeOrderInfo());
+            return YinGeResultFactory.success(new YinGeOrderInfo());
 
         } catch (Exception e) {
-            return YinGeResponseFactory.fail(-1, e.getMessage());
+            return YinGeResultFactory.fail(-1, e.getMessage());
         }
     }
 

@@ -10,7 +10,7 @@ import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.dto.ServiceResult;
 import com.shinnlove.springbootall.util.dto.ServiceResultFactory;
 import com.shinnlove.springbootall.util.http.HttpClientUtil;
-import com.shinnlove.springbootall.util.third.party.dto.YinGeResponse;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +77,7 @@ public class OuttaHttpRequestServiceImpl implements OuttaHttpRequestService {
      * @return
      */
     private static <T> ServiceResult<T> typeConvert(String responseBodyJson, Type type) {
-        YinGeResponse<T> response = null;
+        YinGeResult<T> response = null;
         try {
             // do generic type conversion
             response = JSON.parseObject(responseBodyJson, type);
