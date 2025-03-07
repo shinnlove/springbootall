@@ -10,6 +10,7 @@ import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
 import com.shinnlove.springbootall.util.dto.ServiceResult;
 import com.shinnlove.springbootall.util.third.party.SignatureUtil;
+import com.shinnlove.springbootall.util.third.party.YinGeResultFactory;
 import com.shinnlove.springbootall.util.third.party.dto.CustomizeInfo;
 import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class MockRequestYinGeController {
     }
 
     @RequestMapping(value = "/test_query_mock", method = RequestMethod.GET)
-    public String testQueryMockInfo(@RequestParam("customizeNo") String customizeNo) {
+    public YinGeResult<CustomizeInfo> testQueryMockInfo(@RequestParam("customizeNo") String customizeNo) {
 
         MonthTicketBizConfig bizConfig = new MonthTicketBizConfig();
 
@@ -71,15 +72,13 @@ public class MockRequestYinGeController {
         // do request
         ServiceResult<CustomizeInfo> result = outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);
 
-        return result.getMessage();
-
-//        if (result.isSuccess()) {
-//            logger.warn("控制器：请求三方接口返回结果：{}", result.getData());
-//        } else {
-//            logger.warn("控制器：绑定订单号和自定义单号失败, result={}", result);
-//        }
-//
-//        return result.isSuccess() ? 1 : 0;
+        if (result.isSuccess()) {
+            logger.warn("控制器：请求三方接口返回结果：{}", result.getData());
+            return YinGeResultFactory.success(result.getData());
+        } else {
+            logger.warn("控制器：绑定订单号和自定义单号失败, result={}", result);
+            return YinGeResultFactory.fail(result.getCode(), result.getMessage());
+        }
     }
 
     @RequestMapping(value = "/test_binding", method = RequestMethod.GET)
