@@ -62,4 +62,16 @@ public interface MonthTicketCardSellOrderInfoRepo {
     int updateExpressNoByCustomizeNo(@Param("customizeNo") Long customizeNo,
                                      @Param("expressNo") String expressNo);
 
+    /**
+     * 根据预制单号更新物流信息。
+     *
+     * @param orderNo
+     * @param companyCode
+     * @param expressNo
+     * @return
+     */
+    int updateExpressInfoByOrderNo(@Param("orderNo") Long orderNo,
+                                   @Param("expressNo") String expressNo,
+                                   @Param("companyCode") String companyCode);
+
 }

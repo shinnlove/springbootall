@@ -4,11 +4,13 @@
  */
 package com.shinnlove.springbootall.controller;
 
+import com.shinnlove.springbootall.service.third.party.YinGeLogisticsService;
 import com.shinnlove.springbootall.service.third.party.YinGeOrderService;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.third.party.YinGeResultFactory;
 import com.shinnlove.springbootall.util.third.party.YinGeSignature;
 import com.shinnlove.springbootall.util.third.party.YinGeValidateUtil;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeLogisticsInfo;
 import com.shinnlove.springbootall.util.third.party.dto.YinGeOrderInfo;
 import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
 import org.slf4j.Logger;
@@ -30,6 +32,10 @@ public class HandleYinGeRequestController {
 
     @Resource
     private YinGeOrderService yinGeOrderService;
+
+    /** YinGe order logistics service */
+    @Resource
+    private YinGeLogisticsService yinGeLogisticsService;
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
@@ -76,5 +82,38 @@ public class HandleYinGeRequestController {
 //        logger.info("请求参数：outTradeNo={}", outTradeNo);
 //        return 1;
 //    }
+
+    @RequestMapping(value = "/logistics/notify", method = RequestMethod.POST)
+    public YinGeResult<Integer> testLogistics(@RequestBody MultiValueMap<String, Object> formData) {
+        logger.info("请求参数：formData={}", formData);
+
+        try {
+            // 签名参数字段存在性校验
+            YinGeSignature yinGeSignature = YinGeValidateUtil.validateSignatureRequiredFields(formData);
+
+            // 签名验签校验
+            YinGeValidateUtil.validateYinGeSignature(formData, yinGeSignature);
+
+            // 必要业务字段
+            String customizeNo = YinGeValidateUtil.validateAndExtract(formData, Biz3rdPartyConstant.CUSTOMIZE_NO, String.class);
+            String outTradeNo = YinGeValidateUtil.validateAndExtract(formData, Biz3rdPartyConstant.OUT_TRADE_NO, String.class);
+            String companyCode = YinGeValidateUtil.validateAndExtract(formData, Biz3rdPartyConstant.COMPANY_CODE, String.class);
+            String expressNo = YinGeValidateUtil.validateAndExtract(formData, Biz3rdPartyConstant.EXPRESS_NO, String.class);
+
+            logger.info("Received customizeNo: {}, outTradeNo: {}, companyCode: {}, expressNo: {}.", customizeNo, outTradeNo, companyCode, expressNo);
+
+            YinGeLogisticsInfo logisticsInfo = new YinGeLogisticsInfo();
+            logisticsInfo.setCustomizeNo(customizeNo);
+            logisticsInfo.setOutTradeNo(outTradeNo);
+            logisticsInfo.setCompanyCode(companyCode);
+            logisticsInfo.setExpressNo(expressNo);
+
+            // 处理逻辑
+            return yinGeLogisticsService.logisticsNotify(logisticsInfo);
+
+        } catch (Exception e) {
+            return YinGeResultFactory.fail(-1, e.getMessage());
+        }
+    }
 
 }

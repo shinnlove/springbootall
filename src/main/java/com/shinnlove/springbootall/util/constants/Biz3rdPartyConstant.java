@@ -46,4 +46,8 @@ public class Biz3rdPartyConstant {
 
     public static final String OUT_TRADE_NO = "outTradeNo";
 
+    public static final String COMPANY_CODE = "companyCode";
+
+    public static final String EXPRESS_NO = "expressNo";
+
 }

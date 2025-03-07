@@ -148,4 +148,11 @@
     where `customize_no` = #{customizeNo};
   </update>
 
+  <update id="updateExpressInfoByOrderNo">
+    update month_ticket_card_sell_order_info
+    set express_no = #{expressNo},
+        company_code = #{companyCode}
+    where `order_no` = #{orderNo};
+  </update>
+
 </mapper>

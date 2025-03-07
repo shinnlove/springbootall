@@ -9,6 +9,7 @@ import com.shinnlove.springbootall.db.po.MonthTicketCardSellOrderInfoEntity;
 import com.shinnlove.springbootall.exceptions.DBAccessThrowException;
 import com.shinnlove.springbootall.exceptions.DBExecuteReturnException;
 import com.shinnlove.springbootall.service.third.party.TicketOrderService;
+import com.shinnlove.springbootall.util.third.party.dto.LogisticsCompanyInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,14 @@ public class TicketOrderServiceImpl implements TicketOrderService {
     @Override
     public MonthTicketCardSellOrderInfoEntity queryOrderInfoByOrderNo(Long orderNo) throws DBAccessThrowException, DBExecuteReturnException {
         return monthTicketCardSellOrderInfoRepo.queryOrderByOrderNo(orderNo);
+    }
+
+    public Integer updateOrderWithExpressInfo(Long orderNo, LogisticsCompanyInfo logisticsCompanyInfo) {
+
+        String companyCode = logisticsCompanyInfo.getCompanyCode();
+        String expressNo = logisticsCompanyInfo.getExpressNo();
+
+        return monthTicketCardSellOrderInfoRepo.updateExpressInfoByOrderNo(orderNo, expressNo, companyCode);
     }
 
 }
