@@ -4,10 +4,12 @@
  */
 package com.shinnlove.springbootall.service.third.party.impl;
 
+import com.shinnlove.springbootall.db.dao.MonthTicketCardSellOrderInfoRepo;
 import com.shinnlove.springbootall.db.po.MonthTicketCardSellOrderInfoEntity;
 import com.shinnlove.springbootall.exceptions.DBAccessThrowException;
 import com.shinnlove.springbootall.exceptions.DBExecuteReturnException;
 import com.shinnlove.springbootall.service.third.party.TicketOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,9 +19,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TicketOrderServiceImpl implements TicketOrderService {
 
+    @Autowired
+    private MonthTicketCardSellOrderInfoRepo monthTicketCardSellOrderInfoRepo;
+
     @Override
     public MonthTicketCardSellOrderInfoEntity queryOrderInfoByOrderNo(Long orderNo) throws DBAccessThrowException, DBExecuteReturnException {
-        return null;
+        return monthTicketCardSellOrderInfoRepo.queryOrderByOrderNo(orderNo);
     }
 
 }

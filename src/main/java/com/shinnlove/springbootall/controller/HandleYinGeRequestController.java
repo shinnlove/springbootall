@@ -4,6 +4,7 @@
  */
 package com.shinnlove.springbootall.controller;
 
+import com.shinnlove.springbootall.service.third.party.YinGeOrderService;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.third.party.YinGeResultFactory;
 import com.shinnlove.springbootall.util.third.party.YinGeSignature;
@@ -15,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+
 /**
  * @author Tony Zhao
  * @version $Id: HandleYinGeRequestController.java, v 0.1 2025-03-06 21:40 Tony Zhao Exp $$
@@ -24,6 +27,9 @@ import org.springframework.web.bind.annotation.*;
 public class HandleYinGeRequestController {
 
     private static Logger logger = LoggerFactory.getLogger(HandleYinGeRequestController.class);
+
+    @Resource
+    private YinGeOrderService yinGeOrderService;
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
@@ -47,9 +53,7 @@ public class HandleYinGeRequestController {
             logger.info("Received outTradeNo: " + outTradeNo);
 
             // 处理逻辑
-
-
-            return YinGeResultFactory.success(new YinGeOrderInfo());
+            return yinGeOrderService.queryOrderInfo(outTradeNo);
 
         } catch (Exception e) {
             return YinGeResultFactory.fail(-1, e.getMessage());

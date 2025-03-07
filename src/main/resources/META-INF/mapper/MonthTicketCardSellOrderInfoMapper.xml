@@ -50,7 +50,8 @@
         `material_type`, `gild_selected`, `thumb_url`, `app_type`, `item_id`, `product_type`, `qimei`, `qimei36`,
         `user_context_json`, `device_context_json`, `amount`, `user_address_log_id`, `consignee_name`, `consignee_mobile`,
         `province`, `city`, `district`, `address_line1`, `address_line2`, `fill_address_time`, `company_code`,
-        `express_no`, `redo_order`, `expire_time`, `noticed_paid_time`, `refund_time`, `create_time`, `update_time`, `remark`
+        `express_no`, `redo_order`, `expire_time`, `paid_time`, `noticed_paid_time`, `refund_time`,
+        `create_time`, `update_time`, `remark`
   </sql>
 
   <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
@@ -59,7 +60,7 @@
                                                    user_context_json, device_context_json, amount, user_address_log_id,
                                                    consignee_name, consignee_mobile, province, city, district, address_line1,
                                                    address_line2, fill_address_time, company_code, express_no, redo_order,
-                                                    expire_time, noticed_paid_time, refund_time, create_time, update_time, remark)
+                                                   expire_time, noticed_paid_time, refund_time, create_time, update_time, remark)
     values
       (
         #{entity.activityId,jdbcType=VARCHAR},
@@ -107,7 +108,7 @@
     SELECT
     <include refid="baseSql"/>
     from month_ticket_card_sell_order_info
-    WHERE `activity_id` = #{activityId} AND `order_no` = #{orderNo}
+    WHERE `order_no` = #{orderNo}
     ORDER BY `id` DESC LIMIT 1;
   </select>
 

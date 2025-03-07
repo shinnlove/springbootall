@@ -19,22 +19,18 @@ public interface MonthTicketCardSellOrderInfoRepo {
     /**
      * 根据阅文订单号查询阅文订单。
      *
-     * @param activityId
      * @param orderNo
      * @return
      */
-    MonthTicketCardSellOrderInfoEntity queryOrderByOrderNo(@Param("activityId") String activityId,
-                                                           @Param("orderNo") Long orderNo);
+    MonthTicketCardSellOrderInfoEntity queryOrderByOrderNo(@Param("orderNo") Long orderNo);
 
     /**
      * 根据定制编号查询订单。
      *
-     * @param activityId
      * @param customizeNo
      * @return
      */
-    MonthTicketCardSellOrderInfoEntity queryOrderByCustomizeNo(@Param("activityId") String activityId,
-                                                               @Param("customizeNo") Long customizeNo);
+    MonthTicketCardSellOrderInfoEntity queryOrderByCustomizeNo(@Param("customizeNo") Long customizeNo);
 
     /**
      * 根据定制商品stubId/skuId查询订单、stubId也是全局唯一的。
