@@ -4,6 +4,7 @@
  */
 package com.shinnlove.springbootall.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.shinnlove.springbootall.service.third.party.OuttaHttpRequestService;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
@@ -116,6 +117,43 @@ public class MockRequestYinGeController {
         }
 
         return result.isSuccess() ? 1 : 0;
+    }
+
+    @RequestMapping(value = "/test_sync_logistics", method = RequestMethod.GET)
+    public YinGeResult<Integer> testSyncLogistics() {
+
+        MonthTicketBizConfig bizConfig = new MonthTicketBizConfig();
+
+        String domain = bizConfig.getLocalhostDebugDomain();
+        String endpoint = bizConfig.getLocalhostHandleEndpoint();
+        String url = domain + endpoint;
+
+        // 需要发送的数据
+        String json = "{\"customizeNo\":\"EG001\",\"outTradeNo\":\"345124366542\",\"companyCode\":\"SF\",\"expressNo\":\"324353426543\",\"expressTrace\":[{\"time\":\"2024-06-14 17:08:03\",\"context\":\"快件到达【上海市寄递事业部航空中心桃浦包件车间】\",\"status\":\"TRANSPORT\",\"city\":\"上海市\"},{\"time\":\"2024-06-14 01:31:58\",\"context\":\"快件离开【武汉陆运包件车间】，正在发往下一站\",\"status\":\"TRANSPORT\",\"city\":\"武汉市\"},{\"time\":\"2024-06-13 22:28:39\",\"context\":\"快件到达【武汉陆运包件车间】\",\"status\":\"TRANSPORT\",\"city\":\"武汉市\"}],\"redoOrder\":\"1\"}";
+
+        // 使用 Fastjson 将 JSON 字符串转换为 Map
+        Map<String, Object> paramsMap = JSON.parseObject(json, new TypeReference<Map<String, Object>>() {});
+
+        SignatureUtil.fillCommonSignature(paramsMap);
+
+        //        Map<String, Object> printMap = new TreeMap<>(paramsMap);
+//        printMap.remove(Biz3rdPartyConstant.SIGN);
+//
+//        logger.warn("控制器：请求三方接口json参数：{}", SignatureUtil.mapToJsonString(printMap));
+
+        // 构建具体的返回类型
+        Type type = new TypeReference<YinGeResult<Integer>>() {}.getType();
+
+        // do request
+        ServiceResult<Integer> result = outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);
+
+        if (result.isSuccess()) {
+            logger.warn("控制器：请求三方接口返回结果：{}", result.getData());
+            return YinGeResultFactory.success(result.getData());
+        } else {
+            logger.warn("控制器：绑定订单号和自定义单号失败, result={}", result);
+            return YinGeResultFactory.fail(result.getCode(), result.getMessage());
+        }
     }
 
 }

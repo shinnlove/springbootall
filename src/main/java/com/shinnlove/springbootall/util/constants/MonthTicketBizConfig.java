@@ -31,13 +31,16 @@ public class MonthTicketBizConfig {
     private int signType = 2;
 
     /** 自己本地调试看http请求域名 */
-    private String localhostDebugDomain = "http://127.0.0.1:9000";
+    private String localhostDebugDomain = "http://127.0.0.1:8080";
 
     /** 三方接入接口域名 */
     private String thirdPartyDomain = "https://open.yinge.tech";
 
     /** 三方mock接口沙箱域名 */
     private String thirdPartySandBoxDomain = "https://preapi.songzhaopian.com";
+
+    /** 本地调试路径 */
+    private String localhostHandleEndpoint = "/yuewen/logistics/notify";
 
     /** 1st. 订单付款通知 */
     private String thirdPartyOrderPaidNotifyEndpoint = "/resellers/thirdparty/order/paid";

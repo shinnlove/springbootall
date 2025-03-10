@@ -6,14 +6,17 @@ package com.shinnlove.springbootall.util.third.party;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.TypeReference;
 import com.shinnlove.springbootall.exceptions.BusinessCode;
 import com.shinnlove.springbootall.exceptions.SignatureException;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeExpressInfo;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.MultiValueMap;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -118,6 +121,11 @@ public class YinGeValidateUtil {
      */
     public static void validateYinGeSignature(MultiValueMap<String, Object> formData,
                                               YinGeSignature yinGeSignature) throws SignatureException, IllegalArgumentException {
+
+        if (MapUtils.isEmpty(formData)) {
+            return;
+        }
+
         // 字典序升序
         Map<String, Object> reCalculateSignMap = new TreeMap<>();
 
@@ -126,14 +134,30 @@ public class YinGeValidateUtil {
             String key = entry.getKey();
             List<Object> values = entry.getValue();
 
-            if (SIGNATURE_REQUIRED_FIELDS_MAP.containsKey(key)) {
+            if (SIGNATURE_REQUIRED_FIELDS_MAP.containsKey(key)
+                    || Biz3rdPartyConstant.EXPRESS_TRACE.equalsIgnoreCase(key)) {
                 // 如果是签名字段，直接跳过，只提取业务字段
+                // 如果是expressTrace字段，也跳过，涉及反斜杠等信息
                 continue;
             }
 
             // 只取MultiValueMap的第一个值
             if (!values.isEmpty()) {
                 reCalculateSignMap.put(key, values.get(0));
+            }
+        }
+
+        // 如果有expressTrace字段，单独处理一下
+        if (formData.containsKey(Biz3rdPartyConstant.EXPRESS_TRACE)) {
+            Object expressTraceObj = formData.getFirst(Biz3rdPartyConstant.EXPRESS_TRACE);
+            if (Objects.nonNull(expressTraceObj)) {
+                String expressTraceJson = expressTraceObj.toString();
+
+                // 再反序列化一把，把原生对象丢进去
+                Type type = new TypeReference<List<YinGeExpressInfo>>() {}.getType();
+                List<YinGeExpressInfo> infos = JSON.parseObject(expressTraceJson, type);
+
+                reCalculateSignMap.put(Biz3rdPartyConstant.EXPRESS_TRACE, infos);
             }
         }
 

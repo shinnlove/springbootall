@@ -12,6 +12,9 @@ package com.shinnlove.springbootall.util.constants;
  */
 public class Biz3rdPartyConstant {
 
+    /** 空字符串 */
+    public static final String EMPTY_STR = "";
+
     /** 1st. 签名验签算法常量 */
 
     public static final String SIGN_TYPE_MD5 = "MD5";

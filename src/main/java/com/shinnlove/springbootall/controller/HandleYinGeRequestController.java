@@ -66,7 +66,7 @@ public class HandleYinGeRequestController {
             return result;
 
         } catch (Exception e) {
-            return YinGeResultFactory.fail(-1, e.getMessage());
+            return YinGeResultFactory.fail(-1, "System Error, " + e.getMessage());
         }
     }
 
@@ -116,7 +116,7 @@ public class HandleYinGeRequestController {
             return yinGeLogisticsService.logisticsNotify(logisticsInfo);
 
         } catch (Exception e) {
-            return YinGeResultFactory.fail(-1, e.getMessage());
+            return YinGeResultFactory.fail(-1, "System Error, " + e.getMessage());
         }
     }
 

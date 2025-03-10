@@ -4,22 +4,30 @@
  */
 package com.shinnlove.springbootall.util.third.party;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.ObjectSerializer;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.shinnlove.springbootall.exceptions.BusinessCode;
 import com.shinnlove.springbootall.exceptions.SignatureException;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
+import com.shinnlove.springbootall.util.third.party.dto.CustomizeInfo;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeExpressInfo;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 三方签名验签工具。
@@ -94,6 +102,14 @@ public class SignatureUtil {
         return signature;
     }
 
+    static class NoEscapeSerializer implements ObjectSerializer {
+        @Override
+        public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features) throws IOException {
+            // 直接写入字符串，不进行转义
+            serializer.out.writeString((String) object);
+        }
+    }
+
     /**
      * 字典序排序、拼接参数、MD5加密生成签名。
      *
@@ -102,14 +118,27 @@ public class SignatureUtil {
      * @throws Exception
      */
     private static String generateSignature(Map<String, Object> dataMap) throws Exception {
+
+        if (MapUtils.isEmpty(dataMap)) {
+            return Biz3rdPartyConstant.EMPTY_STR;
+        }
+
         // 准备待签名的参数列表
-        Map<String, Object> sortedMap = new TreeMap<>(dataMap);
+        final Map<String, Object> sortedMap = new TreeMap<>();
+
+        // 先处理非expressTrace字段
+        dataMap.forEach((k, v) -> {
+            if (!Biz3rdPartyConstant.EXPRESS_TRACE.equalsIgnoreCase(k)) {
+                sortedMap.put(k, Biz3rdPartyConstant.EMPTY_STR);
+            }
+        });
 
         // 将expressTrace字段转换为JSON字符串
-        if (sortedMap.containsKey(Biz3rdPartyConstant.EXPRESS_TRACE)) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
-            String expressTraceJson = objectMapper.writeValueAsString(sortedMap.get(Biz3rdPartyConstant.EXPRESS_TRACE));
+        if (dataMap.containsKey(Biz3rdPartyConstant.EXPRESS_TRACE)) {
+            Object expressTraceObj = dataMap.get(Biz3rdPartyConstant.EXPRESS_TRACE);
+            // 禁用转义，生成不带反斜杠的 JSON 字符串
+            String expressTraceJson = JSON.toJSONString(expressTraceObj, SerializerFeature.DisableCircularReferenceDetect);
+            // 放入sortedMap中
             sortedMap.put(Biz3rdPartyConstant.EXPRESS_TRACE, expressTraceJson);
         }
 
