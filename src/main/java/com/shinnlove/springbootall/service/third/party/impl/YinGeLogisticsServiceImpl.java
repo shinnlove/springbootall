@@ -63,6 +63,7 @@ public class YinGeLogisticsServiceImpl implements YinGeLogisticsService {
 
         String expressNo = logisticsInfo.getExpressNo();
 
+        int total = 0;
         List<LogisticsExpressTrace> traces = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(logisticsInfo.getExpressTrace())) {
             for (YinGeExpressTrace trace : logisticsInfo.getExpressTrace()) {
@@ -73,13 +74,12 @@ public class YinGeLogisticsServiceImpl implements YinGeLogisticsService {
                         .context(trace.getContext())
                         .build());
             }
+
+            // 2nd. update logistics number
+            total = orderExpressService.storeLogisticsInfo(expressNo, traces);
         }
 
-        // 2nd. update logistics number
-        int total = orderExpressService.storeLogisticsInfo(expressNo, traces);
-
         return YinGeResultFactory.success(total);
-
     }
 
 }

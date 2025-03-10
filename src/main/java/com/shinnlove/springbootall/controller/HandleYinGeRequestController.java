@@ -59,7 +59,11 @@ public class HandleYinGeRequestController {
             logger.info("Received outTradeNo: " + outTradeNo);
 
             // 处理逻辑
-            return yinGeOrderService.queryOrderInfo(outTradeNo);
+            YinGeResult<YinGeOrderInfo> result = yinGeOrderService.queryOrderInfo(outTradeNo);
+
+            logger.warn("Response result: {}, data={}", result, result.getData());
+
+            return result;
 
         } catch (Exception e) {
             return YinGeResultFactory.fail(-1, e.getMessage());
