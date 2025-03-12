@@ -17,7 +17,6 @@ import com.shinnlove.springbootall.exceptions.SignatureException;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
 import com.shinnlove.springbootall.util.third.party.dto.CustomizeInfo;
-import com.shinnlove.springbootall.util.third.party.dto.YinGeExpressInfo;
 import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
