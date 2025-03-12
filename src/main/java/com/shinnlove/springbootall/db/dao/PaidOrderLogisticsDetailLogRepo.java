@@ -18,12 +18,12 @@ public interface PaidOrderLogisticsDetailLogRepo {
     List<PaidOrderLogisticsDetailLogEntity> queryLogisticsLogsByExpressNo(@Param(value = "expressNo") String expressNo);
 
     /**
-     * 插入新的物流记录。
+     * 批量插入物流信息
      *
-     * @param record
+     * @param records
      * @return
      */
-    int insertSelective(@Param("entity") PaidOrderLogisticsDetailLogEntity record);
+    int batchInsert(@Param("list") List<PaidOrderLogisticsDetailLogEntity> records);
 
     /**
      * 删除给定快递单号下的所有物流信息。

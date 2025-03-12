@@ -16,7 +16,7 @@ public class PaidOrderLogisticsDetailLogEntity implements Serializable {
 
     private String expressNo;
 
-    private Date time;
+    private String time;
 
     private String context;
 

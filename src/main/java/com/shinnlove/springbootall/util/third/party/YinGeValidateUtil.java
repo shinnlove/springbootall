@@ -11,7 +11,7 @@ import com.shinnlove.springbootall.exceptions.BusinessCode;
 import com.shinnlove.springbootall.exceptions.SignatureException;
 import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
 import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
-import com.shinnlove.springbootall.util.third.party.dto.YinGeExpressInfo;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeExpressTrace;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.MultiValueMap;
@@ -154,8 +154,8 @@ public class YinGeValidateUtil {
                 String expressTraceJson = expressTraceObj.toString();
 
                 // 再反序列化一把，把原生对象丢进去
-                Type type = new TypeReference<List<YinGeExpressInfo>>() {}.getType();
-                List<YinGeExpressInfo> infos = JSON.parseObject(expressTraceJson, type);
+                Type type = new TypeReference<List<YinGeExpressTrace>>() {}.getType();
+                List<YinGeExpressTrace> infos = JSON.parseObject(expressTraceJson, type);
 
                 reCalculateSignMap.put(Biz3rdPartyConstant.EXPRESS_TRACE, infos);
             }

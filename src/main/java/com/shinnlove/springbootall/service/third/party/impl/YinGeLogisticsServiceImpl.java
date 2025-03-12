@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Tony Zhao
@@ -38,6 +39,10 @@ public class YinGeLogisticsServiceImpl implements YinGeLogisticsService {
 
         String outTradeNo = logisticsInfo.getOutTradeNo();
 
+        if (StringUtils.isBlank(outTradeNo)) {
+            return YinGeResultFactory.fail(200, "outTradeNo field is empty, need outTradeNo.");
+        }
+
         long orderNo = 0L;
         try {
             orderNo = Long.parseLong(outTradeNo);
@@ -45,13 +50,24 @@ public class YinGeLogisticsServiceImpl implements YinGeLogisticsService {
             return YinGeResultFactory.fail(201, "outTradeNo is not a number");
         }
 
+        // Step2: expressNo validation
+        String expressNo = logisticsInfo.getExpressNo();
+
+        if (StringUtils.isBlank(expressNo)) {
+            return YinGeResultFactory.fail(202, "expressNo field is empty, need expressNo.");
+        }
+
         LogisticsCompanyInfo info = new LogisticsCompanyInfo();
         info.setCompanyCode(logisticsInfo.getCompanyCode());
-        info.setExpressNo(logisticsInfo.getExpressNo());
+        info.setExpressNo(expressNo);
         info.setRedoOrder(logisticsInfo.getRedoOrder());
 
         // 1st query order info express no
         MonthTicketCardSellOrderInfoEntity entity = ticketOrderService.queryOrderInfoByOrderNo(orderNo);
+
+        if (Objects.isNull(entity)) {
+            return YinGeResultFactory.fail(202, "outTradeNo is invalid, query no data.");
+        }
 
         if (StringUtils.isBlank(entity.getExpressNo())) {
             // need update order express info for the first time
@@ -60,8 +76,6 @@ public class YinGeLogisticsServiceImpl implements YinGeLogisticsService {
                 return YinGeResultFactory.fail(202, "update order express info failed");
             }
         }
-
-        String expressNo = logisticsInfo.getExpressNo();
 
         int total = 0;
         List<LogisticsExpressTrace> traces = new ArrayList<>();

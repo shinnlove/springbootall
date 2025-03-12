@@ -13,9 +13,13 @@ import com.shinnlove.springbootall.db.dao.PaidOrderLogisticsDetailLogRepo;
 import com.shinnlove.springbootall.db.po.PaidOrderLogisticsDetailLogEntity;
 import com.shinnlove.springbootall.service.third.party.OrderExpressService;
 import com.shinnlove.springbootall.util.third.party.dto.LogisticsExpressTrace;
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +30,8 @@ import java.util.List;
  */
 @Service
 public class OrderExpressServiceImpl implements OrderExpressService {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderExpressServiceImpl.class);
 
     /** 支付订单物流仓储 */
     @Resource
@@ -43,26 +49,32 @@ public class OrderExpressServiceImpl implements OrderExpressService {
      */
     public int storeLogisticsInfo(String expressNo, List<LogisticsExpressTrace> traces) {
 
-        // todo: add a batch insert here
+        if (CollectionUtils.isEmpty(traces)) {
+            return 0;
+        }
 
-        int total = 0;
+        List<PaidOrderLogisticsDetailLogEntity> entities = new ArrayList<>();
+
+        int i = 1;
         for (LogisticsExpressTrace trace : traces) {
             PaidOrderLogisticsDetailLogEntity entity = new PaidOrderLogisticsDetailLogEntity();
             entity.setExpressNo(expressNo);
-            // todo: change time field type
-//            entity.setTime(trace.getTime());
+            entity.setTime(trace.getTime());  // 假设 trace.getTime() 返回的是 Date 类型
             entity.setContext(trace.getContext());
             entity.setStatus(trace.getStatus());
             entity.setCity(trace.getCity());
+            entity.setLogOrder(i++);
+            entity.setIsDeleted(0);  // 默认值
 
-            try {
-                total += paidOrderLogisticsDetailLogRepo.insertSelective(entity);
-            } catch (Exception e) {
-                // todo: add logs here...
-            }
+            entities.add(entity);
         }
 
-        return total;
+        try {
+            return paidOrderLogisticsDetailLogRepo.batchInsert(entities);
+        } catch (Exception e) {
+            logger.error("批量插入物流信息失败", e);
+            return 0;
+        }
     }
 
 }

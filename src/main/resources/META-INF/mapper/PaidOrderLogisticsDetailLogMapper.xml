@@ -5,7 +5,7 @@
   <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.PaidOrderLogisticsDetailLogEntity">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
-    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
     <result column="context" jdbcType="VARCHAR" property="context" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="city" jdbcType="VARCHAR" property="city" />
@@ -29,19 +29,20 @@
     order by id desc
   </select>
 
-  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
-    insert into paid_order_logistics_detail_log (express_no, time, context, status,
-                                                 city, log_order, is_deleted)
+  <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
+    insert into paid_order_logistics_detail_log (express_no, time, context, status, city, log_order, is_deleted)
     values
+    <foreach collection="list" item="entity" separator=",">
       (
-        #{entity.expressNo,jdbcType=VARCHAR},
-        #{entity.time,jdbcType=TIMESTAMP},
-        #{entity.context,jdbcType=VARCHAR},
-        #{entity.status,jdbcType=VARCHAR},
-        #{entity.city,jdbcType=VARCHAR},
-        #{entity.logOrder,jdbcType=INTEGER},
-        #{entity.isDeleted,jdbcType=INTEGER}
-      );
+      #{entity.expressNo,jdbcType=VARCHAR},
+      #{entity.time,jdbcType=VARCHAR},
+      #{entity.context,jdbcType=VARCHAR},
+      #{entity.status,jdbcType=VARCHAR},
+      #{entity.city,jdbcType=VARCHAR},
+      #{entity.logOrder,jdbcType=INTEGER},
+      #{entity.isDeleted,jdbcType=INTEGER}
+      )
+    </foreach>
   </insert>
 
   <update id="deleteOldExpressLogs">
