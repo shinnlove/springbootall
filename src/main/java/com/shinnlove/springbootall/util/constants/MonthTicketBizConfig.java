@@ -21,8 +21,11 @@ public class MonthTicketBizConfig {
     /** 印鸽给阅文的secret token */
     private String secret = "e8428181ea320d7cc5ddc4ec241ef8a2";
 
-    /** 月票实体卡定制印鸽商品流水线编号 */
-    private String productId = "202503066688001";
+    /** 测试环境-月票实体卡定制印鸽商品-流水线编号 */
+    private String testProductId = "202503066688001";
+
+    /** 正式环境-月票实体卡定制印鸽商品-流水线编号 */
+    private String productId = "202503126688006";
 
     /** 印鸽默认接口版本 */
     private int version = 1;

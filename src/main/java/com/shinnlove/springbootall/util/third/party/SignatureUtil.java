@@ -129,7 +129,7 @@ public class SignatureUtil {
         // 先处理非expressTrace字段
         dataMap.forEach((k, v) -> {
             if (!Biz3rdPartyConstant.EXPRESS_TRACE.equalsIgnoreCase(k)) {
-                sortedMap.put(k, Biz3rdPartyConstant.EMPTY_STR);
+                sortedMap.put(k, v);
             }
         });
 
