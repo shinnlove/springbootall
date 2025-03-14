@@ -7,7 +7,11 @@ package com.shinnlove.springbootall.service.third.party;
 import com.shinnlove.springbootall.db.po.MonthTicketCardSellOrderInfoEntity;
 import com.shinnlove.springbootall.exceptions.DBAccessThrowException;
 import com.shinnlove.springbootall.exceptions.DBExecuteReturnException;
+import com.shinnlove.springbootall.models.MonthTicketOrderQuery;
+import com.shinnlove.springbootall.models.MonthTicketSellOrderInfo;
 import com.shinnlove.springbootall.util.third.party.dto.LogisticsCompanyInfo;
+
+import java.util.List;
 
 /**
  * @author Tony Zhao
@@ -31,5 +35,13 @@ public interface TicketOrderService {
      * @return
      */
     Integer updateOrderWithExpressInfo(Long orderNo, LogisticsCompanyInfo logisticsCompanyInfo);
+
+    /**
+     * Query order info by pages with diverse conditions.
+     *
+     * @param query
+     * @return
+     */
+    List<MonthTicketSellOrderInfo> pageQueryOrderInfoByCondition(MonthTicketOrderQuery query);
 
 }

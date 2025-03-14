@@ -5,6 +5,8 @@ import com.shinnlove.springbootall.db.po.MonthTicketCardSellOrderInfoEntity;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MonthTicketCardSellOrderInfoRepo {
 
@@ -73,5 +75,17 @@ public interface MonthTicketCardSellOrderInfoRepo {
     int updateExpressInfoByOrderNo(@Param("orderNo") Long orderNo,
                                    @Param("expressNo") String expressNo,
                                    @Param("companyCode") String companyCode);
+
+    long countOrderByCondition(@Param("customizeNo") String customizeNo,
+                               @Param("orderNo") Long orderNo,
+                               @Param("payOrderNo") String payOrderNo,
+                               @Param("guid") Long guid);
+
+    List<MonthTicketCardSellOrderInfoEntity> pageQueryOrderByCondition(@Param("customizeNo") String customizeNo,
+                                                                       @Param("orderNo") Long orderNo,
+                                                                       @Param("payOrderNo") String payOrderNo,
+                                                                       @Param("guid") Long guid,
+                                                                       @Param("offset") Integer offset,
+                                                                       @Param("limit") Integer limit);
 
 }

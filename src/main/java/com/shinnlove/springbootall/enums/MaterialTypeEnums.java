@@ -19,7 +19,6 @@ public enum MaterialTypeEnums {
      * 普通
      */
     NORMAL(0, "普通"),
-
     /**
      * 金闪闪
      */
@@ -28,6 +27,15 @@ public enum MaterialTypeEnums {
     public final int code;
 
     public final String desc;
+
+    public static String getDescByCode(int code) {
+        for (MaterialTypeEnums value : MaterialTypeEnums.values()) {
+            if (value.code == code) {
+                return value.desc;
+            }
+        }
+        return NORMAL.desc;
+    }
 
     public static String getNameByCode(int code) {
         for (MaterialTypeEnums value : MaterialTypeEnums.values()) {

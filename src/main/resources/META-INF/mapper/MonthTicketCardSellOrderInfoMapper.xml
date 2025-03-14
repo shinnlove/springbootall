@@ -155,4 +155,56 @@
     where `order_no` = #{orderNo};
   </update>
 
+  <select id="countOrderByCondition" resultType="long">
+    SELECT count(*)
+    from month_ticket_card_sell_order_info
+    <where>
+      <!-- 如果 customizeNo 不为空，添加 customizeNo 条件 -->
+      <if test="customizeNo != null">
+        AND customize_no = #{customizeNo}
+      </if>
+      <!-- 如果 orderNo 不为空，添加 orderNo 条件 -->
+      <if test="orderNo != null">
+        AND order_no = #{orderNo}
+      </if>
+      <!-- 如果 payOrderNo 不为空，添加 payOrderNo 条件 -->
+      <if test="payOrderNo != null">
+        AND pay_order_no = #{payOrderNo}
+      </if>
+      <!-- 如果 guid 不为空，添加 guid 条件 -->
+      <if test="guid != null">
+        AND guid = #{guid}
+      </if>
+    </where>
+  </select>
+
+  <select id="pageQueryOrderByCondition" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from month_ticket_card_sell_order_info
+    <where>
+      <!-- 如果 customizeNo 不为空，添加 customizeNo 条件 -->
+      <if test="customizeNo != null">
+        AND customize_no = #{customizeNo}
+      </if>
+      <!-- 如果 orderNo 不为空，添加 orderNo 条件 -->
+      <if test="orderNo != null">
+        AND order_no = #{orderNo}
+      </if>
+      <!-- 如果 payOrderNo 不为空，添加 payOrderNo 条件 -->
+      <if test="payOrderNo != null">
+        AND pay_order_no = #{payOrderNo}
+      </if>
+      <!-- 如果 guid 不为空，添加 guid 条件 -->
+      <if test="guid != null">
+        AND guid = #{guid}
+      </if>
+    </where>
+    order by id desc
+    <!-- 如果 limit 和 offset 都不为 null，添加分页条件 -->
+    <if test="limit != null and offset != null">
+      LIMIT #{limit} OFFSET #{offset}
+    </if>
+  </select>
+
 </mapper>
