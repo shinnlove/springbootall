@@ -40,7 +40,7 @@ public class MonthTicketBizConfig {
     private String thirdPartyDomain = "https://open.yinge.tech";
 
     /** 三方mock接口沙箱域名 */
-    private String thirdPartySandBoxDomain = "https://preapi.songzhaopian.com";
+    private String thirdPartySandBoxDomain = "https://ataru.qidian.com";
 
     /** 本地调试路径 */
     private String localhostHandleEndpoint = "/yuewen/logistics/notify";
@@ -49,7 +49,7 @@ public class MonthTicketBizConfig {
     private String thirdPartyOrderPaidNotifyEndpoint = "/resellers/thirdparty/order/paid";
 
     /** 2nd. 印鸽给的自定义信息校验三方url地址 */
-    private String customizeInfoValidateUrl = "/resellers/thirdparty/qddsip/customize/info";
+    private String customizeInfoValidateUrl = "/qdact/thirdparty/interact/order/query";
 
     /** 3rd. 发货地址修改 */
     private String thirdPartyModifyUserAddressEndpoint = "/resellers/thirdparty/order/address/change";
