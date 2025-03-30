@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.FileDownloadRecordRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.FileDownloadRecordEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="query_condition" jdbcType="VARCHAR" property="queryCondition" />
+    <result column="file_key" jdbcType="VARCHAR" property="fileKey" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_size" jdbcType="BIGINT" property="fileSize" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+    <sql id="baseSql">
+      `id`, `activity_id`, `component_id`, `query_condition`, `file_key`, `file_name`, `file_size`, `status`, `create_user`, `create_time`, `update_time`
+    </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into file_download_record (activity_id, component_id, query_condition, file_key, file_name, file_size,
+                                      status, create_user, create_time, update_time)
+    values
+      (
+        #{entity.activityId,jdbcType=VARCHAR},
+        #{entity.componentId,jdbcType=BIGINT},
+        #{entity.queryCondition,jdbcType=VARCHAR},
+        #{entity.fileKey,jdbcType=VARCHAR},
+        #{entity.fileName,jdbcType=VARCHAR},
+        #{entity.fileSize,jdbcType=BIGINT},
+        #{entity.status,jdbcType=INTEGER},
+        #{entity.createUser,jdbcType=VARCHAR},
+        #{entity.createTime,jdbcType=TIMESTAMP},
+        #{entity.updateTime,jdbcType=TIMESTAMP}
+      );
+  </insert>
+
+  <update id="updateDownloadFileStatus">
+    update file_download_record
+    set status = #{status},
+        file_size = #{fileSize}
+    where `id` = #{id};
+  </update>
+
+  <select id="countDownloadRecordByCondition" resultType="long">
+    SELECT count(*)
+    FROM file_download_record
+    <where>
+      <!-- 如果 create_user 不为空，添加 create_user 条件 -->
+      <if test="condition.createUser != null">
+        AND create_user = #{condition.createUser}
+      </if>
+      <!-- 如果 status 不为空，添加 status 条件 -->
+      <if test="condition.status != null">
+        AND status = #{condition.status}
+      </if>
+    </where>
+  </select>
+
+  <select id="pageQueryDownloadRecordByCondition" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    FROM file_download_record
+    <where>
+      <!-- 如果 create_user 不为空，添加 create_user 条件 -->
+      <if test="condition.createUser != null">
+        AND create_user = #{condition.createUser}
+      </if>
+      <!-- 如果 status 不为空，添加 status 条件 -->
+      <if test="condition.status != null">
+        AND status = #{condition.status}
+      </if>
+    </where>
+    ORDER BY id DESC
+    <!-- 如果 limit 和 offset 都不为 null，添加分页条件 -->
+    <if test="condition.limit != null and condition.offset != null">
+      LIMIT #{condition.limit} OFFSET #{condition.offset}
+    </if>
+  </select>
+
+</mapper>

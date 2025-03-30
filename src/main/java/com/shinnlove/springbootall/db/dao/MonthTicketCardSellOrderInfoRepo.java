@@ -2,6 +2,7 @@ package com.shinnlove.springbootall.db.dao;
 
 import com.shinnlove.springbootall.db.po.ConsigneeAddressInfo;
 import com.shinnlove.springbootall.db.po.MonthTicketCardSellOrderInfoEntity;
+import com.shinnlove.springbootall.models.OrderQueryCondition;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -76,16 +77,20 @@ public interface MonthTicketCardSellOrderInfoRepo {
                                    @Param("expressNo") String expressNo,
                                    @Param("companyCode") String companyCode);
 
-    long countOrderByCondition(@Param("customizeNo") String customizeNo,
-                               @Param("orderNo") Long orderNo,
-                               @Param("payOrderNo") String payOrderNo,
-                               @Param("guid") Long guid);
+    /**
+     * 管理后台按条件查询订单。
+     *
+     * @param condition
+     * @return
+     */
+    long countOrderByCondition(@Param("condition") OrderQueryCondition condition);
 
-    List<MonthTicketCardSellOrderInfoEntity> pageQueryOrderByCondition(@Param("customizeNo") String customizeNo,
-                                                                       @Param("orderNo") Long orderNo,
-                                                                       @Param("payOrderNo") String payOrderNo,
-                                                                       @Param("guid") Long guid,
-                                                                       @Param("offset") Integer offset,
-                                                                       @Param("limit") Integer limit);
+    /**
+     * 管理后台按条件分页查询订单。
+     *
+     * @param condition
+     * @return
+     */
+    List<MonthTicketCardSellOrderInfoEntity> pageQueryOrderByCondition(@Param("condition") OrderQueryCondition condition);
 
 }

@@ -4,6 +4,9 @@
  */
 package com.shinnlove.springbootall.util.constants;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 跟印鸽对接的三方接口所需的常量字段。
  *
@@ -14,6 +17,9 @@ public class Biz3rdPartyConstant {
 
     /** 空字符串 */
     public static final String EMPTY_STR = "";
+
+    /** 查询无限制 */
+    public static final String NO_LIMITATION = "NO_LIMITATION";
 
     /** 1st. 签名验签算法常量 */
 
@@ -52,5 +58,22 @@ public class Biz3rdPartyConstant {
     public static final String COMPANY_CODE = "companyCode";
 
     public static final String EXPRESS_NO = "expressNo";
+
+    public static final String REDO_ORDER = "redoOrder";
+
+    public static final String MATERIAL_TYPE = "materialType";
+
+    /** 5th. 其他常量 */
+
+    /** Amis订单查看生产环境地址 */
+    public static final String ORDER_INFO_LINK = "https://amis.yuewen.com/group/QDActivityTools/pageQueryMonthTicketOrder?perPage=20&status=-1&materialType=NO_LIMITATION&gildSelected=NO_LIMITATION&page=1&orderNo=";
+
+    /** 6th. 下载导出文件表头 */
+
+    /** 订单导出表头字段 */
+    private static final String[] ORDER_EXPORT_FIELDS = {"记录时间", "订单编号", "用户guid", "用户昵称", "订单状态", "支付时间", "通知印鸽已支付时间", "印鸽定制编号", "订单价格(分)", "材质(是否升级)", "是否黄金材质" };
+
+    /** 表头列表 */
+    public static final List<String> ORDER_EXPORT_HEADER = Arrays.asList(ORDER_EXPORT_FIELDS);
 
 }

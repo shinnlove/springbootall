@@ -157,23 +157,45 @@
 
   <select id="countOrderByCondition" resultType="long">
     SELECT count(*)
-    from month_ticket_card_sell_order_info
+    FROM month_ticket_card_sell_order_info
     <where>
       <!-- 如果 customizeNo 不为空，添加 customizeNo 条件 -->
-      <if test="customizeNo != null">
-        AND customize_no = #{customizeNo}
+      <if test="condition.customizeNo != null">
+        AND customize_no = #{condition.customizeNo}
       </if>
       <!-- 如果 orderNo 不为空，添加 orderNo 条件 -->
-      <if test="orderNo != null">
-        AND order_no = #{orderNo}
+      <if test="condition.orderNo != null">
+        AND order_no = #{condition.orderNo}
       </if>
       <!-- 如果 payOrderNo 不为空，添加 payOrderNo 条件 -->
-      <if test="payOrderNo != null">
-        AND pay_order_no = #{payOrderNo}
+      <if test="condition.payOrderNo != null">
+        AND pay_order_no = #{condition.payOrderNo}
       </if>
       <!-- 如果 guid 不为空，添加 guid 条件 -->
-      <if test="guid != null">
-        AND guid = #{guid}
+      <if test="condition.guid != null">
+        AND guid = #{condition.guid}
+      </if>
+      <!-- 如果 materialType 不为空，添加 materialType 条件 -->
+      <if test="condition.materialType != null">
+        AND material_type = #{condition.materialType}
+      </if>
+      <!-- 如果 gildSelected 不为空，添加 gildSelected 条件 -->
+      <if test="condition.gildSelected != null">
+        AND gild_selected = #{condition.gildSelected}
+      </if>
+      <!-- 如果 status 不为空，添加 status 条件 -->
+      <if test="condition.status != null">
+        AND status = #{condition.status}
+      </if>
+      <!-- 如果 时间范围 不为空，添加 时间范围查询 条件 -->
+      <if test="condition.startTime != null or condition.endTime != null">
+        AND paid_time IS NOT NULL
+        <if test="condition.startTime != null">
+          AND paid_time >= FROM_UNIXTIME(#{condition.startTime})
+        </if>
+        <if test="condition.endTime != null">
+          AND paid_time <![CDATA[<=]]> FROM_UNIXTIME(#{condition.endTime})
+        </if>
       </if>
     </where>
   </select>
@@ -181,29 +203,51 @@
   <select id="pageQueryOrderByCondition" resultMap="BaseResultMap">
     SELECT
     <include refid="baseSql"/>
-    from month_ticket_card_sell_order_info
+    FROM month_ticket_card_sell_order_info
     <where>
       <!-- 如果 customizeNo 不为空，添加 customizeNo 条件 -->
-      <if test="customizeNo != null">
-        AND customize_no = #{customizeNo}
+      <if test="condition.customizeNo != null">
+        AND customize_no = #{condition.customizeNo}
       </if>
       <!-- 如果 orderNo 不为空，添加 orderNo 条件 -->
-      <if test="orderNo != null">
-        AND order_no = #{orderNo}
+      <if test="condition.orderNo != null">
+        AND order_no = #{condition.orderNo}
       </if>
       <!-- 如果 payOrderNo 不为空，添加 payOrderNo 条件 -->
-      <if test="payOrderNo != null">
-        AND pay_order_no = #{payOrderNo}
+      <if test="condition.payOrderNo != null">
+        AND pay_order_no = #{condition.payOrderNo}
       </if>
       <!-- 如果 guid 不为空，添加 guid 条件 -->
-      <if test="guid != null">
-        AND guid = #{guid}
+      <if test="condition.guid != null">
+        AND guid = #{condition.guid}
+      </if>
+      <!-- 如果 materialType 不为空，添加 materialType 条件 -->
+      <if test="condition.materialType != null">
+        AND material_type = #{condition.materialType}
+      </if>
+      <!-- 如果 gildSelected 不为空，添加 gildSelected 条件 -->
+      <if test="condition.gildSelected != null">
+        AND gild_selected = #{condition.gildSelected}
+      </if>
+      <!-- 如果 status 不为空，添加 status 条件 -->
+      <if test="condition.status != null">
+        AND status = #{condition.status}
+      </if>
+      <!-- 如果 时间范围 不为空，添加 时间范围查询 条件 -->
+      <if test="condition.startTime != null or condition.endTime != null">
+        AND paid_time IS NOT NULL
+        <if test="condition.startTime != null">
+          AND paid_time >= FROM_UNIXTIME(#{condition.startTime})
+        </if>
+        <if test="condition.endTime != null">
+          AND paid_time <![CDATA[<=]]> FROM_UNIXTIME(#{condition.endTime})
+        </if>
       </if>
     </where>
-    order by id desc
+    ORDER BY id DESC
     <!-- 如果 limit 和 offset 都不为 null，添加分页条件 -->
-    <if test="limit != null and offset != null">
-      LIMIT #{limit} OFFSET #{offset}
+    <if test="condition.limit != null and condition.offset != null">
+      LIMIT #{condition.limit} OFFSET #{condition.offset}
     </if>
   </select>
 
