@@ -187,14 +187,13 @@
       <if test="condition.status != null">
         AND status = #{condition.status}
       </if>
-      <!-- 如果 时间范围 不为空，添加 时间范围查询 条件 -->
+      <!-- 如果时间范围不为空，添加时间范围查询条件 -->
       <if test="condition.startTime != null or condition.endTime != null">
-        AND paid_time IS NOT NULL
         <if test="condition.startTime != null">
-          AND paid_time >= FROM_UNIXTIME(#{condition.startTime})
+          AND paid_time <![CDATA[ >= ]]> #{condition.startTime}
         </if>
-        <if test="condition.endTime != null">
-          AND paid_time <![CDATA[<=]]> FROM_UNIXTIME(#{condition.endTime})
+        <if test="condition.startTime != null">
+          AND paid_time <![CDATA[ <= ]]> #{condition.endTime}
         </if>
       </if>
     </where>
@@ -233,14 +232,13 @@
       <if test="condition.status != null">
         AND status = #{condition.status}
       </if>
-      <!-- 如果 时间范围 不为空，添加 时间范围查询 条件 -->
+      <!-- 如果时间范围不为空，添加时间范围查询条件 -->
       <if test="condition.startTime != null or condition.endTime != null">
-        AND paid_time IS NOT NULL
         <if test="condition.startTime != null">
-          AND paid_time >= FROM_UNIXTIME(#{condition.startTime})
+          AND paid_time <![CDATA[ >= ]]> #{condition.startTime}
         </if>
-        <if test="condition.endTime != null">
-          AND paid_time <![CDATA[<=]]> FROM_UNIXTIME(#{condition.endTime})
+        <if test="condition.startTime != null">
+          AND paid_time <![CDATA[ <= ]]> #{condition.endTime}
         </if>
       </if>
     </where>

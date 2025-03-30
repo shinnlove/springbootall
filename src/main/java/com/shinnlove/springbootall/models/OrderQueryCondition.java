@@ -6,6 +6,8 @@ package com.shinnlove.springbootall.models;
 
 import lombok.*;
 
+import java.sql.Timestamp;
+
 /**
  * @author Tony Zhao
  * @version $Id: OrderQueryCondition.java, v 0.1 2025-03-30 22:45 Tony Zhao Exp $$
@@ -40,10 +42,10 @@ public class OrderQueryCondition {
     private Integer gildSelected;
 
     /** 新条件: 支付查询开始时间(秒) */
-    private Long startTime;
+    private Timestamp startTime;
 
     /** 新条件: 支付查询结束时间(秒) */
-    private Long endTime;
+    private Timestamp endTime;
 
     /** 偏移位 */
     private Integer offset;

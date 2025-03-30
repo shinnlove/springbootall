@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -125,13 +126,13 @@ public class TicketOrderServiceImpl implements TicketOrderService {
         if (StringUtils.isNotBlank(query.getStartTime())) {
             long startTimeSeconds = Long.parseLong(query.getStartTime());
             long startTimeMilliseconds = startTimeSeconds * 1000;
-            condition.setStartTime(startTimeMilliseconds);
+            condition.setStartTime(new Timestamp(startTimeMilliseconds));
         }
 
         if (StringUtils.isNotBlank(query.getEndTime())) {
             long endTimeSeconds = Long.parseLong(query.getEndTime());
             long endTimeMilliseconds = endTimeSeconds * 1000;
-            condition.setEndTime(endTimeMilliseconds);
+            condition.setEndTime(new Timestamp(endTimeMilliseconds));
         }
 
         // 先统计数据库有多少条满足条件
