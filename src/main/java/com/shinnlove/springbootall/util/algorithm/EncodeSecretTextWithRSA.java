@@ -152,127 +152,18 @@ public class EncodeSecretTextWithRSA {
         return new KeyPair(publicKey, privateKey);
     }
 
-    /**
-     * 示例二：从给定文件路径中读取公私钥。
-     *
-     * 读取公钥，是因为要读取别人给你用来验签或加密内容的公钥，一般放在配置中心或文件中。
-     *
-     * @param privateKeyFilePath
-     * @param publicKeyFilePath
-     * @return
-     * @throws Exception
-     */
-    public static KeyPair readKeyPairFromPemFile(String privateKeyFilePath, String publicKeyFilePath) throws Exception {
-        PrivateKey privateKey = loadPrivateKeyFromPemFile(privateKeyFilePath);
-        PublicKey publicKey = loadPublicKeyFromPemFile(publicKeyFilePath);
-
-        return new KeyPair(publicKey, privateKey);
-    }
-
-    /**
-     * 示例二：根据文件路径 加载 PKCS#8 私钥
-     *
-     * @param pemFilePath
-     * @return
-     * @throws Exception
-     */
-    public static PrivateKey loadPrivateKeyFromPemFile(String pemFilePath) throws Exception {
-
-        // 文件中提取秘钥二进制
-        byte[] der = readKeyDerBytesFromFile(pemFilePath);
-
-        // 生成pkcs#8格式的私钥
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(der);
-
-        // 读取私钥
-        return KeyFactory.getInstance(RSAEncryptConstant.RSA_ALGORITHM_NAME).generatePrivate(keySpec);
-    }
-
-    /**
-     * 示例二：根据文件路径 加载 X.509 公钥。
-     *
-     * 最佳实践：
-     * 1) 如果是别人给的公钥，用来验证别人签名、或者加密数据给别人，可以用这个方法读取；
-     * 2) 如果是自己的公钥，不建议直接读取，建议从完整私钥推导。
-     *
-     * 使用如下命令:
-     *
-     * ```shell
-     *
-     * # 从私钥文件导出公钥
-     * openssl rsa -in rsa_pkcs1.pem -pubout -out public_key.pem
-     *
-     * # 从pkcs#8格式的私钥导出公钥
-     * openssl rsa -in rsa_pkcs8.pem -pubout -out public_key.pem
-     *
-     * ```
-     *
-     * @param pemFilePath
-     * @return
-     * @throws Exception
-     */
-    public static PublicKey loadPublicKeyFromPemFile(String pemFilePath) throws Exception {
-
-        // 文件中提取秘钥二进制
-        byte[] der = readKeyDerBytesFromFile(pemFilePath);
-
-        // 标准X.509的公钥
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(der);
-
-        // 读取公钥
-        return KeyFactory.getInstance(RSAEncryptConstant.RSA_ALGORITHM_NAME).generatePublic(keySpec);
-    }
-
-    /**
-     * 公共方法：从文件中读取无论是公钥还是私钥的der二进制内容。
-     *
-     * @param pemFilePath
-     * @return
-     * @throws Exception
-     */
-    private static byte[] readKeyDerBytesFromFile(String pemFilePath) throws Exception {
-
-        if (StringUtils.isBlank(pemFilePath)) {
-            throw new IllegalArgumentException("pem file path empty, cannot extract private or public key from file.");
-        }
-
-        // 二进制读取后转成明文
-        byte[] fileContent = Files.readAllBytes(Paths.get(pemFilePath));
-        String pemFileContent = new String(fileContent, RSAEncryptConstant.CHARSET_ENCODE);
-
-        // 明文中提取base64的Key
-        String base64KeyContent = RsaKeyPairExtractor.extractPemBase64BlockFromFileContent(pemFileContent);
-
-        // 转成解码后的der字节数组
-        return Base64.getDecoder().decode(base64KeyContent);
-    }
-
-    /**
-     * 示例三：给定config文件中的私钥内容（不含begin或end的头尾部），实例化成PrivateKey。
-     *
-     * @param configBase64KeyContent
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
-     */
-    public static PrivateKey loadPrivateKeyFromConfigBase64KeyContent(String configBase64KeyContent) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        // 将配置base64编码的key内容转成der字节数组
-        byte[] der = Base64.getDecoder().decode(configBase64KeyContent);
-
-        // 生成pkcs#8格式的私钥
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(der);
-
-        // 读取私钥
-        return KeyFactory.getInstance(RSAEncryptConstant.RSA_ALGORITHM_NAME).generatePrivate(keySpec);
-    }
-
     public static void main(String[] args) throws Exception {
         // 1. 每次都新生成RSA公私钥
         KeyPair newGenerateRSAKeyPair = newGenerateKeyPair(RSAEncryptConstant.RSA_ENCODE_BIT);
 
         // 2. 给定私钥文件地址、推导公钥并返回keyPair
-        String privateKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/rsa_pkcs8.pem";
+        String privateKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/rsa_pkcs8_pri.pem";
         KeyPair fileRSAKeyPair = RsaKeyPairExtractor.loadKeyPairFromPrivatePem(privateKeyFilePath);
+
+        // 3. 都从磁盘上文件读取公私钥 (用来校验)
+        String KeyPairPrivateKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/rsa_pkcs8_pri.pem";
+        String KeyPairPublicKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/rsa_pkcs8_pub.pem";
+        KeyPair bothFileRSAKeyPair = RsaKeyPairExtractor.loadKeyPairBothFromPemFile(KeyPairPrivateKeyFilePath, KeyPairPublicKeyFilePath);
 
         // 3. 给定公私钥文件内容、自动识别并读出区间内的公私钥Base64区块
         String pemFileContent = RSAEncryptConstant.SAMPLE_PRIVATE_KEY_FILE_CONTENT;
@@ -281,28 +172,28 @@ public class EncodeSecretTextWithRSA {
         System.out.println("读取到的配置内容, configBase64KeyContent: " + configBase64KeyContent);
 
         // 4. 从config中读取configBase64KeyContent，进行实例化公私钥
-        KeyPair configRSAKeyPair = RsaKeyPairExtractor.loadKeyPairFromConfigBase64Content(configBase64KeyContent);
+        KeyPair configRSAKeyPair2 = RsaKeyPairExtractor.loadKeyPairFromConfigBase64Content(configBase64KeyContent);
 
         // 5. 准备待加密明文
         String plaintext = "Hello RSA! Use RSA algorithm to encrypt text. Use RSA algorithm to encrypt text. Use RSA algorithm to encrypt text.";
 
         // 5-1. 公钥加密
-        String encryptedBase64 = encryptText(plaintext, configRSAKeyPair.getPublic());
+        String encryptedBase64 = encryptText(plaintext, bothFileRSAKeyPair.getPublic());
         System.out.println("加密后的base64字符串， encryptedBase64: " + encryptedBase64);
 
         // 5-2. 私钥解密密文
-        String decryptText = decryptText(encryptedBase64, configRSAKeyPair.getPrivate());
+        String decryptText = decryptText(encryptedBase64, bothFileRSAKeyPair.getPrivate());
         System.out.println("解密后的字符串, decryptText: " + decryptText);
 
         // 6. 准备签名
         String signPlainText = "This is my signature!";
 
         // 6-1. 私钥签名
-        String signature = signWithPrivateKey(signPlainText, configRSAKeyPair.getPrivate());
+        String signature = signWithPrivateKey(signPlainText, bothFileRSAKeyPair.getPrivate());
         System.out.println("签名（Base64）: " + signature);
 
         // 6-2. 公钥验签
-        boolean isVerified = verifySignWithPublicKey(signPlainText, signature, configRSAKeyPair.getPublic());
+        boolean isVerified = verifySignWithPublicKey(signPlainText, signature, bothFileRSAKeyPair.getPublic());
         System.out.println("验签结果: " + isVerified);
     }
 
