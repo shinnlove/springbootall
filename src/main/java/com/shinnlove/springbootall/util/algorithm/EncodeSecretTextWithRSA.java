@@ -278,7 +278,7 @@ public class EncodeSecretTextWithRSA {
         String pemFileContent = RSAEncryptConstant.SAMPLE_PRIVATE_KEY_FILE_CONTENT;
         String configBase64KeyContent = RsaKeyPairExtractor.extractPemBase64BlockFromFileContent(pemFileContent);
 
-        System.out.println(configBase64KeyContent);
+        System.out.println("读取到的配置内容, configBase64KeyContent: " + configBase64KeyContent);
 
         // 4. 从config中读取configBase64KeyContent，进行实例化公私钥
         KeyPair configRSAKeyPair = RsaKeyPairExtractor.loadKeyPairFromConfigBase64Content(configBase64KeyContent);
@@ -288,11 +288,11 @@ public class EncodeSecretTextWithRSA {
 
         // 5-1. 公钥加密
         String encryptedBase64 = encryptText(plaintext, configRSAKeyPair.getPublic());
-        System.out.println("encryptedBase64: " + encryptedBase64);
+        System.out.println("加密后的base64字符串， encryptedBase64: " + encryptedBase64);
 
         // 5-2. 私钥解密密文
         String decryptText = decryptText(encryptedBase64, configRSAKeyPair.getPrivate());
-        System.out.println("decryptText: " + decryptText);
+        System.out.println("解密后的字符串, decryptText: " + decryptText);
 
         // 6. 准备签名
         String signPlainText = "This is my signature!";
