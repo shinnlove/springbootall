@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+participant 客户
+participant 销售模块
+participant 生产模块
+participant 采购模块
+participant 仓库模块
+    
+'客户->>+Order: 下达销售订单
+销售模块->>生产模块: 检查MRP需求
+生产模块->>采购模块: 触发物料采购
+采购模块->>供应商: 发送采购订单
+供应商-->>采购模块: 返回发货通知
+仓库模块->>生产模块: 领料投产
+生产模块->>仓库模块: 产成品入库
+仓库模块->>销售模块: 备货完成
+销售模块->>客户: 安排物流配送
+
+@enduml

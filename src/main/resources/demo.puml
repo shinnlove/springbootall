@@ -1,0 +1,250 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam sequenceMessageAlign left
+
+actor "User" as User
+participant "ThirdPayPage" as ThirdPayPage
+participant "YueWenH5Page" as YueWenH5Page
+queue PayMQNotify as PayMQNotify
+participant "YueWenActBackend" as YueWenActBackend
+participant "YinGeH5Page" as YinGeH5Page
+participant "YinGeBackend" as YinGeBackend
+control     "YinGeControlJob"  as YinGeControlJob
+queue LogisticsMQ as LogisticsMQ
+
+'Step1: YueWen: select and redirect'
+
+autonumber 1.1
+
+User -> YueWenH5Page: select a month ticket with one book from page
+activate YueWenH5Page
+
+YueWenH5Page -> YueWenActBackend: query necessary parameters
+activate YueWenActBackend
+
+YueWenActBackend -> YueWenActBackend: generate outTradeNo and outProductId
+YueWenActBackend --> YueWenH5Page: assemble url parameters and do url encode
+deactivate YueWenActBackend
+
+YueWenH5Page -> YinGeH5Page: redirect url to <font color=blue><b>[YinGeH5Page]</b></font>
+activate YinGeH5Page
+deactivate YueWenH5Page
+
+YinGeH5Page --> User: YinGe display template select page to user
+deactivate YinGeH5Page
+
+|||
+|||
+
+'Step2: YinGe checkout and YueWen prepay check'
+
+autonumber 2.1
+
+User -> YinGeH5Page: user upload img and select card template
+activate YinGeH5Page
+
+YinGeH5Page -> YinGeBackend: user confirm and checkout
+activate YinGeBackend
+
+YinGeBackend -> YinGeBackend: place YinGe system's order and generate customizeNo
+YinGeBackend --> YinGeH5Page: return place order 200 ok with customizeNo
+deactivate YinGeBackend
+
+YinGeH5Page -> YueWenH5Page: redirect url back to [callback] <font color=blue><b>[YueWenPrepayH5Page]</b></font> with 3 parameters
+deactivate YinGeH5Page
+activate YueWenH5Page
+
+YueWenH5Page -> YueWenActBackend: request with customizeNo, thumbUrl, outSkuId etc.
+activate YueWenActBackend
+
+YueWenActBackend -> YueWenActBackend: update order with customizeNo, thumbUrl, outSkuId etc.
+YueWenActBackend -> YinGeBackend: call <font color=red><b>[YinGe]-[a4.YinGe pre-order info]</b></font> interface | customizeNo
+activate YinGeBackend
+
+YinGeBackend --> YueWenActBackend: return YinGe's pre-order info with required-fields
+deactivate YinGeBackend
+
+YueWenActBackend -> YueWenActBackend: required fields validation
+
+alt <font color=green>all required fields correspond</font>
+
+    YueWenActBackend -> YueWenActBackend: pre-pay and call internal service
+    YueWenActBackend --> YueWenH5Page: pre-check order success
+    deactivate YueWenActBackend
+
+    YueWenH5Page --> User: display pre-check order page to user
+    activate User
+
+    User -> YueWenH5Page: continue payment
+    deactivate User
+
+    YueWenH5Page -> ThirdPayPage: redirect to third party payment page
+    activate ThirdPayPage
+    deactivate YueWenH5Page
+
+    ThirdPayPage --> User: display third party payment page to user
+    deactivate ThirdPayPage
+
+else <font color=red>exists one required field not match</font>
+
+    activate YueWenActBackend
+    YueWenActBackend --> YueWenH5Page: pre-check order failed
+    activate YueWenH5Page
+    deactivate YueWenActBackend
+
+    YueWenH5Page --> User: redirect user to fail page
+    deactivate YueWenH5Page
+
+end
+
+|||
+|||
+
+'Step3: '
+
+autonumber 3.1
+
+User -> ThirdPayPage: check info and pay order
+activate User
+activate ThirdPayPage
+
+ThirdPayPage -> YueWenActBackend: payment success
+activate YueWenActBackend
+deactivate ThirdPayPage
+
+YueWenActBackend --> YueWenH5Page: payment success with paymentNo
+activate YueWenH5Page
+deactivate YueWenActBackend
+
+YueWenH5Page --> User: 200 ok for payment success
+deactivate YueWenH5Page
+deactivate User
+
+|||
+|||
+
+autonumber 4.1
+
+PayMQNotify -> YueWenActBackend: payment success notification
+activate PayMQNotify
+activate YueWenActBackend
+deactivate PayMQNotify
+
+YueWenActBackend -> YinGeBackend: call <font color=blue><b>[YinGe]-[b1.order payment success]</b></font> interface
+activate YinGeBackend
+
+YinGeBackend --> YueWenActBackend: 200 ok for confirming notification
+deactivate YinGeBackend
+deactivate YueWenActBackend
+
+deactivate PayMQNotify
+
+|||
+|||
+
+'Step4: '
+
+autonumber 5.1
+
+...[<font color="purple">2 hours later after placed the order</font>]...
+
+YinGeControlJob -> YinGeBackend: schedule print card job 2 hours later
+activate YinGeControlJob
+activate YinGeBackend
+
+deactivate YinGeControlJob
+
+YinGeBackend -> YueWenActBackend: call <font color="blue"><b>[YueWen]-[a1.fetch order info]</b></font> interface
+activate YueWenActBackend
+
+YueWenActBackend --> YinGeBackend: return YueWen's order info, with [orderStatus=<font color="green">PAID</font> | <font color="red">REFUND</font>]
+deactivate YueWenActBackend
+
+alt orderStatus ==<font color=green> PAID</font>
+    YinGeBackend -> YinGeBackend: update address info fetch from YueWen
+    YinGeBackend -> YinGeBackend: produce physical card
+else orderStatus ==<font color=red> REFUND</font>
+    YinGeBackend -> YinGeBackend: terminate this order and refund
+end
+
+deactivate YinGeBackend
+deactivate YinGeControlJob
+
+|||
+|||
+
+'Step6: Optional: user modify consignee's address info'
+
+autonumber 6.1
+
+User -> YueWenH5Page: user modify consignee's address info
+activate User
+activate YueWenH5Page
+
+YueWenH5Page -> YueWenActBackend: submit address modification
+activate YueWenActBackend
+
+YueWenActBackend -> YinGeBackend: call <font color="blue"><b>[YueWen]-[a2.address change]</b></font> interface
+activate YinGeBackend
+
+YinGeBackend --> YueWenActBackend: return result
+deactivate YinGeBackend
+
+alt <font color=green>code == 0</font>
+    YueWenActBackend -> YueWenActBackend: modify address in self system
+    YueWenActBackend --> YueWenH5Page: address modify success
+    YueWenH5Page --> User: return 200 ok for modify success
+else <font color=red>code != 0</font>
+    YueWenActBackend --> YueWenH5Page: address modify failed
+    YueWenH5Page --> User: return fail result with detail reason
+end
+
+deactivate User
+deactivate YueWenActBackend
+deactivate YueWenH5Page
+deactivate YinGeBackend
+
+|||
+|||
+
+'Step7: YinGe need intercept current order'
+
+autonumber 7.1
+
+YinGeControlJob -> YinGeBackend: sth. wicked happened
+activate YinGeControlJob
+activate YinGeBackend
+
+YinGeBackend -> YueWenActBackend: call <font color=blue><b>[YueWen]-[a2.order-intercept]</b></font> interface
+activate YueWenActBackend
+
+YueWenActBackend -> YueWenActBackend: YueWen pending internal order
+YueWenActBackend --> YinGeBackend: return 200 ok for intercepting order
+
+deactivate YueWenActBackend
+deactivate YinGeBackend
+
+|||
+|||
+
+'Step8: YinGe sync logistics info'
+
+autonumber 8.1
+
+LogisticsMQ -> YinGeBackend: logistics companies synchronize logistics information
+activate LogisticsMQ
+activate YinGeBackend
+
+deactivate LogisticsMQ
+
+YinGeBackend -> YueWenActBackend: call <font color=blue><b>[YueWen]-[a3.logistics notification]</b></font> interface
+activate YueWenActBackend
+
+YueWenActBackend -> YueWenActBackend: store entire logistics info
+YueWenActBackend --> YinGeBackend: return 200 ok for synchronizing logistics info
+
+deactivate YueWenActBackend
+deactivate YinGeBackend
+
+@enduml
