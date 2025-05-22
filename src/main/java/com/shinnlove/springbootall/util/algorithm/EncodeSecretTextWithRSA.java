@@ -157,12 +157,12 @@ public class EncodeSecretTextWithRSA {
         KeyPair newGenerateRSAKeyPair = newGenerateKeyPair(RSAEncryptConstant.RSA_ENCODE_BIT);
 
         // 2. 给定私钥文件地址、推导公钥并返回keyPair
-        String privateKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/rsa_pkcs8_pri.pem";
+        String privateKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/test_staging_rsa_pkcs8_pri.pem";
         KeyPair fileRSAKeyPair = RsaKeyPairExtractor.loadKeyPairFromPrivatePem(privateKeyFilePath);
 
         // 3. 都从磁盘上文件读取公私钥 (用来校验)
-        String KeyPairPrivateKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/rsa_pkcs8_pri.pem";
-        String KeyPairPublicKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/rsa_pkcs8_pub.pem";
+        String KeyPairPrivateKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/test_staging_rsa_pkcs8_pri.pem";
+        String KeyPairPublicKeyFilePath = "/Users/zhaochensheng/Downloads/rsa_test/test_staging_rsa_x509_pub.pem";
         KeyPair bothFileRSAKeyPair = RsaKeyPairExtractor.loadKeyPairBothFromPemFile(KeyPairPrivateKeyFilePath, KeyPairPublicKeyFilePath);
 
         // 3. 给定公私钥文件内容、自动识别并读出区间内的公私钥Base64区块
