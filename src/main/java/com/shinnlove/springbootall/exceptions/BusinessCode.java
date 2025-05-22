@@ -15,6 +15,28 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum BusinessCode implements ErrorCodeProvider {
 
+    // 统一错误处理
+    SYSTEM_ERROR(450, "系统错误！"),
+    INVALID_REQUEST(451, "无效的请求！"),
+    UNAUTHORIZED(452, "无接口访问权限！"),
+    RPC_CALL_ERROR(453, "RPC调用错误"),
+    LIMIT_ERROR(454, "请求频繁，请稍后再试"),
+    DEGRADE_ERROR(455, "请求频繁，请稍后再试"),
+
+    GET_NOAH_DATA_CONFIG_FAILED(900, "获取数据配置器配置失败"),
+    GET_NOAH_DATA_CONFIG_ERROR(901, "数据配置器配置错误，请检查配置"),
+    GET_COMPONENT_CONFIG_FAILED(902, "获取数据配置器配置失败"),
+    GET_COMPONENT_CONFIG_ERROR(903, "数据配置器配置错误，请检查配置"),
+    OUT_OF_ACTIVITY_TIME(904, "不在活动时间内"),
+    INTELLIGENT_FAILED(905, "智能接口异常！"),
+    UGC_ACTIVE_POST_QUERY_FAILED(906, "智能搜索查询帖子异常！"),
+
+    LOCK_TOO_FAST_ERROR(998, "太快了！"),
+    LOCK_TOO_FAST_FAILED(999, "太快了！"),
+
+    ENCRYPT_MD5_FAILED(1001, "MD5加密失败"),
+    SIGNATURE_VALIDATE_FAILED(1002, "签名验签失败"),
+
     // 一些通用服务层错误
     DB_ACCESS_THROW_ERROR(6001, "数据库访问直接抛错"),
     DB_EXECUTE_RETURN_ERROR(6002, "数据库sql返回执行结果失败"),

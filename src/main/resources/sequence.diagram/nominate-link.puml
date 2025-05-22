@@ -1,0 +1,74 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User
+participant "ActivityBoot" as User
+
+autonumber
+
+User -> ActivityBoot: user nominate bookId with comments
+activate ActivityBoot
+
+alt if nominate_status == 1
+
+ActivityBoot->MySQL: store detail records into db
+activate MySQL
+MySQL->ActivityBoot: store result
+deactivate MySQL
+
+alt if Case1: insert fail
+ActivityBoot->ActivityBoot: throw exception
+end
+
+ActivityBoot->Redis: put guid into redis using lpush command
+activate Redis
+Redis->ActivityBoot: return execute command result
+deactivate Redis
+
+alt if Case2: execute not ok
+ActivityBoot->ActivityBoot: throw exception
+end
+
+ActivityBoot->CMQ: send CMQ message to UniteRanking queue
+activate CMQ
+CMQ->ActivityBoot: send CMQ message to UniteRanking queue
+deactivate CMQ
+
+alt if Case3： msg send fail
+ActivityBoot->ActivityBoot: throw exception
+end
+
+else catch exception
+
+ActivityBoot->AlertingServer: report nominate failed indicator
+activate AlertingServer
+AlertingServer->ActivityBoot: return report success
+deactivate AlertingServer
+
+ActivityBoot->User: return nominate failed result
+
+end
+
+ActivityBoot->UGCService: publish ugc comment
+activate UGCService
+
+UGCService->ActivityBoot: return submit result
+deactivate UGCService
+
+activate AlertingServer
+
+alt if ugc_comment==success
+
+ActivityBoot->AlertingServer: report nominate success with usg success indicator
+
+else ugc_comment==fail
+
+ActivityBoot->AlertingServer: report nominate success with usg fail indicator
+
+end
+AlertingServer->ActivityBoot: return report success
+deactivate AlertingServer
+
+ActivityBoot->User: return nominate success result
+
+@enduml

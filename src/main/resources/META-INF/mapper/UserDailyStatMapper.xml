@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.UserDailyStatRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.UserDailyStatEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="component_id" jdbcType="BIGINT" property="componentId" />
+    <result column="guid" jdbcType="BIGINT" property="guid" />
+    <result column="total_num" jdbcType="BIGINT" property="totalNum" />
+    <result column="used_num" jdbcType="BIGINT" property="usedNum" />
+    <result column="remain_num" jdbcType="BIGINT" property="remainNum" />
+    <result column="date_mark" jdbcType="INTEGER" property="dateMark" />
+    <result column="chance_received" jdbcType="INTEGER" property="chanceReceived" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into user_daily_stat (activity_id, component_id, guid,
+                                 date_mark, total_num, used_num)
+    values
+      (
+        #{entity.activityId,jdbcType=VARCHAR},
+        #{entity.componentId,jdbcType=BIGINT},
+        #{entity.guid,jdbcType=BIGINT},
+        #{entity.dateMark,jdbcType=INTEGER},
+        #{entity.totalNum,jdbcType=INTEGER},
+        #{entity.usedNum,jdbcType=INTEGER}
+      ) on duplicate key
+    update total_num = total_num, chance_received = 0, used_num = 0;
+  </insert>
+
+  <select id="queryUserDailyStat" resultMap="BaseResultMap">
+    select activity_id, component_id, guid, date_mark,
+           (total_num - used_num) as remain_num,
+           total_num, used_num,
+           chance_received
+    from user_daily_stat
+    where `activity_id` = #{activityId} and `guid` = #{guid}
+        and `date_mark` = #{dateMark}
+      limit 1
+  </select>
+
+  <update id="updateUserDailyStat">
+    update user_daily_stat
+    set chance_received = 1
+    where `activity_id` = #{activityId} and `guid` = #{guid}
+      and `date_mark` = #{dateMark}
+  </update>
+
+</mapper>

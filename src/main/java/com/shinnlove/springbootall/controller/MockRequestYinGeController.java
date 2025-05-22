@@ -1,0 +1,159 @@
+/**
+ * Inc.
+ * Copyright (c) 2004-2025 All Rights Reserved.
+ */
+package com.shinnlove.springbootall.controller;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.shinnlove.springbootall.service.third.party.OuttaHttpRequestService;
+import com.shinnlove.springbootall.util.constants.Biz3rdPartyConstant;
+import com.shinnlove.springbootall.util.constants.MonthTicketBizConfig;
+import com.shinnlove.springbootall.util.dto.ServiceResult;
+import com.shinnlove.springbootall.util.third.party.SignatureUtil;
+import com.shinnlove.springbootall.util.third.party.YinGeResultFactory;
+import com.shinnlove.springbootall.util.third.party.dto.CustomizeInfo;
+import com.shinnlove.springbootall.util.third.party.dto.YinGeResult;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+/**
+ * @author Tony Zhao
+ * @version $Id: MockRequestYinGeController.java, v 0.1 2025-03-03 15:06 Tony Zhao Exp $$
+ */
+@RestController
+@RequestMapping(value = "/http")
+public class MockRequestYinGeController {
+
+    private static Logger logger = LoggerFactory.getLogger(MockRequestYinGeController.class);
+
+    @Autowired
+    private OuttaHttpRequestService outtaHttpRequestService;
+
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    public String sayHello() {
+        return "Hello http request.";
+    }
+
+    @RequestMapping(value = "/test_query_mock", method = RequestMethod.GET)
+    public YinGeResult<CustomizeInfo> testQueryMockInfo(@RequestParam("customizeNo") String customizeNo) {
+
+        MonthTicketBizConfig bizConfig = new MonthTicketBizConfig();
+
+//        String domain = bizConfig.getLocalhostDebugDomain();
+
+        String domain = bizConfig.getThirdPartySandBoxDomain();
+        String endpoint = bizConfig.getCustomizeInfoValidateUrl();
+        String url = domain + endpoint;
+
+        Map<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put(Biz3rdPartyConstant.CUSTOMIZE_NO, customizeNo);
+
+        SignatureUtil.fillCommonSignature(paramsMap);
+
+        //        Map<String, Object> printMap = new TreeMap<>(paramsMap);
+//        printMap.remove(Biz3rdPartyConstant.SIGN);
+//
+//        logger.warn("控制器：请求三方接口json参数：{}", SignatureUtil.mapToJsonString(printMap));
+
+        // 构建具体的返回类型
+        Type type = new TypeReference<YinGeResult<CustomizeInfo>>() {}.getType();
+
+        // do request
+        ServiceResult<CustomizeInfo> result = outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);
+
+        if (result.isSuccess()) {
+            logger.warn("控制器：请求三方接口返回结果：{}", result.getData());
+            return YinGeResultFactory.success(result.getData());
+        } else {
+            logger.warn("控制器：绑定订单号和自定义单号失败, result={}", result);
+            return YinGeResultFactory.fail(result.getCode(), result.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/test_binding", method = RequestMethod.GET)
+    public Integer testBindingOrderNoWithCustomizeNo() {
+
+        MonthTicketBizConfig bizConfig = new MonthTicketBizConfig();
+
+//        String domain = bizConfig.getLocalhostDebugDomain();
+        String domain = bizConfig.getThirdPartyDomain();
+        String endpoint = bizConfig.getThirdPartyOrderPaidNotifyEndpoint();
+        String url = domain + endpoint;
+
+        Map<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put(Biz3rdPartyConstant.CUSTOMIZE_NO, "EGznO2yl");
+        paramsMap.put(Biz3rdPartyConstant.OUT_TRADE_NO, "202503071236689");
+
+        SignatureUtil.fillCommonSignature(paramsMap);
+
+//        Map<String, Object> printMap = new TreeMap<>(paramsMap);
+//        printMap.remove(Biz3rdPartyConstant.SIGN);
+//
+//        logger.warn("控制器：请求三方接口json参数：{}", SignatureUtil.mapToJsonString(printMap));
+
+        // 构建具体的返回类型
+        Type type = new TypeReference<YinGeResult<List<Object>>>() {}.getType();
+
+        // do request
+        ServiceResult<List<Object>> result = outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);
+
+        if (result.isSuccess()) {
+            logger.warn("控制器：请求三方接口返回结果：{}", result.getData());
+        } else {
+            logger.warn("控制器：绑定订单号和自定义单号失败, result={}", result);
+        }
+
+        return result.isSuccess() ? 1 : 0;
+    }
+
+    @RequestMapping(value = "/test_sync_logistics", method = RequestMethod.GET)
+    public YinGeResult<Integer> testSyncLogistics() {
+
+        MonthTicketBizConfig bizConfig = new MonthTicketBizConfig();
+
+        String domain = bizConfig.getLocalhostDebugDomain();
+        String endpoint = bizConfig.getLocalhostHandleEndpoint();
+        String url = domain + endpoint;
+
+        // 需要发送的数据
+        String json = "{\"customizeNo\":\"EG001\",\"outTradeNo\":\"345124366542\",\"companyCode\":\"SF\",\"expressNo\":\"324353426543\",\"expressTrace\":[{\"time\":\"2024-06-14 17:08:03\",\"context\":\"快件到达【上海市寄递事业部航空中心桃浦包件车间】\",\"status\":\"TRANSPORT\",\"city\":\"上海市\"},{\"time\":\"2024-06-14 01:31:58\",\"context\":\"快件离开【武汉陆运包件车间】，正在发往下一站\",\"status\":\"TRANSPORT\",\"city\":\"武汉市\"},{\"time\":\"2024-06-13 22:28:39\",\"context\":\"快件到达【武汉陆运包件车间】\",\"status\":\"TRANSPORT\",\"city\":\"武汉市\"}],\"redoOrder\":\"1\"}";
+
+        // 使用 Fastjson 将 JSON 字符串转换为 Map
+        Map<String, Object> paramsMap = JSON.parseObject(json, new TypeReference<Map<String, Object>>() {});
+
+        SignatureUtil.fillCommonSignature(paramsMap);
+
+        //        Map<String, Object> printMap = new TreeMap<>(paramsMap);
+//        printMap.remove(Biz3rdPartyConstant.SIGN);
+//
+//        logger.warn("控制器：请求三方接口json参数：{}", SignatureUtil.mapToJsonString(printMap));
+
+        // 构建具体的返回类型
+        Type type = new TypeReference<YinGeResult<Integer>>() {}.getType();
+
+        // do request
+        ServiceResult<Integer> result = outtaHttpRequestService.requestOnce(url, Biz3rdPartyConstant.METHOD_POST, paramsMap, type);
+
+        if (result.isSuccess()) {
+            logger.warn("控制器：请求三方接口返回结果：{}", result.getData());
+            return YinGeResultFactory.success(result.getData());
+        } else {
+            logger.warn("控制器：绑定订单号和自定义单号失败, result={}", result);
+            return YinGeResultFactory.fail(result.getCode(), result.getMessage());
+        }
+    }
+
+}

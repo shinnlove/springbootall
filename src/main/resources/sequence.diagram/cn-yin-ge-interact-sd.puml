@@ -1,0 +1,250 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam sequenceMessageAlign left
+
+actor "用户" as User
+participant "三方支付" as ThirdPayPage
+participant "阅文H5页面" as YueWenH5Page
+queue "支付MQ消息" as PayMQNotify
+participant "阅文后端服务" as YueWenActBackend
+participant "印鸽H5页面" as YinGeH5Page
+participant "印鸽后端服务" as YinGeBackend
+control     "印鸽总控"  as YinGeControlJob
+queue "物流MQ消息" as LogisticsMQ
+
+'Step1: YueWen: select and redirect'
+
+autonumber 1.1
+
+User -> YueWenH5Page: 页面上选择书本月票
+activate YueWenH5Page
+
+YueWenH5Page -> YueWenActBackend: 查询必要参数
+activate YueWenActBackend
+
+YueWenActBackend -> YueWenActBackend: 生成outTradeNo和outProductId
+YueWenActBackend --> YueWenH5Page: 组装url参数和进行url encode
+deactivate YueWenActBackend
+
+YueWenH5Page -> YinGeH5Page: 页面重定向到<font color=blue><b>[印鸽H5页面]</b></font>
+activate YinGeH5Page
+deactivate YueWenH5Page
+
+YinGeH5Page --> User: 印鸽页面展示模板供用户选择
+deactivate YinGeH5Page
+
+|||
+|||
+
+'Step2: YinGe checkout and YueWen prepay check'
+
+autonumber 2.1
+
+User -> YinGeH5Page: 用户选择模板与上传图片自定义卡片
+activate YinGeH5Page
+
+YinGeH5Page -> YinGeBackend: 用户确认去下单
+activate YinGeBackend
+
+YinGeBackend -> YinGeBackend: 在印鸽系统里创建预订单
+YinGeBackend --> YinGeH5Page: 返回200 ok预订单编号customizeNo
+deactivate YinGeBackend
+
+YinGeH5Page -> YueWenH5Page: 带3个必要参数重定向到阅文callback地址<font color=blue><b>[YueWenH5Page]</b></font>
+deactivate YinGeH5Page
+activate YueWenH5Page
+
+YueWenH5Page -> YueWenActBackend: 请求存储customizeNo, thumbUrl, outSkuId etc等必要回传字段.
+activate YueWenActBackend
+
+YueWenActBackend -> YueWenActBackend: 更新订单上的customizeNo, thumbUrl, outSkuId等字段.
+YueWenActBackend -> YinGeBackend: 调用<font color=red><b>[印鸽]-[a4.预制单查询]</b></font> 接口 | customizeNo
+activate YinGeBackend
+
+YinGeBackend --> YueWenActBackend: 返回印鸽预订单信息、包含必要校对字段
+deactivate YinGeBackend
+
+YueWenActBackend -> YueWenActBackend: 必要字段校验
+
+alt <font color=green>所有必要字段均复合</font>
+
+    YueWenActBackend -> YueWenActBackend: 参数组装与调用支付服务做预支付
+    YueWenActBackend --> YueWenH5Page: 预支付订单准备完成
+    deactivate YueWenActBackend
+
+    YueWenH5Page --> User: 展示印鸽预览和订单信息给用户
+    activate User
+
+    User -> YueWenH5Page: 确认下单并支付
+    deactivate User
+
+    YueWenH5Page -> ThirdPayPage: 重定向到三方支付页面
+    activate ThirdPayPage
+    deactivate YueWenH5Page
+
+    ThirdPayPage --> User: 展示三方支付页面给用户
+    deactivate ThirdPayPage
+
+else <font color=red>存在某个必要字段不符合</font>
+
+    activate YueWenActBackend
+    YueWenActBackend --> YueWenH5Page: 预检查订单字段失败
+    activate YueWenH5Page
+    deactivate YueWenActBackend
+
+    YueWenH5Page --> User: 重定向用户到参数错误页面，流程完成
+    deactivate YueWenH5Page
+
+end
+
+|||
+|||
+
+'Step3: '
+
+autonumber 3.1
+
+User -> ThirdPayPage: 校验信息与支付
+activate User
+activate ThirdPayPage
+
+ThirdPayPage -> YueWenActBackend: 支付成功
+activate YueWenActBackend
+deactivate ThirdPayPage
+
+YueWenActBackend --> YueWenH5Page: 支付成功并返回paymentNo
+activate YueWenH5Page
+deactivate YueWenActBackend
+
+YueWenH5Page --> User: 支付成功
+deactivate YueWenH5Page
+deactivate User
+
+|||
+|||
+
+autonumber 4.1
+
+PayMQNotify -> YueWenActBackend: 支付回调通知消息
+activate PayMQNotify
+activate YueWenActBackend
+deactivate PayMQNotify
+
+YueWenActBackend -> YinGeBackend: 调用<font color=blue><b>[印鸽]-[b1.订单支付成功推送]</b></font> 接口
+activate YinGeBackend
+
+YinGeBackend --> YueWenActBackend: 印鸽确认收到支付成功推送
+deactivate YinGeBackend
+deactivate YueWenActBackend
+
+deactivate PayMQNotify
+
+|||
+|||
+
+'Step4: '
+
+autonumber 5.1
+
+...[<font color="purple">印鸽预订单下单2小时后</font>]...
+
+YinGeControlJob -> YinGeBackend: 2小时后定制卡制作进入流程
+activate YinGeControlJob
+activate YinGeBackend
+
+deactivate YinGeControlJob
+
+YinGeBackend -> YueWenActBackend: 调用<font color="blue"><b>[阅文]-[a1.获取订单信息]</b></font> 接口
+activate YueWenActBackend
+
+YueWenActBackend --> YinGeBackend: 返回阅文订单信息, 必要状态字段 [orderStatus=<font color="green">PAID</font> | <font color="red">REFUND</font>]
+deactivate YueWenActBackend
+
+alt orderStatus ==<font color=green> PAID</font>
+    YinGeBackend -> YinGeBackend: 更新从阅文拿到的收货地址(简单密文可反解)
+    YinGeBackend -> YinGeBackend: 进入实体卡制作流程
+else orderStatus ==<font color=red> REFUND</font>
+    YinGeBackend -> YinGeBackend: 终止订单并退款给合作方储备金账户
+end
+
+deactivate YinGeBackend
+deactivate YinGeControlJob
+
+|||
+|||
+
+'Step6: Optional: user modify consignee's address info'
+
+autonumber 6.1
+
+User -> YueWenH5Page: 用户修改收货人地址信息
+activate User
+activate YueWenH5Page
+
+YueWenH5Page -> YueWenActBackend: 发起地址修改请求
+activate YueWenActBackend
+
+YueWenActBackend -> YinGeBackend: 调用 <font color="blue"><b>[阅文]-[a2.修改收货地址]</b></font> 接口
+activate YinGeBackend
+
+YinGeBackend --> YueWenActBackend: 返回修改结果
+deactivate YinGeBackend
+
+alt <font color=green>code == 0</font>
+    YueWenActBackend -> YueWenActBackend: 修改系统中自身收货地址
+    YueWenActBackend --> YueWenH5Page: 地址修改成功
+    YueWenH5Page --> User: 页面返回修改地址成功
+else <font color=red>code != 0</font>
+    YueWenActBackend --> YueWenH5Page: 地址修改失败
+    YueWenH5Page --> User: 页面返回修改地址失败
+end
+
+deactivate User
+deactivate YueWenActBackend
+deactivate YueWenH5Page
+deactivate YinGeBackend
+
+|||
+|||
+
+'Step7: YinGe need intercept current order'
+
+autonumber 7.1
+
+YinGeControlJob -> YinGeBackend: 发生了什么不可控力
+activate YinGeControlJob
+activate YinGeBackend
+
+YinGeBackend -> YueWenActBackend: 调用 <font color=blue><b>[阅文]-[a2.订单拦截]</b></font> 接口
+activate YueWenActBackend
+
+YueWenActBackend -> YueWenActBackend: 阅文挂起内部订单
+YueWenActBackend --> YinGeBackend: 返回给印鸽成功拦截订单，内部不做推进
+
+deactivate YueWenActBackend
+deactivate YinGeBackend
+
+|||
+|||
+
+'Step8: YinGe sync logistics info'
+
+autonumber 8.1
+
+LogisticsMQ -> YinGeBackend: 物流公司同步物流信息给印鸽
+activate LogisticsMQ
+activate YinGeBackend
+
+deactivate LogisticsMQ
+
+YinGeBackend -> YueWenActBackend: 调用 <font color=blue><b>[阅文]-[a3.物流信息通知]</b></font> 接口
+activate YueWenActBackend
+
+YueWenActBackend -> YueWenActBackend: 存储完整物流信息
+YueWenActBackend --> YinGeBackend: 返回给印鸽同步物流信息ok
+
+deactivate YueWenActBackend
+deactivate YinGeBackend
+
+@enduml

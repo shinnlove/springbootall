@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.AssistRecordRepo">
+
+  <resultMap id="AssistRecordResultMap" type="com.shinnlove.springbootall.db.po.AssistRecordEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="inviter_guid" jdbcType="BIGINT" property="inviterGuid" />
+    <result column="assistant_guid" jdbcType="BIGINT" property="assistantGuid" />
+    <result column="book_id" jdbcType="BIGINT" property="bookId" />
+    <result column="point_count" jdbcType="BIGINT" property="pointCount" />
+    <result column="assistant_type" jdbcType="INTEGER" property="assistantType" />
+    <result column="received" jdbcType="INTEGER" property="received" />
+    <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="date_mark" jdbcType="INTEGER" property="dateMark" />
+    <result column="expired_timestamp" jdbcType="BIGINT" property="expiredTimestamp" />
+    <result column="assist_timestamp" jdbcType="BIGINT" property="assistTimestamp" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="SumAssistRecord" type="com.shinnlove.springbootall.db.po.SumAssistRecord">
+    <result column="total_unreceived_points" property="totalUnreceivedPoints" />
+    <result column="total_unreceived_assists" property="totalUnreceivedAssists" />
+  </resultMap>
+
+  <insert id="createAssistRecord">
+    INSERT INTO assist_record
+    ( `inviter_guid`, `assistant_guid`, `book_id`, `point_count`, `assist_timestamp`
+    , `expired_timestamp`, `assistant_type`, `date_mark`)
+    VALUES (#{entity.inviterGuid}, #{entity.assistantGuid}, #{entity.bookId}, #{entity.pointCount}, #{entity.assistTimestamp},
+            #{entity.expiredTimestamp}, #{entity.assistantType}, #{entity.dateMark})
+  </insert>
+
+  <update id="updateReceivedBatch" >
+    update assist_record
+    set `received` = 1
+    where `id` in
+    <foreach collection="recordIds" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+    and `received` = 0
+  </update>
+
+  <select id="queryEffectiveAssistRecordByGuid"
+          resultType="com.shinnlove.springbootall.db.po.AssistRecordEntity">
+    SELECT
+      `id`, `inviter_guid`, `assistant_guid`, `book_id`, `point_count`, `assistant_type`
+    FROM
+      assist_record
+    WHERE
+      `inviter_guid` = #{inviterGuid}
+      AND `received` = 0
+      AND `expired_timestamp` > #{currentTimeMillis}
+  </select>
+
+  <select id="sumEffectiveAssistRecordByGuid" resultMap="SumAssistRecord">
+    SELECT
+      sum(`point_count`) as total_unreceived_points,
+      count(*) as total_unreceived_assists
+    FROM
+      assist_record
+    WHERE
+      `inviter_guid` = #{inviterGuid}
+      AND `received` = 0
+      AND `expired_timestamp` > #{currentTimeMillis}
+  </select>
+
+  <!-- 2. 主页小卡上方今日邀请用户数 -->
+  <select id="countTodayInviteRecords" resultType="long">
+    SELECT COUNT(*)
+    FROM assist_record
+    WHERE inviter_guid = #{inviterGuid}
+      AND date_mark = #{dateMark}
+  </select>
+
+  <!-- 4.1 count语句 -->
+  <select id="countInviteRecords" resultType="long">
+    SELECT COUNT(*)
+    FROM assist_record
+    WHERE inviter_guid = #{inviterGuid}
+  </select>
+
+  <!-- 4.2 分页select语句 -->
+  <select id="pageQueryInviteRecords" resultMap="AssistRecordResultMap">
+    SELECT
+      id,
+      inviter_guid,
+      assistant_guid,
+      book_id,
+      date_mark,
+      point_count,
+      assist_timestamp,
+      receive_time,
+      expired_timestamp,
+      assistant_type,
+      received
+    FROM assist_record
+    WHERE inviter_guid = #{inviterGuid}
+    ORDER BY id DESC
+      LIMIT #{offset}, #{limit}
+  </select>
+
+  <select id="latestAssistRecord" resultMap="AssistRecordResultMap">
+    SELECT
+      id,
+      inviter_guid,
+      assistant_guid,
+      book_id,
+      date_mark,
+      point_count,
+      assist_timestamp,
+      receive_time,
+      expired_timestamp,
+      assistant_type,
+      received
+    FROM assist_record
+    WHERE inviter_guid = #{inviterGuid}
+    ORDER BY id DESC
+      LIMIT 1
+  </select>
+
+  <!-- 5.1 更新用户领取分享点币 -->
+  <update id="updateReceivedStatusByGuidAndDate">
+    UPDATE assist_record
+    SET received = 1,
+        receive_time = #{timestamp}
+    WHERE inviter_guid = #{guid}
+      AND date_mark = #{dateMark}
+      AND received = 0
+  </update>
+
+  <!-- 5.2 更新用户领取好友助力点币 -->
+  <update id="updateReceivedStatusByIds">
+    UPDATE assist_record
+    SET received = 1,
+    receive_time = #{timestamp}
+    WHERE id IN
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </update>
+
+</mapper>

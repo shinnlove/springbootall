@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinnlove.springbootall.db.dao.BookAdjustReasonMessageRepo">
+
+  <resultMap id="BaseResultMap" type="com.shinnlove.springbootall.db.po.BookAdjustReasonMessageEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="consumer_env" jdbcType="VARCHAR" property="consumerEnv" />
+    <result column="original_msg_body" jdbcType="VARCHAR" property="originalMsgBody" />
+    <result column="msg_cbid" jdbcType="BIGINT" property="msgCbid" />
+    <result column="msg_title" jdbcType="VARCHAR" property="msgTitle" />
+    <result column="msg_reason" jdbcType="VARCHAR" property="msgReason" />
+    <result column="msg_type" jdbcType="INTEGER" property="msgType" />
+    <result column="msg_operator" jdbcType="VARCHAR" property="msgOperator" />
+    <result column="msg_create_time" jdbcType="BIGINT" property="msgCreateTime" />
+    <result column="msg_create_time_str" jdbcType="VARCHAR" property="msgCreateTimeStr" />
+    <result column="check_level" jdbcType="INTEGER" property="checkLevel" />
+    <result column="audit_status" jdbcType="VARCHAR" property="auditStatus" />
+    <result column="need_push" jdbcType="INTEGER" property="needPush" />
+    <result column="has_sent" jdbcType="INTEGER" property="hasSent" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="baseSql">
+    `id`, `activity_id`, `consumer_env`, `original_msg_body`, `msg_cbid`, `msg_title`, `msg_reason`, `msg_type`,
+        `msg_operator`, `msg_create_time`, `msg_create_time_str`, `check_level`, `audit_status`,
+        `need_push`, `has_sent`, `create_time`,`update_time`, `remark`
+  </sql>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="entity.id">
+    insert into book_adjust_reason_message (`activity_id`, `consumer_env`, `original_msg_body`, `msg_cbid`,
+                                            `msg_title`, `msg_reason`, `msg_type`, `msg_operator`, `msg_create_time`,
+                                            `msg_create_time_str`)
+    values
+      (
+        #{entity.activityId,jdbcType=VARCHAR},
+        #{entity.consumerEnv,jdbcType=VARCHAR},
+        #{entity.originalMsgBody,jdbcType=VARCHAR},
+        #{entity.msgCbid,jdbcType=BIGINT},
+        #{entity.msgTitle,jdbcType=VARCHAR},
+        #{entity.msgReason,jdbcType=VARCHAR},
+        #{entity.msgType,jdbcType=INTEGER},
+        #{entity.msgOperator,jdbcType=VARCHAR},
+        #{entity.msgCreateTime,jdbcType=BIGINT},
+        #{entity.msgCreateTimeStr,jdbcType=VARCHAR}
+      );
+  </insert>
+
+  <update id="updateBookCurrentCheckLevelAndAuditStatus">
+    update book_adjust_reason_message
+    set check_level = #{checkLevel},
+        audit_status = #{auditStatus},
+        need_push = #{needPush}
+    where `id` = #{id};
+  </update>
+
+  <update id="updateBookAdjustReasonPushResult">
+    update book_adjust_reason_message
+    set has_sent = #{hasSent}
+    where `id` = #{id};
+  </update>
+
+  <select id="queryMessageByCbid" resultMap="BaseResultMap">
+    SELECT
+    <include refid="baseSql"/>
+    from book_adjust_reason_message
+    WHERE `msg_cbid` = #{cbid}
+    ORDER BY `id` DESC;
+  </select>
+
+</mapper>
