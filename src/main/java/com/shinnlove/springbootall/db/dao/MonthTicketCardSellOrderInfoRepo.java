@@ -66,6 +66,16 @@ public interface MonthTicketCardSellOrderInfoRepo {
                                      @Param("expressNo") String expressNo);
 
     /**
+     * Step1: 为数据库的记录更新uniqueId。
+     *
+     * @param complianceSensitiveId
+     * @param orderNo
+     * @return
+     */
+    int updateUniqueSensitiveId(@Param("complianceSensitiveId") String complianceSensitiveId,
+                                @Param("orderNo") Long orderNo);
+
+    /**
      * 根据预制单号更新物流信息。
      *
      * @param orderNo

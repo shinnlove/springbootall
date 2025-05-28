@@ -55,6 +55,8 @@ public class MonthTicketCardSellOrderInfoEntity implements Serializable {
 
     private Integer amount;
 
+    private String complianceSensitiveId;
+
     private Long userAddressLogId;
 
     private String consigneeName;

@@ -28,6 +28,15 @@ public interface TicketOrderService {
     MonthTicketCardSellOrderInfoEntity queryOrderInfoByOrderNo(Long orderNo) throws DBAccessThrowException, DBExecuteReturnException;
 
     /**
+     * Step1: 更新记录增加id
+     *
+     * @param uniqueSensitiveId
+     * @param orderNo
+     * @return
+     */
+    Integer updateUniqueSensitiveId(String uniqueSensitiveId, Long orderNo);
+
+    /**
      * 更新订单的物流信息。
      *
      * @param orderNo

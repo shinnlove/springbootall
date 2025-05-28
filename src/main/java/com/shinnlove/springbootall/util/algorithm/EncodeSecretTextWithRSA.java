@@ -175,7 +175,8 @@ public class EncodeSecretTextWithRSA {
         System.out.println("加密后的base64字符串， encryptedBase64: " + encryptedBase64);
 
         // 5-2. 私钥解密密文
-        String decryptText = decryptText(encryptedBase64, bothFileRSAKeyPair.getPrivate());
+        String str = "X2qYwRFbUTpopdAEzw3llJLD1TmArOGb40ER7HhxS7UJ6h/Xe1ZqnH6NUyLIeoZ/iZ3qUf+Vm+bDjyGQk/g3FMawm6s5GkGjuQSB8okSgVByZ21Jhiup0taqE0mHS0xAzfJoIYJY6lZ1DlXqnb2uubbYHFdkkwO3ebH8xMah55RMWlWJnX/Hgr1yunCwGyC9EMNXUm6wNnlYVGqlJZiHQH9G4X7fSNoboCMGx4XisDXPedicA52fHvIZw4EftKOCeUC1fYXIlFua/k2evKPNROLEeMW62pdyU5CiBwItnI/+SvW1TfB0MxAi+PLDrAsms8aIiPK1CdBsBSYWgJXyGiSqe4b/dCeHWCqmNzy7DeRbZJ3JdIQT4m2uguFL0x0WZS1RqU2M3XoJVRvAwIbsPjfoBBvaD7ZRX2LFWTqSc+O71doiJ4JyNbi4E8ZFxfoG6URW7p58VDlZU4EExKhf4a5dH21CzRY3JZ7XvxN14uSYtzCX70IGGKJ1MH+LxKElrxposMiod3GWT5T5gPepJS0X2X8OWiuywMYq1/yeYlnqxWeICzOCUEZCiQExQyhaa8HaqJpC/yVprhRe1g2jlS8nMX4FeIG2a5fl5u754/51ZA1JGvrFFdZJfT+zLYhwviSZdujRTaaZCd5su5rTJa1H89IQubD+eXMsB2jnCCI=";
+        String decryptText = decryptText(str, bothFileRSAKeyPair.getPrivate());
         System.out.println("解密后的字符串, decryptText: " + decryptText);
 
         // 6. 准备签名

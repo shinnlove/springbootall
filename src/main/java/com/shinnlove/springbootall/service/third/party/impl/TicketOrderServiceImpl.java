@@ -44,6 +44,16 @@ public class TicketOrderServiceImpl implements TicketOrderService {
         return monthTicketCardSellOrderInfoRepo.queryOrderByOrderNo(orderNo);
     }
 
+    @Override
+    public Integer updateUniqueSensitiveId(String uniqueSensitiveId, Long orderNo) {
+        if (Objects.isNull(orderNo) || StringUtils.isBlank(uniqueSensitiveId)) {
+            return 0; // 无效参数
+        }
+
+        return monthTicketCardSellOrderInfoRepo.updateUniqueSensitiveId(uniqueSensitiveId, orderNo);
+    }
+
+    @Override
     public Integer updateOrderWithExpressInfo(Long orderNo, LogisticsCompanyInfo logisticsCompanyInfo) {
 
         String companyCode = logisticsCompanyInfo.getCompanyCode();
