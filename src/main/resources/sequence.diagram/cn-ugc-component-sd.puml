@@ -1,0 +1,72 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam sequenceMessageAlign left
+
+actor "用户" as User
+participant "诡秘活动H5" as MysteriesH5Page
+participant "活动UGC展示组件" as UGCReviewComponent
+participant "Noah数据配置器" as NoahDataConfigCenter
+participant "活动backend" as ActivityBackendService
+participant "用户后端" as ArgusUserService
+participant "UGC后端服务" as UGCBackendService
+database "卷毛狒狒从库DB" as CircleClubUserSlaveDB
+
+'关于UGC帖子详情内容'
+
+autonumber 1.1
+
+User -> MysteriesH5Page: 用户访问诡秘专区H5页面
+activate MysteriesH5Page
+
+MysteriesH5Page -> UGCReviewComponent: 请求直出展示信息
+activate UGCReviewComponent
+
+UGCReviewComponent -> NoahDataConfigCenter: 获取配置帖子id+top3用户头像
+activate NoahDataConfigCenter
+
+NoahDataConfigCenter --> UGCReviewComponent: 返回帖子id列表+用户头像
+deactivate NoahDataConfigCenter
+
+UGCReviewComponent -> UGCReviewComponent: 随机出3条帖子id
+
+UGCReviewComponent -> UGCBackendService: 根据id批量查询帖子信息
+activate UGCBackendService
+UGCBackendService --> UGCReviewComponent: 返回帖子信息
+deactivate UGCBackendService
+
+alt 多图文
+    UGCReviewComponent -> UGCReviewComponent: 提取帖子中的图片
+    UGCReviewComponent -> UGCReviewComponent: 合并标题和正文
+else 章段评 配音
+    UGCReviewComponent -> UGCReviewComponent: 使用帖子的配音文
+end
+
+UGCReviewComponent -> ArgusUserService: 批量查询发帖用户头像
+activate ArgusUserService
+
+ArgusUserService --> UGCReviewComponent: 返回发帖用户头像信息
+
+'关于卷毛狒狒信息'
+
+autonumber 2.1
+
+UGCReviewComponent -> ActivityBackendService: 查询卷毛狒狒会员信息
+activate ActivityBackendService
+
+ActivityBackendService -> CircleClubUserSlaveDB: `select count(*) 从库表` as 人数
+activate CircleClubUserSlaveDB
+
+CircleClubUserSlaveDB --> ActivityBackendService: 返回俱乐部入会人数
+deactivate CircleClubUserSlaveDB
+
+ActivityBackendService --> UGCReviewComponent: 返回俱乐部入会人数
+deactivate ActivityBackendService
+
+UGCReviewComponent --> MysteriesH5Page: 返回UGC展示信息
+deactivate UGCReviewComponent
+
+MysteriesH5Page --> User: 展示诡秘专区H5页面
+deactivate MysteriesH5Page
+
+@enduml
